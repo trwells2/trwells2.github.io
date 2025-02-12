@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tom Wells | Professional Portfolio</title>
+    <meta name="description" content="Senior Power Platform Developer and BI Analyst">
+    
+    <!-- Apple-style Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;700&display=swap">
+    
+    <style>
+        /* OpenAI-inspired Minimalist CSS */
+        :root {
+            --primary-color: #000;
+            --secondary-color: #666;
+            --accent-color: #0041ad;
+            --bg-color: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--primary-color);
+            background-color: var(--bg-color);
+        }
+
+        /* Apple-style Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* Hero Section - OpenAI-inspired */
+        .hero {
+			height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 0px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+		}
+		.hero-container {
+            position: relative;
+            height: 50vh;
+            overflow: hidden;
+        }
+		
+		
+
+        #hero-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+
+
+        /* Interactive Cards */
+        .projects-grid {
+            max-width: 1200px;
+            margin: 4rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+		.viewport-header {
+			position: relative;
+			height: 100vh;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+        .project-card {
+            border-radius: 18px;
+            padding: 2rem;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Contact Form with Validation */
+        .contact-section {
+            max-width: 600px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .form-button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+		
+		.video-container {
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+        margin: 0 auto;
+		}
+    
+		video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Preserve aspect ratio while filling container */
+		}
+    </style>
+</head>
+<body>
+    <!-- Apple-style Navigation -->
+    <div class="nav-container">
+        <nav>
+            <h2>Tom Wells</h2>
+            <div class="nav-links">
+                <a href="#work">Work</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </div>
+	
+	<!-- Hero Section -->
+	<section class="hero-container">
+	<!-- Video container -->
+		<video autoplay loop playsinline id="hero-video">
+			<source src="D:\site\BG_move.mp4" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>
+	</div>  
+    
+		<div class ="hero-content">
+			<h1>Building the Future of Analytics</h1>
+            <p>Senior Power Platform Developer and BI Analyst</p>
+			
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="projects-grid" id="projects">
+        <div class="project-card">
+            <h3>Power Apps</h3>
+            <p>Custom application development</p>
+            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+        </div>
+		<div class="project-card">
+            <h3>Power BI</h3>
+            <p>Beautiful data visualizations</p>
+            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+        </div>
+		<div class="project-card">
+            <h3>Power Automate</h3>
+            <p>Automating business processess</p>
+            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+        </div>
+        <!-- Add more project cards -->
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-section" id="contact">
+        <h2>Get in Touch</h2>
+        <form class="contact-form" id="contactForm" method="POST">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit" class="form-button">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Smooth Scroll & Animations -->
+    <script>
+        // Apple-style smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Observe project cards
+        document.querySelectorAll('.project-card').forEach((card) => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            observer.observe(card);
+        });
+
+        // Form Validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            const email = document.querySelector('input[type="email"]').value;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                e.preventDefault();
+                alert('Please enter a valid email address');
+            }
+        });
+    </script>
+
+    
+</body>
+</html>#   t r w e l l s 2 . g i t h u b . i o  
+ 
