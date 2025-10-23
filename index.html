@@ -269,13 +269,52 @@
 	-->
 	<section class="contact-section" id="contact">
     <h2>Get in Touch</h2>
-    <form class="contact-form" id="contactForm" method="POST" action="contact.php">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+    <form class="contact-form" id="contactForm">
+        <input type="text" name="name" id="name" placeholder="Your Name" required>
+        <input type="email" name="email" id="email" placeholder="Email Address" required>
+        <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
         <button type="submit" class="form-button">Send Message</button>
     </form>
 </section>
+
+<script>
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+
+    if (!name || !email || !message) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    if (!email.includes('@')) {
+        alert('Please enter a valid email.');
+        return;
+    }
+
+    const data = { name, email, message };
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbxOCMi7GLmftRHwWyB_-wtVRDIQHK1DEUsmSRn-rbqXywBquOjeckxNy8VxVfMgZulgjw/exec'; // Paste from Step 2
+
+    try {
+        const response = await fetch(webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors', // Required for Apps Script
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        // no-cors doesn't give response body, but if it reaches here, it succeeded
+        alert(`Message sent successfully! Thank you, ${name}!`);
+        this.reset(); // Clear form
+    } catch (error) {
+        alert('Error sending message. Please try again later.');
+        console.error('Error:', error);
+    }
+});
+</script>
 	
     <!-- Smooth Scroll & Animations -->
     <script>
@@ -321,5 +360,6 @@
 </html>#   t r w e l l s 2 . g i t h u b . i o 
  
  
+
 
 
