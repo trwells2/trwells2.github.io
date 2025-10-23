@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tom Wells | Professional Portfolio</title>
     <meta name="description" content="Senior Power Platform Developer and BI Analyst">
+    <title>Tom Wells | Professional Portfolio</title>
     
-    <!-- Apple-style Fonts -->
+    <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;700&display=swap">
     
     <style>
-        /* OpenAI-inspired Minimalist CSS */
         :root {
             --primary-color: #000;
             --secondary-color: #666;
             --accent-color: #0041ad;
-            --bg-color: #FFFFFF;
+            --bg-color: #fff;
+            --nav-height: 70px;
         }
 
         * {
@@ -31,7 +31,6 @@
             background-color: var(--bg-color);
         }
 
-        /* Apple-style Navigation */
         .nav-container {
             position: fixed;
             top: 0;
@@ -61,36 +60,11 @@
             opacity: 0.7;
         }
 
-        /* Hero Section - OpenAI-inspired */
-        .hero {
-			height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 0px;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-            max-width: 600px;
-            margin: 0 auto;
-		}
-		.hero-container {
+        .hero-container {
             position: relative;
-            height: 50vh;
+            height: 100vh;
             overflow: hidden;
         }
-		
-		
 
         #hero-video {
             position: absolute;
@@ -99,22 +73,32 @@
             transform: translate(-50%, -50%);
             min-width: 100%;
             min-height: 100%;
-            z-index: 1;
+            object-fit: cover;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
-            color: white;
-            text-align: center;
-            padding: 20px;
+            position: absolute;
             top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            z-index: 1;
         }
 
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
 
+        .hero-content p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+        }
 
-        /* Interactive Cards */
         .projects-grid {
             max-width: 1200px;
             margin: 4rem auto;
@@ -124,28 +108,19 @@
             padding: 0 2rem;
         }
 
-		.viewport-header {
-			position: relative;
-			height: 100vh;
-			text-align: center;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
         .project-card {
             border-radius: 18px;
             padding: 2rem;
             background: #fff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* Contact Form with Validation */
         .contact-section {
             max-width: 600px;
             margin: 4rem auto;
@@ -172,32 +147,26 @@
             transition: opacity 0.3s ease;
         }
 
+        .form-button:hover {
+            opacity: 0.8;
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
-            
-            .hero h1 {
+
+            .hero-content h1 {
                 font-size: 2.5rem;
             }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
         }
-		
-		.video-container {
-        width: 100%;
-        height: 600px;
-        overflow: hidden;
-        margin: 0 auto;
-		}
-    
-		video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Preserve aspect ratio while filling container */
-		}
     </style>
 </head>
 <body>
-    <!-- Apple-style Navigation -->
     <div class="nav-container">
         <nav>
             <h2>Tom Wells</h2>
@@ -208,158 +177,157 @@
             </div>
         </nav>
     </div>
-	
-	<!-- Hero Section -->
-	<section class="hero-container">
-	<!-- Video container -->
-		<video autoplay loop playsinline id="hero-video">
-			<source src="BG_move.mp4" type="video/mp4">
-			Your browser does not support the video tag.
-		</video>
-	</div>  
-    
-		<div class ="hero-content">
-			<h1>Transforming Data into Actionable Insights</h1>
+
+    <section class="hero-container">
+        <video autoplay loop muted playsinline id="hero-video">
+            <source src="BG_move.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-content">
+            <h1>Transforming Data into Actionable Insights</h1>
             <p>Dynamic Data Analyst/Architect & Microsoft Power Platform Developer</p>
-			
         </div>
     </section>
 
-    <!-- Projects Grid -->
     <section class="projects-grid" id="projects">
+        <div class="project-card">
+            <h3>Data Architecture</h3>
+            <p>Data modeling, performance optimization, and governance</p>
+            <button class="form-button" data-project="data-architecture">Learn More</button>
+        </div>
         <div class="project-card">
             <h3>Power Apps</h3>
             <p>Custom application development</p>
-            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+            <button class="form-button" data-project="power-apps">Learn More</button>
         </div>
-		<div class="project-card">
+        <div class="project-card">
             <h3>Power BI</h3>
             <p>Professional data visualizations</p>
-            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+            <button class="form-button" data-project="power-bi">Learn More</button>
         </div>
-		<div class="project-card">
+        <div class="project-card">
             <h3>Power Automate</h3>
-            <p>Automating business processess</p>
-            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+            <p>Automating business processes</p>
+            <button class="form-button" data-project="power-automate">Learn More</button>
         </div>
-		<div class="project-card">
+        <div class="project-card">
             <h3>Web Design</h3>
-            <p>HTML, CSS, PHP and JavaScript development</p>
-            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+            <p>HTML, CSS, PHP, and JavaScript development</p>
+            <button class="form-button" data-project="web-design">Learn More</button>
         </div>
-		<div class="project-card">
+        <div class="project-card">
             <h3>SharePoint</h3>
             <p>Design and development</p>
-            <button class="form-button" onclick="showProjectDetails('ai-chat')">Learn More</button>
+            <button class="form-button" data-project="sharepoint">Learn More</button>
         </div>
-        <!-- Add more project cards -->
     </section>
 
-    <!-- Contact Form -->
-    <!-- Old form
-	<section class="contact-section" id="contact">
+    <section class="contact-section" id="contact">
         <h2>Get in Touch</h2>
-        <form class="contact-form" id="contactForm" method="POST">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Email Address" required>
-            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <form class="contact-form" id="contactForm">
+            <input type="text" name="name" id="name" placeholder="Your Name" required>
+            <input type="email" name="email" id="email" placeholder="Email Address" required>
+            <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
             <button type="submit" class="form-button">Send Message</button>
         </form>
     </section>
-	-->
-	<section class="contact-section" id="contact">
-    <h2>Get in Touch</h2>
-    <form class="contact-form" id="contactForm">
-        <input type="text" name="name" id="name" placeholder="Your Name" required>
-        <input type="email" name="email" id="email" placeholder="Email Address" required>
-        <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
-        <button type="submit" class="form-button">Send Message</button>
-    </form>
-</section>
 
-<script>
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
-    e.preventDefault(); // Prevent default form submission
-
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-
-    if (!name || !email || !message) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    if (!email.includes('@')) {
-        alert('Please enter a valid email.');
-        return;
-    }
-
-    const data = { name, email, message };
-    const webAppUrl = 'https://script.google.com/macros/s/AKfycbxOCMi7GLmftRHwWyB_-wtVRDIQHK1DEUsmSRn-rbqXywBquOjeckxNy8VxVfMgZulgjw/exec'; // Paste from Step 2
-
-    try {
-        const response = await fetch(webAppUrl, {
-            method: 'POST',
-            mode: 'no-cors', // Required for Apps Script
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        // no-cors doesn't give response body, but if it reaches here, it succeeded
-        alert(`Message sent successfully! Thank you, ${name}!`);
-        this.reset(); // Clear form
-    } catch (error) {
-        alert('Error sending message. Please try again later.');
-        console.error('Error:', error);
-    }
-});
-</script>
-	
-    <!-- Smooth Scroll & Animations -->
     <script>
-        // Apple-style smooth scrolling
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                document.querySelector(anchor.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
                 });
             });
         });
 
-        // Intersection Observer for scroll animations
+        // Project details handler
+        function showProjectDetails(projectId) {
+            // Implement project details modal or page navigation
+            console.log(`Showing details for: ${projectId}`);
+            // Add modal or redirect logic here
+        }
+
+        // Animation observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('visible');
                 }
             });
+        }, {
+            threshold: 0.1
         });
 
-        // Observe project cards
         document.querySelectorAll('.project-card').forEach((card) => {
-            card.style.opacity = 0;
-            card.style.transform = 'translateY(20px)';
+            card.classList.add('animate');
             observer.observe(card);
         });
 
-        // Form Validation
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            const email = document.querySelector('input[type="email"]').value;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                e.preventDefault();
-                alert('Please enter a valid email address');
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (!name || !email || !message) {
+                alert('Please fill in all fields.');
+                return;
             }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            const data = { name, email, message };
+            const webAppUrl = 'https://script.google.com/macros/s/AKfycbxOCMi7GLmftRHwWyB_-wtVRDIQHK1DEUsmSRn-rbqXywBquOjeckxNy8VxVfMgZulgjw/exec';
+
+            try {
+                const response = await fetch(webAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                alert(`Message sent successfully! Thank you, ${name}!`);
+                contactForm.reset();
+            } catch (error) {
+                alert('Error sending message. Please try again later.');
+                console.error('Error:', error);
+            }
+        });
+
+        // Add project card click handlers
+        document.querySelectorAll('.project-card button').forEach(button => {
+            button.addEventListener('click', () => {
+                showProjectDetails(button.dataset.project);
+            });
         });
     </script>
 
-    
+    <style>
+        .project-card.animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </body>
 </html>#   t r w e l l s 2 . g i t h u b . i o 
  
  
+
 
 
 
