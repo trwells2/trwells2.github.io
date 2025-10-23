@@ -256,7 +256,8 @@
     </section>
 
     <!-- Contact Form -->
-    <section class="contact-section" id="contact">
+    <!-- Old form
+	<section class="contact-section" id="contact">
         <h2>Get in Touch</h2>
         <form class="contact-form" id="contactForm" method="POST">
             <input type="text" name="name" placeholder="Your Name" required>
@@ -265,7 +266,17 @@
             <button type="submit" class="form-button">Send Message</button>
         </form>
     </section>
-
+	-->
+	<section class="contact-section" id="contact">
+    <h2>Get in Touch</h2>
+    <form class="contact-form" id="contactForm" method="POST" action="contact.php">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit" class="form-button">Send Message</button>
+    </form>
+</section>
+	
     <!-- Smooth Scroll & Animations -->
     <script>
         // Apple-style smooth scrolling
@@ -310,4 +321,5 @@
 </html>#   t r w e l l s 2 . g i t h u b . i o 
  
  
+
 
