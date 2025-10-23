@@ -4,184 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Senior Power Platform Developer and BI Analyst">
+    <meta name="keywords" content="Power Platform, Data Analyst, BI Developer, Web Development">
+    <meta name="author" content="Tom Wells">
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="Tom Wells | Professional Portfolio">
+    <meta property="og:description" content="Senior Power Platform Developer and BI Analyst">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="https://yourwebsite.com/og-image.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tom Wells | Professional Portfolio">
+    <meta name="twitter:description" content="Senior Power Platform Developer and BI Analyst">
+    <meta name="twitter:image" content="https://yourwebsite.com/og-image.jpg">
     <title>Tom Wells | Professional Portfolio</title>
     
-    <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;700&display=swap">
-    
-    <style>
-        :root {
-            --primary-color: #000;
-            --secondary-color: #666;
-            --accent-color: #0041ad;
-            --bg-color: #fff;
-            --nav-height: 70px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        body {
-            line-height: 1.6;
-            color: var(--primary-color);
-            background-color: var(--bg-color);
-        }
-
-        .nav-container {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--primary-color);
-            text-decoration: none;
-            margin-left: 2rem;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.7;
-        }
-
-        .hero-container {
-            position: relative;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        #hero-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-        }
-
-        .hero-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            padding: 2rem;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .hero-content p {
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 600px;
-        }
-
-        .projects-grid {
-            max-width: 1200px;
-            margin: 4rem auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 0 2rem;
-        }
-
-        .project-card {
-            border-radius: 18px;
-            padding: 2rem;
-            background: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-section {
-            max-width: 600px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 1rem;
-        }
-
-        .form-button {
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .form-button:hover {
-            opacity: 0.8;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-content p {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Skip to content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
     <div class="nav-container">
         <nav>
             <h2>Tom Wells</h2>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
             <div class="nav-links">
-                <a href="#work">Work</a>
-                <a href="#projects">Projects</a>
-                <a href="#contact">Contact</a>
+                <a href="#work" aria-label="View work experience">Work</a>
+                <a href="#projects" aria-label="View projects">Projects</a>
+                <a href="#contact" aria-label="Contact me">Contact</a>
             </div>
         </nav>
     </div>
 
-    <section class="hero-container">
-        <video autoplay loop muted playsinline id="hero-video">
+    <!-- Hero Section -->
+    <section class="hero-container" id="main-content">
+        <video autoplay loop muted playsinline id="hero-video" loading="lazy">
             <source src="BG_move.mp4" type="video/mp4">
-            Your browser does not support the video tag.
+            <div class="video-fallback">
+                <p>Sorry, the video could not be loaded. Please view the site on a modern browser.</p>
+            </div>
         </video>
         <div class="hero-content">
             <h1>Transforming Data into Actionable Insights</h1>
@@ -189,50 +53,107 @@
         </div>
     </section>
 
+    <!-- Projects Grid -->
     <section class="projects-grid" id="projects">
-        <div class="project-card">
+        <div class="project-card" id="data-architecture">
             <h3>Data Architecture</h3>
             <p>Data modeling, performance optimization, and governance</p>
             <button class="form-button" data-project="data-architecture">Learn More</button>
         </div>
-        <div class="project-card">
+        <div class="project-card" id="power-apps">
             <h3>Power Apps</h3>
             <p>Custom application development</p>
             <button class="form-button" data-project="power-apps">Learn More</button>
         </div>
-        <div class="project-card">
+        <div class="project-card" id="power-bi">
             <h3>Power BI</h3>
             <p>Professional data visualizations</p>
             <button class="form-button" data-project="power-bi">Learn More</button>
         </div>
-        <div class="project-card">
+        <div class="project-card" id="power-automate">
             <h3>Power Automate</h3>
             <p>Automating business processes</p>
             <button class="form-button" data-project="power-automate">Learn More</button>
         </div>
-        <div class="project-card">
+        <div class="project-card" id="web-design">
             <h3>Web Design</h3>
             <p>HTML, CSS, PHP, and JavaScript development</p>
             <button class="form-button" data-project="web-design">Learn More</button>
         </div>
-        <div class="project-card">
+        <div class="project-card" id="sharepoint">
             <h3>SharePoint</h3>
             <p>Design and development</p>
             <button class="form-button" data-project="sharepoint">Learn More</button>
         </div>
     </section>
 
+    <!-- Project Modal -->
+    <div class="modal" id="projectModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-content">
+            <h3 id="modalTitle">Project Details</h3>
+            <p id="projectDetails"></p>
+            <button class="form-button close-modal" aria-label="Close modal">Close</button>
+        </div>
+    </div>
+
+    <!-- Contact Form -->
     <section class="contact-section" id="contact">
         <h2>Get in Touch</h2>
-        <form class="contact-form" id="contactForm">
-            <input type="text" name="name" id="name" placeholder="Your Name" required>
-            <input type="email" name="email" id="email" placeholder="Email Address" required>
-            <textarea name="message" id="message" placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit" class="form-button">Send Message</button>
+        <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" name="name" id="name" placeholder="Your Name" required aria-describedby="nameError">
+                <span class="error" id="nameError"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" placeholder="Email Address" required aria-describedby="emailError">
+                <span class="error" id="emailError"></span>
+            </div>
+            <div class="form-group">
+                <label for="message">Your Message</label>
+                <textarea name="message" id="message" placeholder="Your Message" rows="5" required aria-describedby="messageError"></textarea>
+                <span class="error" id="messageError"></span>
+            </div>
+            <button type="submit" class="form-button" disabled>Send Message</button>
         </form>
     </section>
 
     <script>
+        // Project details data
+        const projects = {
+            'data-architecture': {
+                title: 'Data Architecture',
+                description: 'Designed and implemented scalable data models, optimized performance, and established governance frameworks.',
+                technologies: ['SQL', 'Azure', 'ETL']
+            },
+            'power-apps': {
+                title: 'Power Apps',
+                description: 'Developed custom business applications using Microsoft Power Apps to streamline operations.',
+                technologies: ['Power Apps', 'Canvas Apps', 'Model-Driven Apps']
+            },
+            'power-bi': {
+                title: 'Power BI',
+                description: 'Created interactive dashboards and reports for data-driven decision-making.',
+                technologies: ['Power BI', 'DAX', 'Power Query']
+            },
+            'power-automate': {
+                title: 'Power Automate',
+                description: 'Automated complex business processes to improve efficiency and reduce manual tasks.',
+                technologies: ['Power Automate', 'Flow', 'RPA']
+            },
+            'web-design': {
+                title: 'Web Design',
+                description: 'Built responsive websites using modern web technologies for optimal user experience.',
+                technologies: ['HTML', 'CSS', 'JavaScript', 'PHP']
+            },
+            'sharepoint': {
+                title: 'SharePoint',
+                description: 'Designed and developed SharePoint solutions for collaboration and document management.',
+                technologies: ['SharePoint', 'SPFx', 'Microsoft 365']
+            }
+        };
+
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', (e) => {
@@ -243,12 +164,15 @@
             });
         });
 
-        // Project details handler
-        function showProjectDetails(projectId) {
-            // Implement project details modal or page navigation
-            console.log(`Showing details for: ${projectId}`);
-            // Add modal or redirect logic here
-        }
+        // Mobile navigation toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileNavToggle.addEventListener('click', () => {
+            const isExpanded = mobileNavToggle.getAttribute('aria-expanded') === 'true';
+            mobileNavToggle.setAttribute('aria-expanded', !isExpanded);
+            navLinks.classList.toggle('active');
+            mobileNavToggle.textContent = isExpanded ? '☰' : '✕';
+        });
 
         // Animation observer
         const observer = new IntersectionObserver((entries) => {
@@ -257,76 +181,125 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, {
-            threshold: 0.1
-        });
+        }, { threshold: 0.1 });
 
         document.querySelectorAll('.project-card').forEach((card) => {
             card.classList.add('animate');
             observer.observe(card);
         });
 
-        // Form submission
+        // Modal handling
+        const modal = document.getElementById('projectModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDetails = document.getElementById('projectDetails');
+        const closeModal = document.querySelector('.close-modal');
+
+        function showProjectDetails(projectId) {
+            const project = projects[projectId];
+            if (project) {
+                modalTitle.textContent = project.title;
+                modalDetails.innerHTML = `
+                    <p>${project.description}</p>
+                    <p><strong>Technologies:</strong> ${project.technologies.join(', ')}</p>
+                `;
+                modal.classList.add('active');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        });
+
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal.click();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal.click();
+            }
+        });
+
+        // Project card click handlers
+        document.querySelectorAll('.project-card button').forEach(button => {
+            button.addEventListener('click', () => {
+                showProjectDetails(button.dataset.project);
+            });
+        });
+
+        // Form handling
         const contactForm = document.getElementById('contactForm');
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const inputs = contactForm.querySelectorAll('input, textarea');
+
+        function validateForm() {
+            let isValid = true;
+            inputs.forEach(input => {
+                const errorElement = document.getElementById(`${input.id}Error`);
+                if (!input.value.trim()) {
+                    errorElement.textContent = `${input.name} is required.`;
+                    isValid = false;
+                } else if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+                    errorElement.textContent = 'Please enter a valid email address.';
+                    isValid = false;
+                } else {
+                    errorElement.textContent = '';
+                }
+            });
+            submitButton.disabled = !isValid;
+            return isValid;
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (!validateForm()) return;
 
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const message = document.getElementById('message').value.trim();
-
-            if (!name || !email || !message) {
-                alert('Please fill in all fields.');
-                return;
-            }
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert('Please enter a valid email address.');
-                return;
-            }
-
-            const data = { name, email, message };
             const webAppUrl = 'https://script.google.com/macros/s/AKfycbxOCMi7GLmftRHwWyB_-wtVRDIQHK1DEUsmSRn-rbqXywBquOjeckxNy8VxVfMgZulgjw/exec';
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
 
             try {
                 const response = await fetch(webAppUrl, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({ name, email, message })
                 });
                 alert(`Message sent successfully! Thank you, ${name}!`);
                 contactForm.reset();
+                inputs.forEach(input => {
+                    document.getElementById(`${input.id}Error`).textContent = '';
+                });
             } catch (error) {
-                alert('Error sending message. Please try again later.');
+                alert('Error sending message. Please try again later or contact me directly at tom@example.com.');
                 console.error('Error:', error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
             }
         });
-
-        // Add project card click handlers
-        document.querySelectorAll('.project-card button').forEach(button => {
-            button.addEventListener('click', () => {
-                showProjectDetails(button.dataset.project);
-            });
-        });
     </script>
-
-    <style>
-        .project-card.animate {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .project-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </body>
 </html>#   t r w e l l s 2 . g i t h u b . i o 
  
  
+
 
 
 
