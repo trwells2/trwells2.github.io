@@ -1,9 +1,7 @@
 ---
 layout: none
 ---
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -27,856 +25,855 @@ layout: none
     --muted: #66605c;
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-background: var(–paper);
-color: var(–ink);
-font-family: ‘Inter Tight’, sans-serif;
-font-weight: 400;
-line-height: 1.5;
--webkit-font-smoothing: antialiased;
-}
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
 
-.wrap {
-max-width: 1040px;
-margin: 0 auto;
-padding: 24px 22px 60px;
-}
+  .wrap {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 24px 22px 60px;
+  }
 
-.masthead {
-border-top: 2px solid var(–ink);
-border-bottom: 1px solid var(–ink);
-padding: 10px 0 12px;
-display: grid;
-grid-template-columns: 1fr auto 1fr;
-align-items: center;
-gap: 18px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-color: var(–muted);
-}
-.masthead .right { text-align: right; }
-.masthead .center {
-font-family: ‘Fraunces’, serif;
-font-weight: 600;
-font-size: 12px;
-letter-spacing: 0.25em;
-color: var(–ink);
-}
+  .masthead {
+    border-top: 2px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 10px 0 12px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .right { text-align: right; }
+  .masthead .center {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--ink);
+  }
 
-.hero {
-padding: 28px 0 20px;
-border-bottom: 1px solid var(–ink);
-}
-.hero .kicker {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.3em;
-text-transform: uppercase;
-color: var(–claret);
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 12px;
-}
-.hero .kicker::after {
-content: “”;
-flex: 1;
-height: 1px;
-background: var(–claret);
-opacity: 0.5;
-}
-.hero h1 {
-font-family: ‘Fraunces’, serif;
-font-weight: 400;
-font-size: clamp(34px, 5.5vw, 58px);
-line-height: 0.98;
-letter-spacing: -0.03em;
-color: var(–ink);
-font-variation-settings: “opsz” 144;
-}
-.hero h1 em {
-font-style: italic;
-font-weight: 300;
-color: var(–olive);
-}
-.hero .subtitle {
-margin-top: 14px;
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 14px;
-padding-top: 14px;
-border-top: 1px dashed var(–rule);
-}
-.meta-cell .label {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–muted);
-margin-bottom: 4px;
-}
-.meta-cell .value {
-font-family: ‘Fraunces’, serif;
-font-size: 14px;
-font-weight: 500;
-color: var(–ink);
-line-height: 1.2;
-}
+  .hero {
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .hero .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--claret);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero .kicker::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--claret);
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(34px, 5.5vw, 58px);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 144;
+  }
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--olive);
+  }
+  .hero .subtitle {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+  }
+  .meta-cell .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .meta-cell .value {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
 
-.tabs {
-display: flex;
-gap: 0;
-margin: 22px 0 0;
-border-bottom: 1px solid var(–ink);
-position: sticky;
-top: 0;
-background: var(–paper);
-z-index: 10;
-}
-.tab {
-background: none;
-border: none;
-font-family: ‘Fraunces’, serif;
-font-size: 18px;
-font-weight: 400;
-color: var(–muted);
-padding: 12px 22px 10px;
-cursor: pointer;
-position: relative;
-letter-spacing: -0.01em;
-transition: color 0.2s ease;
-}
-.tab:hover { color: var(–ink); }
-.tab.active { color: var(–ink); font-weight: 500; }
-.tab.active::after {
-content: “”;
-position: absolute;
-left: 0; right: 0; bottom: -1px;
-height: 3px;
-background: var(–claret);
-}
-.tab .num {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.1em;
-vertical-align: super;
-margin-right: 5px;
-color: var(–claret);
-font-weight: 500;
-}
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin: 22px 0 0;
+    border-bottom: 1px solid var(--ink);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 10;
+  }
+  .tab {
+    background: none;
+    border: none;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--muted);
+    padding: 12px 22px 10px;
+    cursor: pointer;
+    position: relative;
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--ink); font-weight: 500; }
+  .tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 3px;
+    background: var(--claret);
+  }
+  .tab .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    vertical-align: super;
+    margin-right: 5px;
+    color: var(--claret);
+    font-weight: 500;
+  }
 
-.panel-tools {
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 14px;
-padding: 14px 0;
-border-bottom: 1px solid var(–rule);
-flex-wrap: wrap;
-}
-.panel-tools .stat-row {
-display: flex;
-gap: 18px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-color: var(–muted);
-}
-.panel-tools .stat-row strong {
-color: var(–ink);
-font-family: ‘Fraunces’, serif;
-font-size: 15px;
-letter-spacing: -0.01em;
-font-weight: 500;
-margin-right: 4px;
-}
-.tool-btns { display: flex; gap: 6px; }
-.tool-btn {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-padding: 7px 12px;
-background: transparent;
-border: 1px solid var(–ink);
-color: var(–ink);
-cursor: pointer;
-transition: all 0.15s;
-}
-.tool-btn:hover { background: var(–ink); color: var(–paper); }
+  .panel-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+  .panel-tools .stat-row {
+    display: flex;
+    gap: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .panel-tools .stat-row strong {
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .tool-btns { display: flex; gap: 6px; }
+  .tool-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    background: transparent;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tool-btn:hover { background: var(--ink); color: var(--paper); }
 
-.tab-panel { display: none; padding-top: 4px; }
-.tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(4px); }
-to { opacity: 1; transform: translateY(0); }
-}
+  .tab-panel { display: none; padding-top: 4px; }
+  .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-details {
-border-bottom: 1px solid var(–rule);
-transition: background 0.2s;
-}
-details[open] { background: var(–paper-soft); }
-details > summary {
-list-style: none;
-cursor: pointer;
-padding: 14px 16px 14px 4px;
-display: grid;
-grid-template-columns: 64px 1fr auto;
-gap: 16px;
-align-items: center;
-user-select: none;
-transition: background 0.15s;
-}
-details > summary::-webkit-details-marker { display: none; }
-details > summary:hover { background: rgba(153, 15, 61, 0.04); }
+  details {
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.2s;
+  }
+  details[open] { background: var(--paper-soft); }
+  details > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 16px 14px 4px;
+    display: grid;
+    grid-template-columns: 64px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary:hover { background: rgba(153, 15, 61, 0.04); }
 
-.sum-date { text-align: center; }
-.sum-date .sum-day {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-color: var(–claret);
-line-height: 1;
-}
-.sum-date .sum-num {
-font-family: ‘Fraunces’, serif;
-font-size: 32px;
-font-weight: 300;
-line-height: 1;
-color: var(–ink);
-letter-spacing: -0.03em;
-margin-top: 2px;
-}
-.sum-date .sum-mon {
-font-family: ‘Fraunces’, serif;
-font-size: 11px;
-font-style: italic;
-color: var(–olive);
-margin-top: 1px;
-}
+  .sum-date { text-align: center; }
+  .sum-date .sum-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--claret);
+    line-height: 1;
+  }
+  .sum-date .sum-num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    margin-top: 2px;
+  }
+  .sum-date .sum-mon {
+    font-family: 'Fraunces', serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--olive);
+    margin-top: 1px;
+  }
 
-.sum-main { min-width: 0; }
-.sum-title {
-font-family: ‘Fraunces’, serif;
-font-size: 19px;
-font-weight: 500;
-color: var(–ink);
-line-height: 1.15;
-letter-spacing: -0.01em;
-margin-bottom: 3px;
-}
-.sum-title .rankmini {
-color: var(–claret);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-vertical-align: super;
-letter-spacing: 0.1em;
-margin-left: 2px;
-}
-.sum-desc {
-font-size: 13px;
-color: var(–muted);
-line-height: 1.4;
-max-width: 60ch;
-}
+  .sum-main { min-width: 0; }
+  .sum-title {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 3px;
+  }
+  .sum-title .rankmini {
+    color: var(--claret);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    vertical-align: super;
+    letter-spacing: 0.1em;
+    margin-left: 2px;
+  }
+  .sum-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+    max-width: 60ch;
+  }
 
-.sum-right {
-display: flex;
-align-items: center;
-gap: 12px;
-}
-.sum-tag {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-padding: 4px 8px;
-border: 1px solid var(–rule-strong);
-color: var(–ink);
-white-space: nowrap;
-}
-.sum-tag.claret { border-color: var(–claret); color: var(–claret); }
-.sum-tag.olive { border-color: var(–olive); color: var(–olive); }
-.sum-tag.blue { border-color: var(–blue); color: var(–blue); }
+  .sum-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sum-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .sum-tag.claret { border-color: var(--claret); color: var(--claret); }
+  .sum-tag.olive { border-color: var(--olive); color: var(--olive); }
+  .sum-tag.blue { border-color: var(--blue); color: var(--blue); }
 
-.chevron {
-width: 14px;
-height: 14px;
-position: relative;
-flex-shrink: 0;
-transition: transform 0.25s ease;
-}
-.chevron::before,
-.chevron::after {
-content: “”;
-position: absolute;
-width: 9px;
-height: 1.5px;
-background: var(–ink);
-top: 50%;
-}
-.chevron::before { left: 0; transform: rotate(45deg); transform-origin: right center; }
-.chevron::after { right: 0; transform: rotate(-45deg); transform-origin: left center; }
-details[open] .chevron { transform: rotate(180deg); }
+  .chevron {
+    width: 14px;
+    height: 14px;
+    position: relative;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+  .chevron::before,
+  .chevron::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 1.5px;
+    background: var(--ink);
+    top: 50%;
+  }
+  .chevron::before { left: 0; transform: rotate(45deg); transform-origin: right center; }
+  .chevron::after { right: 0; transform: rotate(-45deg); transform-origin: left center; }
+  details[open] .chevron { transform: rotate(180deg); }
 
-.details-body {
-padding: 4px 16px 22px 84px;
-animation: slideDown 0.25s ease;
-}
-@keyframes slideDown {
-from { opacity: 0; transform: translateY(-4px); }
-to { opacity: 1; transform: translateY(0); }
-}
+  .details-body {
+    padding: 4px 16px 22px 84px;
+    animation: slideDown 0.25s ease;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-.event {
-display: grid;
-grid-template-columns: 72px 1fr;
-gap: 18px;
-padding: 10px 0;
-border-top: 1px solid rgba(51, 51, 51, 0.1);
-}
-.event:first-child { border-top: none; padding-top: 4px; }
-.event .time {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 11.5px;
-color: var(–ink);
-letter-spacing: 0.03em;
-padding-top: 2px;
-font-weight: 500;
-line-height: 1.3;
-}
-.event .time .ampm {
-font-size: 9px;
-color: var(–muted);
-letter-spacing: 0.12em;
-display: block;
-}
-.event .body {
-border-left: 1px solid var(–rule-strong);
-padding-left: 16px;
-position: relative;
-}
-.event .body::before {
-content: “”;
-position: absolute;
-left: -4px; top: 5px;
-width: 7px; height: 7px;
-border-radius: 50%;
-background: var(–ink);
-}
-.event.claret .body::before { background: var(–claret); }
-.event.blue .body::before { background: var(–blue); }
-.event.olive .body::before { background: var(–olive); }
+  .event {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 18px;
+    padding: 10px 0;
+    border-top: 1px solid rgba(51, 51, 51, 0.1);
+  }
+  .event:first-child { border-top: none; padding-top: 4px; }
+  .event .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+    padding-top: 2px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .event .time .ampm {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    display: block;
+  }
+  .event .body {
+    border-left: 1px solid var(--rule-strong);
+    padding-left: 16px;
+    position: relative;
+  }
+  .event .body::before {
+    content: "";
+    position: absolute;
+    left: -4px; top: 5px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .event.claret .body::before { background: var(--claret); }
+  .event.blue .body::before { background: var(--blue); }
+  .event.olive .body::before { background: var(--olive); }
 
-.event .type {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–muted);
-margin-bottom: 3px;
-}
-.event.olive .type { color: var(–olive); }
-.event.blue .type { color: var(–blue); }
-.event.claret .type { color: var(–claret); }
+  .event .type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .event.olive .type { color: var(--olive); }
+  .event.blue .type { color: var(--blue); }
+  .event.claret .type { color: var(--claret); }
 
-.event h4 {
-font-family: ‘Fraunces’, serif;
-font-size: 16px;
-font-weight: 500;
-letter-spacing: -0.01em;
-line-height: 1.2;
-color: var(–ink);
-margin-bottom: 5px;
-}
-.event h4 .rank {
-font-size: 10px;
-font-family: ‘JetBrains Mono’, monospace;
-color: var(–claret);
-vertical-align: super;
-letter-spacing: 0.1em;
-font-weight: 500;
-margin-left: 3px;
-}
-.event p {
-font-size: 13px;
-color: var(–ink);
-line-height: 1.5;
-max-width: 60ch;
-}
-.course-stat {
-display: block;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10.5px;
-color: var(–muted);
-letter-spacing: 0.03em;
-margin-top: 6px;
-}
-.course-stat strong { color: var(–ink); font-weight: 500; }
-.meta-chips {
-display: flex;
-gap: 6px;
-flex-wrap: wrap;
-margin-top: 8px;
-}
-.chip {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-padding: 3px 7px;
-border: 1px solid var(–rule-strong);
-color: var(–ink);
-background: rgba(255,255,255,0.3);
-}
-.chip.claret { border-color: var(–claret); color: var(–claret); }
-.chip.olive { border-color: var(–olive); color: var(–olive); }
+  .event h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+  .event h4 .rank {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--claret);
+    vertical-align: super;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-left: 3px;
+  }
+  .event p {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.5;
+    max-width: 60ch;
+  }
+  .course-stat {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    margin-top: 6px;
+  }
+  .course-stat strong { color: var(--ink); font-weight: 500; }
+  .meta-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+    background: rgba(255,255,255,0.3);
+  }
+  .chip.claret { border-color: var(--claret); color: var(--claret); }
+  .chip.olive { border-color: var(--olive); color: var(--olive); }
 
-.pack-progress {
-padding: 12px 14px;
-border: 1px solid var(–ink);
-background: var(–paper-warm);
-margin-bottom: 14px;
-display: grid;
-grid-template-columns: auto 1fr auto;
-gap: 16px;
-align-items: center;
-}
-.pack-progress .pct {
-font-family: ‘Fraunces’, serif;
-font-size: 24px;
-font-weight: 400;
-color: var(–ink);
-line-height: 1;
-min-width: 80px;
-}
-.pack-progress .pct .total {
-font-size: 13px;
-color: var(–muted);
-margin-left: 2px;
-}
-.progress-track {
-height: 6px;
-background: rgba(13, 13, 13, 0.12);
-overflow: hidden;
-}
-.progress-fill {
-height: 100%;
-background: var(–claret);
-transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.progress-label {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: var(–muted);
-margin-bottom: 5px;
-}
+  .pack-progress {
+    padding: 12px 14px;
+    border: 1px solid var(--ink);
+    background: var(--paper-warm);
+    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .pack-progress .pct {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+    min-width: 80px;
+  }
+  .pack-progress .pct .total {
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+  .progress-track {
+    height: 6px;
+    background: rgba(13, 13, 13, 0.12);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--claret);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .progress-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
 
-.pack-section-note {
-font-family: ‘Fraunces’, serif;
-font-style: italic;
-color: var(–olive);
-font-size: 13px;
-padding: 4px 16px 10px 84px;
-}
+  .pack-section-note {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--olive);
+    font-size: 13px;
+    padding: 4px 16px 10px 84px;
+  }
 
-.pack-items {
-padding: 0 16px 18px 84px;
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 2px 28px;
-}
+  .pack-items {
+    padding: 0 16px 18px 84px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px 28px;
+  }
 
-.pack-item {
-display: flex;
-align-items: flex-start;
-gap: 11px;
-padding: 7px 0;
-border-bottom: 1px solid rgba(13, 13, 13, 0.06);
-cursor: pointer;
-transition: background 0.12s;
-}
-.pack-item:hover { background: rgba(153, 15, 61, 0.04); }
+  .pack-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(13, 13, 13, 0.06);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .pack-item:hover { background: rgba(153, 15, 61, 0.04); }
 
-.pack-item input[type=“checkbox”] {
-appearance: none;
-width: 15px;
-height: 15px;
-border: 1.5px solid var(–ink);
-background: var(–paper);
-cursor: pointer;
-flex-shrink: 0;
-margin-top: 2px;
-position: relative;
-transition: all 0.15s;
-}
-.pack-item input[type=“checkbox”]:hover { border-color: var(–claret); }
-.pack-item input[type=“checkbox”]:checked {
-background: var(–claret);
-border-color: var(–claret);
-}
-.pack-item input[type=“checkbox”]:checked::after {
-content: “✓”;
-position: absolute;
-top: 50%; left: 50%;
-transform: translate(-50%, -55%);
-color: var(–paper);
-font-size: 11px;
-font-weight: 700;
-}
+  .pack-item input[type="checkbox"] {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .pack-item input[type="checkbox"]:hover { border-color: var(--claret); }
+  .pack-item input[type="checkbox"]:checked {
+    background: var(--claret);
+    border-color: var(--claret);
+  }
+  .pack-item input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    color: var(--paper);
+    font-size: 11px;
+    font-weight: 700;
+  }
 
-.pack-item .item-body { flex: 1; }
-.pack-item .item-label {
-font-size: 13.5px;
-color: var(–ink);
-line-height: 1.3;
-transition: color 0.15s;
-}
-.pack-item.checked .item-label {
-text-decoration: line-through;
-color: var(–muted);
-}
-.pack-item .item-note {
-font-family: ‘Fraunces’, serif;
-font-style: italic;
-font-size: 11.5px;
-color: var(–muted);
-margin-top: 1px;
-display: block;
-line-height: 1.35;
-}
-.pack-item .item-qty {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-color: var(–claret);
-background: rgba(153, 15, 61, 0.1);
-padding: 1px 5px;
-margin-left: 5px;
-letter-spacing: 0.03em;
-}
+  .pack-item .item-body { flex: 1; }
+  .pack-item .item-label {
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.3;
+    transition: color 0.15s;
+  }
+  .pack-item.checked .item-label {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+  .pack-item .item-note {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 1px;
+    display: block;
+    line-height: 1.35;
+  }
+  .pack-item .item-qty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--claret);
+    background: rgba(153, 15, 61, 0.1);
+    padding: 1px 5px;
+    margin-left: 5px;
+    letter-spacing: 0.03em;
+  }
 
-.section-mini {
-display: flex;
-align-items: center;
-gap: 6px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-color: var(–muted);
-letter-spacing: 0.1em;
-white-space: nowrap;
-}
-.section-mini .done-num {
-color: var(–ink);
-font-weight: 500;
-}
-.section-mini.complete .done-num { color: var(–olive); }
+  .section-mini {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+  .section-mini .done-num {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .section-mini.complete .done-num { color: var(--olive); }
 
-.pack-icon {
-font-family: ‘Fraunces’, serif;
-font-size: 24px;
-line-height: 1;
-color: var(–ink);
-}
+  .pack-icon {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--ink);
+  }
 
-.foot {
-margin-top: 44px;
-padding-top: 20px;
-border-top: 2px solid var(–ink);
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 20px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-color: var(–muted);
-}
-.foot .right { text-align: right; }
-.foot .center { text-align: center; }
+  .foot {
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .foot .right { text-align: right; }
+  .foot .center { text-align: center; }
 
-/* ============ SHOPPING LIST ============ */
-.shop-header {
-padding: 20px 0 14px;
-border-bottom: 1px solid var(–rule);
-margin-bottom: 18px;
-}
-.shop-header h2 {
-font-family: ‘Fraunces’, serif;
-font-size: 28px;
-font-weight: 500;
-color: var(–ink);
-letter-spacing: -0.015em;
-margin-bottom: 4px;
-line-height: 1.1;
-}
-.shop-header h2 em {
-font-style: italic;
-color: var(–claret);
-font-weight: 400;
-}
-.shop-header p {
-font-size: 13px;
-color: var(–muted);
-max-width: 60ch;
-line-height: 1.4;
-}
+  /* ============ SHOPPING LIST ============ */
+  .shop-header {
+    padding: 20px 0 14px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 18px;
+  }
+  .shop-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .shop-header h2 em {
+    font-style: italic;
+    color: var(--claret);
+    font-weight: 400;
+  }
+  .shop-header p {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 60ch;
+    line-height: 1.4;
+  }
 
-.shop-add {
-display: grid;
-grid-template-columns: 1fr 180px auto;
-gap: 8px;
-margin-bottom: 18px;
-padding: 14px;
-background: var(–paper-warm);
-border: 1px solid var(–ink);
-}
-.shop-input,
-.shop-select {
-font-family: ‘Inter Tight’, sans-serif;
-font-size: 14px;
-padding: 10px 12px;
-border: 1px solid var(–rule-strong);
-background: var(–paper);
-color: var(–ink);
-outline: none;
-transition: border-color 0.15s;
-}
-.shop-input::placeholder { color: var(–muted); }
-.shop-input:focus,
-.shop-select:focus { border-color: var(–claret); }
-.shop-select {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 11px;
-letter-spacing: 0.1em;
-text-transform: uppercase;
-cursor: pointer;
-}
-.shop-add-btn {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-padding: 10px 18px;
-background: var(–claret);
-border: 1px solid var(–claret);
-color: var(–paper);
-cursor: pointer;
-transition: all 0.15s;
-white-space: nowrap;
-}
-.shop-add-btn:hover { background: var(–ink); border-color: var(–ink); }
+  .shop-add {
+    display: grid;
+    grid-template-columns: 1fr 180px auto;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 14px;
+    background: var(--paper-warm);
+    border: 1px solid var(--ink);
+  }
+  .shop-input,
+  .shop-select {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .shop-input::placeholder { color: var(--muted); }
+  .shop-input:focus,
+  .shop-select:focus { border-color: var(--claret); }
+  .shop-select {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .shop-add-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    background: var(--claret);
+    border: 1px solid var(--claret);
+    color: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .shop-add-btn:hover { background: var(--ink); border-color: var(--ink); }
 
-.shop-filters {
-display: flex;
-gap: 4px;
-margin-bottom: 14px;
-flex-wrap: wrap;
-}
-.shop-filter {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-padding: 6px 11px;
-background: transparent;
-border: 1px solid var(–rule);
-color: var(–muted);
-cursor: pointer;
-transition: all 0.15s;
-}
-.shop-filter:hover { color: var(–ink); border-color: var(–ink); }
-.shop-filter.active {
-background: var(–ink);
-color: var(–paper);
-border-color: var(–ink);
-}
-.shop-filter .cat-count {
-color: var(–claret);
-margin-left: 4px;
-font-weight: 500;
-}
-.shop-filter.active .cat-count { color: var(–paper); }
+  .shop-filters {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .shop-filter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 11px;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .shop-filter:hover { color: var(--ink); border-color: var(--ink); }
+  .shop-filter.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .shop-filter .cat-count {
+    color: var(--claret);
+    margin-left: 4px;
+    font-weight: 500;
+  }
+  .shop-filter.active .cat-count { color: var(--paper); }
 
-.shop-list {
-list-style: none;
-padding: 0;
-margin: 0;
-}
-.shop-empty {
-text-align: center;
-padding: 40px 20px;
-font-family: ‘Fraunces’, serif;
-font-style: italic;
-color: var(–muted);
-font-size: 15px;
-border: 1px dashed var(–rule);
-background: var(–paper-soft);
-}
+  .shop-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .shop-empty {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 15px;
+    border: 1px dashed var(--rule);
+    background: var(--paper-soft);
+  }
 
-.shop-item {
-display: grid;
-grid-template-columns: auto 1fr auto auto;
-gap: 14px;
-align-items: center;
-padding: 12px 14px;
-border-bottom: 1px solid rgba(13, 13, 13, 0.08);
-transition: background 0.15s;
-animation: slideIn 0.25s ease;
-}
-@keyframes slideIn {
-from { opacity: 0; transform: translateY(-4px); }
-to { opacity: 1; transform: translateY(0); }
-}
-.shop-item:hover { background: rgba(153, 15, 61, 0.04); }
-.shop-item.bought { background: rgba(45, 74, 58, 0.06); }
-.shop-item.bought .shop-text { text-decoration: line-through; color: var(–muted); }
+  .shop-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(13, 13, 13, 0.08);
+    transition: background 0.15s;
+    animation: slideIn 0.25s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .shop-item:hover { background: rgba(153, 15, 61, 0.04); }
+  .shop-item.bought { background: rgba(45, 74, 58, 0.06); }
+  .shop-item.bought .shop-text { text-decoration: line-through; color: var(--muted); }
 
-.shop-check {
-appearance: none;
-width: 18px;
-height: 18px;
-border: 1.5px solid var(–ink);
-background: var(–paper);
-cursor: pointer;
-flex-shrink: 0;
-position: relative;
-transition: all 0.15s;
-}
-.shop-check:hover { border-color: var(–claret); }
-.shop-check:checked {
-background: var(–olive);
-border-color: var(–olive);
-}
-.shop-check:checked::after {
-content: “✓”;
-position: absolute;
-top: 50%; left: 50%;
-transform: translate(-50%, -55%);
-color: var(–paper);
-font-size: 12px;
-font-weight: 700;
-}
+  .shop-check {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--ink);
+    background: var(--paper);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .shop-check:hover { border-color: var(--claret); }
+  .shop-check:checked {
+    background: var(--olive);
+    border-color: var(--olive);
+  }
+  .shop-check:checked::after {
+    content: "✓";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    color: var(--paper);
+    font-size: 12px;
+    font-weight: 700;
+  }
 
-.shop-text {
-font-size: 14.5px;
-color: var(–ink);
-line-height: 1.3;
-word-break: break-word;
-}
+  .shop-text {
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.3;
+    word-break: break-word;
+  }
 
-.shop-cat {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-padding: 3px 8px;
-border: 1px solid var(–rule-strong);
-color: var(–muted);
-white-space: nowrap;
-}
-.shop-cat.apparel { border-color: var(–olive); color: var(–olive); }
-.shop-cat.equipment { border-color: var(–claret); color: var(–claret); }
-.shop-cat.tech { border-color: var(–blue); color: var(–blue); }
-.shop-cat.toiletries { border-color: var(–ochre); color: var(–ochre); }
-.shop-cat.other { border-color: var(–muted); color: var(–muted); }
+  .shop-cat {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--rule-strong);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .shop-cat.apparel { border-color: var(--olive); color: var(--olive); }
+  .shop-cat.equipment { border-color: var(--claret); color: var(--claret); }
+  .shop-cat.tech { border-color: var(--blue); color: var(--blue); }
+  .shop-cat.toiletries { border-color: var(--ochre); color: var(--ochre); }
+  .shop-cat.other { border-color: var(--muted); color: var(--muted); }
 
-.shop-delete {
-background: none;
-border: none;
-color: var(–muted);
-cursor: pointer;
-padding: 4px 6px;
-font-size: 16px;
-line-height: 1;
-transition: color 0.15s;
-opacity: 0.5;
-}
-.shop-delete:hover { color: var(–claret); opacity: 1; }
+  .shop-delete {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 6px;
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.15s;
+    opacity: 0.5;
+  }
+  .shop-delete:hover { color: var(--claret); opacity: 1; }
 
-.shop-summary {
-padding: 12px 14px;
-margin-top: 14px;
-border: 1px solid var(–rule);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-letter-spacing: 0.15em;
-text-transform: uppercase;
-color: var(–muted);
-display: flex;
-justify-content: space-between;
-flex-wrap: wrap;
-gap: 10px;
-}
-.shop-summary strong {
-color: var(–ink);
-font-family: ‘Fraunces’, serif;
-font-size: 14px;
-letter-spacing: -0.01em;
-margin-right: 4px;
-}
-.shop-summary .clear-btn {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9.5px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-padding: 5px 10px;
-background: transparent;
-border: 1px solid var(–muted);
-color: var(–muted);
-cursor: pointer;
-transition: all 0.15s;
-}
-.shop-summary .clear-btn:hover {
-color: var(–claret);
-border-color: var(–claret);
-}
+  .shop-summary {
+    padding: 12px 14px;
+    margin-top: 14px;
+    border: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .shop-summary strong {
+    color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    margin-right: 4px;
+  }
+  .shop-summary .clear-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .shop-summary .clear-btn:hover {
+    color: var(--claret);
+    border-color: var(--claret);
+  }
 
-@media (max-width: 780px) {
-.wrap { padding: 16px 14px 40px; }
-.hero .subtitle { grid-template-columns: repeat(2, 1fr); }
-.masthead { grid-template-columns: 1fr; gap: 4px; text-align: center; }
-.masthead .right { text-align: center; }
-details > summary {
-grid-template-columns: 48px 1fr auto;
-gap: 10px;
-padding: 12px 10px 12px 2px;
-}
-.sum-date .sum-num { font-size: 26px; }
-.sum-title { font-size: 16px; }
-.sum-desc { font-size: 12px; }
-.sum-tag { font-size: 8.5px; padding: 3px 6px; }
-.details-body, .pack-section-note, .pack-items {
-padding-left: 12px;
-padding-right: 8px;
-}
-.pack-items { grid-template-columns: 1fr; gap: 0; }
-.event { grid-template-columns: 56px 1fr; gap: 10px; }
-.foot { grid-template-columns: 1fr; gap: 8px; text-align: center; }
-.foot .right, .foot .center { text-align: center; }
-.panel-tools .stat-row { font-size: 9px; gap: 12px; }
-.shop-add { grid-template-columns: 1fr; gap: 6px; }
-.shop-item {
-grid-template-columns: auto 1fr auto;
-gap: 10px;
-row-gap: 4px;
-}
-.shop-item .shop-cat {
-grid-column: 2 / 3;
-justify-self: start;
-}
-.shop-item .shop-delete { grid-row: 1; }
-}
+  @media (max-width: 780px) {
+    .wrap { padding: 16px 14px 40px; }
+    .hero .subtitle { grid-template-columns: repeat(2, 1fr); }
+    .masthead { grid-template-columns: 1fr; gap: 4px; text-align: center; }
+    .masthead .right { text-align: center; }
+    details > summary {
+      grid-template-columns: 48px 1fr auto;
+      gap: 10px;
+      padding: 12px 10px 12px 2px;
+    }
+    .sum-date .sum-num { font-size: 26px; }
+    .sum-title { font-size: 16px; }
+    .sum-desc { font-size: 12px; }
+    .sum-tag { font-size: 8.5px; padding: 3px 6px; }
+    .details-body, .pack-section-note, .pack-items {
+      padding-left: 12px;
+      padding-right: 8px;
+    }
+    .pack-items { grid-template-columns: 1fr; gap: 0; }
+    .event { grid-template-columns: 56px 1fr; gap: 10px; }
+    .foot { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+    .foot .right, .foot .center { text-align: center; }
+    .panel-tools .stat-row { font-size: 9px; gap: 12px; }
+    .shop-add { grid-template-columns: 1fr; gap: 6px; }
+    .shop-item {
+      grid-template-columns: auto 1fr auto;
+      gap: 10px;
+      row-gap: 4px;
+    }
+    .shop-item .shop-cat {
+      grid-column: 2 / 3;
+      justify-self: start;
+    }
+    .shop-item .shop-delete { grid-row: 1; }
+  }
 </style>
-
 </head>
 <body>
 <div class="wrap">
@@ -917,733 +914,724 @@ justify-self: start;
   </nav>
 
   <!-- ITINERARY -->
-
   <section class="tab-panel active" id="itinerary">
 
-```
-<div class="panel-tools">
-  <div class="stat-row">
-    <span><strong>7</strong>nights</span>
-    <span><strong>6</strong>rounds</span>
-    <span><strong>5</strong>courses</span>
-    <span><strong>108</strong>holes</span>
-  </div>
-  <div class="tool-btns">
-    <button class="tool-btn" data-action="expand-all" data-target="itinerary">Expand All</button>
-    <button class="tool-btn" data-action="collapse-all" data-target="itinerary">Collapse All</button>
-  </div>
-</div>
-
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Sat</div>
-      <div class="sum-num">23</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Departure Day — Chicago to Málaga</div>
-      <div class="sum-desc">UA 606 to Newark, then overnight Polaris to Spain with Zornes & Eyer.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag blue">Travel</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">12:11<span class="ampm">PM CT</span></div>
-      <div class="body">
-        <div class="type">UA 606 · United First</div>
-        <h4>Chicago O'Hare → Newark</h4>
-        <p>Boeing 737-900. Arrives EWR 3:39 PM ET. 2h 11m connection before your overnight.</p>
+    <div class="panel-tools">
+      <div class="stat-row">
+        <span><strong>7</strong>nights</span>
+        <span><strong>6</strong>rounds</span>
+        <span><strong>5</strong>courses</span>
+        <span><strong>108</strong>holes</span>
+      </div>
+      <div class="tool-btns">
+        <button class="tool-btn" data-action="expand-all" data-target="itinerary">Expand All</button>
+        <button class="tool-btn" data-action="collapse-all" data-target="itinerary">Collapse All</button>
       </div>
     </div>
-    <div class="event blue">
-      <div class="time">5:50<span class="ampm">PM ET</span></div>
-      <div class="body">
-        <div class="type">UA 350 · United Polaris Business</div>
-        <h4>Newark → Málaga</h4>
-        <p>Boeing 757-200. Arrives AGP 7:35 AM local on Sunday. Traveling alongside Michael Zornes and Mark Eyer on the same booking.</p>
-        <div class="meta-chips">
-          <span class="chip claret">7h 45m</span>
-          <span class="chip">Polaris lie-flat</span>
+
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Sat</div>
+          <div class="sum-num">23</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Departure Day — Chicago to Málaga</div>
+          <div class="sum-desc">UA 606 to Newark, then overnight Polaris to Spain with Zornes & Eyer.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag blue">Travel</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">12:11<span class="ampm">PM CT</span></div>
+          <div class="body">
+            <div class="type">UA 606 · United First</div>
+            <h4>Chicago O'Hare → Newark</h4>
+            <p>Boeing 737-900. Arrives EWR 3:39 PM ET. 2h 11m connection before your overnight.</p>
+          </div>
+        </div>
+        <div class="event blue">
+          <div class="time">5:50<span class="ampm">PM ET</span></div>
+          <div class="body">
+            <div class="type">UA 350 · United Polaris Business</div>
+            <h4>Newark → Málaga</h4>
+            <p>Boeing 757-200. Arrives AGP 7:35 AM local on Sunday. Traveling alongside Michael Zornes and Mark Eyer on the same booking.</p>
+            <div class="meta-chips">
+              <span class="chip claret">7h 45m</span>
+              <span class="chip">Polaris lie-flat</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Sun</div>
-      <div class="sum-num">24</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Arrive Marbella — Check-in at Puente Romano</div>
-      <div class="sum-desc">Touch down, transfer to the hotel, then Marbella Old Town or Puerto Banús at leisure.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag claret">Arrival</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event claret">
-      <div class="time">7:35<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Touchdown · Costa del Sol</div>
-        <h4>Arrive Málaga (AGP)</h4>
-        <p>Meet your private coach, 45-minute transfer west along the coast to Marbella.</p>
-      </div>
-    </div>
-    <div class="event">
-      <div class="time">≈9:00<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Check-in · 7 nights</div>
-        <h4>Hotel Puente Romano, Marbella</h4>
-        <p>Deluxe Garden View Junior Suite with full buffet breakfast included.</p>
-        <div class="meta-chips">
-          <span class="chip">Junior Suite</span>
-          <span class="chip">Breakfast incl.</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Sun</div>
+          <div class="sum-num">24</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Arrive Marbella — Check-in at Puente Romano</div>
+          <div class="sum-desc">Touch down, transfer to the hotel, then Marbella Old Town or Puerto Banús at leisure.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag claret">Arrival</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event claret">
+          <div class="time">7:35<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Touchdown · Costa del Sol</div>
+            <h4>Arrive Málaga (AGP)</h4>
+            <p>Meet your private coach, 45-minute transfer west along the coast to Marbella.</p>
+          </div>
+        </div>
+        <div class="event">
+          <div class="time">≈9:00<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Check-in · 7 nights</div>
+            <h4>Hotel Puente Romano, Marbella</h4>
+            <p>Deluxe Garden View Junior Suite with full buffet breakfast included.</p>
+            <div class="meta-chips">
+              <span class="chip">Junior Suite</span>
+              <span class="chip">Breakfast incl.</span>
+            </div>
+          </div>
+        </div>
+        <div class="event claret">
+          <div class="time">PM</div>
+          <div class="body">
+            <div class="type">Group exploration · 4-hr coach</div>
+            <h4>Marbella & Puerto Banús at leisure</h4>
+            <p>Consider the Old Town — cobblestone lanes, Plaza de los Naranjos — or Puerto Banús for the yacht marina and a welcome dinner.</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="event claret">
-      <div class="time">PM</div>
-      <div class="body">
-        <div class="type">Group exploration · 4-hr coach</div>
-        <h4>Marbella & Puerto Banús at leisure</h4>
-        <p>Consider the Old Town — cobblestone lanes, Plaza de los Naranjos — or Puerto Banús for the yacht marina and a welcome dinner.</p>
-      </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Mon</div>
-      <div class="sum-num">25</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Round 1 — Real Valderrama <span class="rankmini">#1</span></div>
-      <div class="sum-desc">Spain's answer to Augusta. Robert Trent Jones Sr. masterpiece, 1997 Ryder Cup venue.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag olive">Round 1</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈10:30<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 50 min</div>
-        <h4>Private coach to Valderrama</h4>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">12:00<span class="ampm">PM</span></div>
-      <div class="body">
-        <div class="type">Tee times · 12:00 / 12:12</div>
-        <h4>Real Valderrama <span class="rank">#1 Spain</span></h4>
-        <p>Narrow fairways, small contoured greens, centuries-old cork oaks. A stern test — trust club selection over ego.</p>
-        <span class="course-stat"><strong>6,990 yds</strong> · Par 72 · Host: Volvo Masters</span>
-        <div class="meta-chips">
-          <span class="chip olive">Cork Oaks</span>
-          <span class="chip">Tight Driving</span>
-          <span class="chip claret">Bucket List</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Mon</div>
+          <div class="sum-num">25</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Round 1 — Real Valderrama <span class="rankmini">#1</span></div>
+          <div class="sum-desc">Spain's answer to Augusta. Robert Trent Jones Sr. masterpiece, 1997 Ryder Cup venue.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag olive">Round 1</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈10:30<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 50 min</div>
+            <h4>Private coach to Valderrama</h4>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">12:00<span class="ampm">PM</span></div>
+          <div class="body">
+            <div class="type">Tee times · 12:00 / 12:12</div>
+            <h4>Real Valderrama <span class="rank">#1 Spain</span></h4>
+            <p>Narrow fairways, small contoured greens, centuries-old cork oaks. A stern test — trust club selection over ego.</p>
+            <span class="course-stat"><strong>6,990 yds</strong> · Par 72 · Host: Volvo Masters</span>
+            <div class="meta-chips">
+              <span class="chip olive">Cork Oaks</span>
+              <span class="chip">Tight Driving</span>
+              <span class="chip claret">Bucket List</span>
+            </div>
+          </div>
+        </div>
+        <div class="event">
+          <div class="time">Evening</div>
+          <div class="body">
+            <div class="type">At disposal</div>
+            <h4>4-hour coach service</h4>
+            <p>Dinner in Marbella Old Town or back at the hotel.</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="event">
-      <div class="time">Evening</div>
-      <div class="body">
-        <div class="type">At disposal</div>
-        <h4>4-hour coach service</h4>
-        <p>Dinner in Marbella Old Town or back at the hotel.</p>
-      </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Tue</div>
-      <div class="sum-num">26</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Round 2 — Sotogrande Old <span class="rankmini">#2</span></div>
-      <div class="sum-desc">One of Europe's premier championship layouts. Six water hazards, mature palms, tricky back nine.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag olive">Round 2</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈10:15<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 50 min</div>
-        <h4>Private coach to Real Club de Golf Sotogrande</h4>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">11:39<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Tee times · 11:39 / 11:48</div>
-        <h4>Sotogrande Old Course <span class="rank">#2 Spain</span></h4>
-        <p>Six holes with serious water. Palms and oaks frame the rest. Position over power on the back nine.</p>
-        <span class="course-stat"><strong>6,895 yds</strong> · Par 72 · Robert Trent Jones Sr.</span>
-        <div class="meta-chips">
-          <span class="chip">Water on 6</span>
-          <span class="chip olive">Palm-Lined</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Tue</div>
+          <div class="sum-num">26</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Round 2 — Sotogrande Old <span class="rankmini">#2</span></div>
+          <div class="sum-desc">One of Europe's premier championship layouts. Six water hazards, mature palms, tricky back nine.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag olive">Round 2</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈10:15<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 50 min</div>
+            <h4>Private coach to Real Club de Golf Sotogrande</h4>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">11:39<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Tee times · 11:39 / 11:48</div>
+            <h4>Sotogrande Old Course <span class="rank">#2 Spain</span></h4>
+            <p>Six holes with serious water. Palms and oaks frame the rest. Position over power on the back nine.</p>
+            <span class="course-stat"><strong>6,895 yds</strong> · Par 72 · Robert Trent Jones Sr.</span>
+            <div class="meta-chips">
+              <span class="chip">Water on 6</span>
+              <span class="chip olive">Palm-Lined</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Wed</div>
-      <div class="sum-num">27</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">36-Hole Day — Finca Cortesín <span class="rankmini">#4</span></div>
-      <div class="sum-desc">Morning and afternoon rounds. 2023 Solheim Cup host, one of Europe's longest courses.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag claret">36 Holes</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈8:30<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 45 min</div>
-        <h4>Private coach to Finca Cortesín</h4>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">10:00<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Morning round · 10:00 / 10:12</div>
-        <h4>Finca Cortesín <span class="rank">#4 Spain</span></h4>
-        <p>Cabell Robinson's epic between Marbella and Sotogrande, with views to the African coast.</p>
-        <span class="course-stat"><strong>7,482 yds</strong> · Par 72 · 2023 Solheim Cup host</span>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">3:00<span class="ampm">PM</span></div>
-      <div class="body">
-        <div class="type">Afternoon round · 3:00 / 3:12</div>
-        <h4>Finca Cortesín — Second 18</h4>
-        <p>Same course, different light. Pace yourself at lunch. Hydrate.</p>
-        <div class="meta-chips">
-          <span class="chip claret">Long Day</span>
-          <span class="chip olive">Sea Views</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Wed</div>
+          <div class="sum-num">27</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">36-Hole Day — Finca Cortesín <span class="rankmini">#4</span></div>
+          <div class="sum-desc">Morning and afternoon rounds. 2023 Solheim Cup host, one of Europe's longest courses.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag claret">36 Holes</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈8:30<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 45 min</div>
+            <h4>Private coach to Finca Cortesín</h4>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">10:00<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Morning round · 10:00 / 10:12</div>
+            <h4>Finca Cortesín <span class="rank">#4 Spain</span></h4>
+            <p>Cabell Robinson's epic between Marbella and Sotogrande, with views to the African coast.</p>
+            <span class="course-stat"><strong>7,482 yds</strong> · Par 72 · 2023 Solheim Cup host</span>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">3:00<span class="ampm">PM</span></div>
+          <div class="body">
+            <div class="type">Afternoon round · 3:00 / 3:12</div>
+            <h4>Finca Cortesín — Second 18</h4>
+            <p>Same course, different light. Pace yourself at lunch. Hydrate.</p>
+            <div class="meta-chips">
+              <span class="chip claret">Long Day</span>
+              <span class="chip olive">Sea Views</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Thu</div>
-      <div class="sum-num">28</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">36-Hole Day — La Reserva <span class="rankmini">#6</span></div>
-      <div class="sum-desc">Another Cabell Robinson gem. Wide fairways, multi-tiered greens, palatial clubhouse.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag claret">36 Holes</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈8:45<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 50 min</div>
-        <h4>Private coach to La Reserva de Sotogrande</h4>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">10:12<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Morning round · 10:12 / 10:24</div>
-        <h4>La Reserva de Sotogrande <span class="rank">#6 Spain</span></h4>
-        <p>Big, handsome, welcoming. Wide fairways for the hitters, multi-tiered greens ask the questions.</p>
-        <span class="course-stat"><strong>6,721 m</strong> · Par 72</span>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">3:00<span class="ampm">PM</span></div>
-      <div class="body">
-        <div class="type">Afternoon round · 3:00 / 3:12</div>
-        <h4>La Reserva — Second 18</h4>
-        <p>Save time for the clubhouse after — Andalucian hospitality at its best.</p>
-      </div>
-    </div>
-  </div>
-</details>
-
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Fri</div>
-      <div class="sum-num">29</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Round 5 — Sotogrande Old (Encore)</div>
-      <div class="sum-desc">Relaxed morning, later tee time. A second crack now that you know the water.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag olive">Round 5</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈11:30<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 50 min</div>
-        <h4>Private coach back to Sotogrande</h4>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">12:51<span class="ampm">PM</span></div>
-      <div class="body">
-        <div class="type">Tee times · 12:51 / 1:00</div>
-        <h4>Sotogrande Old — Encore</h4>
-        <p>Later tee means a relaxed morning. Long breakfast, the spa, or the beach at Puente Romano.</p>
-        <div class="meta-chips">
-          <span class="chip olive">Know the Course</span>
-          <span class="chip">Redemption</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Thu</div>
+          <div class="sum-num">28</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">36-Hole Day — La Reserva <span class="rankmini">#6</span></div>
+          <div class="sum-desc">Another Cabell Robinson gem. Wide fairways, multi-tiered greens, palatial clubhouse.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag claret">36 Holes</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈8:45<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 50 min</div>
+            <h4>Private coach to La Reserva de Sotogrande</h4>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">10:12<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Morning round · 10:12 / 10:24</div>
+            <h4>La Reserva de Sotogrande <span class="rank">#6 Spain</span></h4>
+            <p>Big, handsome, welcoming. Wide fairways for the hitters, multi-tiered greens ask the questions.</p>
+            <span class="course-stat"><strong>6,721 m</strong> · Par 72</span>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">3:00<span class="ampm">PM</span></div>
+          <div class="body">
+            <div class="type">Afternoon round · 3:00 / 3:12</div>
+            <h4>La Reserva — Second 18</h4>
+            <p>Save time for the clubhouse after — Andalucian hospitality at its best.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Sat</div>
-      <div class="sum-num">30</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Finale — La Hacienda Links <span class="rankmini">#12</span></div>
-      <div class="sum-desc">Southern Spain's only true links. Gibraltar and the Atlas Mountains in view. Farewell dinner.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag olive">Round 6</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event blue">
-      <div class="time">≈7:30<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Transfer · 50 min · early start</div>
-        <h4>Private coach to La Hacienda</h4>
-        <p>The earliest tee of the week. Coffee on the coach.</p>
-      </div>
-    </div>
-    <div class="event olive">
-      <div class="time">9:00<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Tee times · 9:00 / 9:10</div>
-        <h4>La Hacienda Links <span class="rank">#12 Spain</span></h4>
-        <p>A tribute to Pebble Beach and Cypress Point. Rock of Gibraltar and Atlas Mountains backdrop. Heather, gorse, double greens.</p>
-        <span class="course-stat"><strong>5,841 m</strong> · Par 72 · Alliss & Clark</span>
-        <div class="meta-chips">
-          <span class="chip olive">Links Golf</span>
-          <span class="chip claret">Gibraltar Views</span>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Fri</div>
+          <div class="sum-num">29</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Round 5 — Sotogrande Old (Encore)</div>
+          <div class="sum-desc">Relaxed morning, later tee time. A second crack now that you know the water.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag olive">Round 5</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈11:30<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 50 min</div>
+            <h4>Private coach back to Sotogrande</h4>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">12:51<span class="ampm">PM</span></div>
+          <div class="body">
+            <div class="type">Tee times · 12:51 / 1:00</div>
+            <h4>Sotogrande Old — Encore</h4>
+            <p>Later tee means a relaxed morning. Long breakfast, the spa, or the beach at Puente Romano.</p>
+            <div class="meta-chips">
+              <span class="chip olive">Know the Course</span>
+              <span class="chip">Redemption</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="event claret">
-      <div class="time">Evening</div>
-      <div class="body">
-        <div class="type">Last night · 4-hr coach at disposal</div>
-        <h4>Farewell dinner in Marbella</h4>
-        <p>An early one is wise — bags leave before dawn.</p>
-      </div>
-    </div>
-  </div>
-</details>
+    </details>
 
-<details>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">Sun</div>
-      <div class="sum-num">31</div>
-      <div class="sum-mon">May</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Departure — Málaga to Chicago</div>
-      <div class="sum-desc">Pre-dawn coach to AGP, Polaris to Newark, connection home to O'Hare.</div>
-    </div>
-    <div class="sum-right">
-      <span class="sum-tag blue">Travel</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="details-body">
-    <div class="event claret">
-      <div class="time">6:35<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">Private coach · 45 min</div>
-        <h4>Transfer to Málaga Airport</h4>
-        <p>With Messrs. Eyer, Gurbacki, Loncka, and Zornes.</p>
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Sat</div>
+          <div class="sum-num">30</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Finale — La Hacienda Links <span class="rankmini">#12</span></div>
+          <div class="sum-desc">Southern Spain's only true links. Gibraltar and the Atlas Mountains in view. Farewell dinner.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag olive">Round 6</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event blue">
+          <div class="time">≈7:30<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Transfer · 50 min · early start</div>
+            <h4>Private coach to La Hacienda</h4>
+            <p>The earliest tee of the week. Coffee on the coach.</p>
+          </div>
+        </div>
+        <div class="event olive">
+          <div class="time">9:00<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Tee times · 9:00 / 9:10</div>
+            <h4>La Hacienda Links <span class="rank">#12 Spain</span></h4>
+            <p>A tribute to Pebble Beach and Cypress Point. Rock of Gibraltar and Atlas Mountains backdrop. Heather, gorse, double greens.</p>
+            <span class="course-stat"><strong>5,841 m</strong> · Par 72 · Alliss & Clark</span>
+            <div class="meta-chips">
+              <span class="chip olive">Links Golf</span>
+              <span class="chip claret">Gibraltar Views</span>
+            </div>
+          </div>
+        </div>
+        <div class="event claret">
+          <div class="time">Evening</div>
+          <div class="body">
+            <div class="type">Last night · 4-hr coach at disposal</div>
+            <h4>Farewell dinner in Marbella</h4>
+            <p>An early one is wise — bags leave before dawn.</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="event blue">
-      <div class="time">9:35<span class="ampm">AM</span></div>
-      <div class="body">
-        <div class="type">UA 351 · United Polaris</div>
-        <h4>Málaga → Newark</h4>
-        <p>Boeing 757-200. Arrives EWR 12:10 PM local. 2h 40m connection.</p>
+    </details>
+
+    <details>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">Sun</div>
+          <div class="sum-num">31</div>
+          <div class="sum-mon">May</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Departure — Málaga to Chicago</div>
+          <div class="sum-desc">Pre-dawn coach to AGP, Polaris to Newark, connection home to O'Hare.</div>
+        </div>
+        <div class="sum-right">
+          <span class="sum-tag blue">Travel</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="details-body">
+        <div class="event claret">
+          <div class="time">6:35<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">Private coach · 45 min</div>
+            <h4>Transfer to Málaga Airport</h4>
+            <p>With Messrs. Eyer, Gurbacki, Loncka, and Zornes.</p>
+          </div>
+        </div>
+        <div class="event blue">
+          <div class="time">9:35<span class="ampm">AM</span></div>
+          <div class="body">
+            <div class="type">UA 351 · United Polaris</div>
+            <h4>Málaga → Newark</h4>
+            <p>Boeing 757-200. Arrives EWR 12:10 PM local. 2h 40m connection.</p>
+          </div>
+        </div>
+        <div class="event blue">
+          <div class="time">2:50<span class="ampm">PM</span></div>
+          <div class="body">
+            <div class="type">UA 2788 · United First</div>
+            <h4>Newark → Chicago O'Hare</h4>
+            <p>Arrives ORD 4:33 PM CT. Home by dinner.</p>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="event blue">
-      <div class="time">2:50<span class="ampm">PM</span></div>
-      <div class="body">
-        <div class="type">UA 2788 · United First</div>
-        <h4>Newark → Chicago O'Hare</h4>
-        <p>Arrives ORD 4:33 PM CT. Home by dinner.</p>
-      </div>
-    </div>
-  </div>
-</details>
-```
+    </details>
 
   </section>
 
   <!-- PACKING LIST -->
-
   <section class="tab-panel" id="packing">
 
-```
-<div class="pack-progress">
-  <div class="pct"><span id="check-count">0</span><span class="total">/<span id="total-count">0</span></span></div>
-  <div>
-    <div class="progress-label">Packing progress</div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-  </div>
-  <button class="tool-btn" id="reset-btn">Reset</button>
-</div>
+    <div class="pack-progress">
+      <div class="pct"><span id="check-count">0</span><span class="total">/<span id="total-count">0</span></span></div>
+      <div>
+        <div class="progress-label">Packing progress</div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+      <button class="tool-btn" id="reset-btn">Reset</button>
+    </div>
 
-<div class="panel-tools" style="border-bottom:1px solid var(--rule);margin-bottom:0;padding:10px 0;">
-  <div class="stat-row"><span>8 categories · 75 items</span></div>
-  <div class="tool-btns">
-    <button class="tool-btn" data-action="expand-all" data-target="packing">Expand All</button>
-    <button class="tool-btn" data-action="collapse-all" data-target="packing">Collapse All</button>
-  </div>
-</div>
+    <div class="panel-tools" style="border-bottom:1px solid var(--rule);margin-bottom:0;padding:10px 0;">
+      <div class="stat-row"><span>8 categories · 75 items</span></div>
+      <div class="tool-btns">
+        <button class="tool-btn" data-action="expand-all" data-target="packing">Expand All</button>
+        <button class="tool-btn" data-action="collapse-all" data-target="packing">Collapse All</button>
+      </div>
+    </div>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">01</div>
-      <div class="pack-icon">G</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Golf Apparel</div>
-      <div class="sum-desc">Collared shirts, tailored trousers & shorts, rain layer, two pairs of shoes.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/14</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Most Andalucian clubs require collared shirts. Slacks or tailored shorts — no denim, no cargo pockets.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Polo shirts <span class="item-qty">×7</span></span><span class="item-note">Performance fabric, one per round plus spare.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf trousers <span class="item-qty">×3</span></span><span class="item-note">For cooler mornings at Valderrama & La Hacienda.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Tailored golf shorts <span class="item-qty">×3</span></span><span class="item-note">For warmer afternoons at Finca & La Reserva.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Performance socks <span class="item-qty">×8</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf belt</span><span class="item-note">Black and brown if you can fit both.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Lightweight ¼-zip pullover <span class="item-qty">×2</span></span><span class="item-note">Early tees start in the 60s.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rain jacket (packable)</span><span class="item-note">May is mostly dry but coastal showers happen.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf cap or visor <span class="item-qty">×2</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf glove <span class="item-qty">×3</span></span><span class="item-note">Two 36-hole days — rotate them.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf shoes <span class="item-qty">×2 pairs</span></span><span class="item-note">One dries while the other plays. Soft spikes only.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Sunglasses (polarized)</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Base layer / wind shirt</span><span class="item-note">La Hacienda links wind can bite.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf towel</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Hand warmer / grip wipes</span><span class="item-note">Optional — cork oak dew at Valderrama.</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">01</div>
+          <div class="pack-icon">G</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Golf Apparel</div>
+          <div class="sum-desc">Collared shirts, tailored trousers & shorts, rain layer, two pairs of shoes.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/14</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Most Andalucian clubs require collared shirts. Slacks or tailored shorts — no denim, no cargo pockets.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Polo shirts <span class="item-qty">×7</span></span><span class="item-note">Performance fabric, one per round plus spare.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf trousers <span class="item-qty">×3</span></span><span class="item-note">For cooler mornings at Valderrama & La Hacienda.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Tailored golf shorts <span class="item-qty">×3</span></span><span class="item-note">For warmer afternoons at Finca & La Reserva.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Performance socks <span class="item-qty">×8</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf belt</span><span class="item-note">Black and brown if you can fit both.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Lightweight ¼-zip pullover <span class="item-qty">×2</span></span><span class="item-note">Early tees start in the 60s.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rain jacket (packable)</span><span class="item-note">May is mostly dry but coastal showers happen.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf cap or visor <span class="item-qty">×2</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf glove <span class="item-qty">×3</span></span><span class="item-note">Two 36-hole days — rotate them.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf shoes <span class="item-qty">×2 pairs</span></span><span class="item-note">One dries while the other plays. Soft spikes only.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Sunglasses (polarized)</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Base layer / wind shirt</span><span class="item-note">La Hacienda links wind can bite.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf towel</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Hand warmer / grip wipes</span><span class="item-note">Optional — cork oak dew at Valderrama.</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">02</div>
-      <div class="pack-icon">E</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Golf Equipment</div>
-      <div class="sum-desc">Clubs, balls, tees, rangefinder, AirTag — protect the sticks for the transatlantic.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/10</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Travel-cover everything. UA Polaris has generous baggage but protect the sticks.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Clubs in hard travel case</span><span class="item-note">Stiff Arm or headcovers on every club.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf balls <span class="item-qty">×4 dz</span></span><span class="item-note">Water at Sotogrande, heather at La Hacienda.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Tees <span class="item-qty">×50+</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Ball markers & divot tool</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rangefinder + batteries</span><span class="item-note">Verify TSA-safe battery.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Yardage book / notepad</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">AirTag inside golf bag</span><span class="item-note">Peace of mind through EWR & AGP.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Bag tag with hotel address</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Spare spikes + wrench</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small towel + brush</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">02</div>
+          <div class="pack-icon">E</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Golf Equipment</div>
+          <div class="sum-desc">Clubs, balls, tees, rangefinder, AirTag — protect the sticks for the transatlantic.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/10</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Travel-cover everything. UA Polaris has generous baggage but protect the sticks.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Clubs in hard travel case</span><span class="item-note">Stiff Arm or headcovers on every club.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf balls <span class="item-qty">×4 dz</span></span><span class="item-note">Water at Sotogrande, heather at La Hacienda.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Tees <span class="item-qty">×50+</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Ball markers & divot tool</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rangefinder + batteries</span><span class="item-note">Verify TSA-safe battery.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Yardage book / notepad</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">AirTag inside golf bag</span><span class="item-note">Peace of mind through EWR & AGP.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Bag tag with hotel address</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Spare spikes + wrench</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small towel + brush</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">03</div>
-      <div class="pack-icon">R</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Resort & Evening</div>
-      <div class="sum-desc">Smart-casual dinners, pool time, a blazer that does five nights of work.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/10</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Puente Romano's restaurants and Puerto Banús call for smart-casual.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Linen or cotton blazer</span><span class="item-note">One piece, five different dinners.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Dress shirts <span class="item-qty">×3</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Chinos / linen trousers <span class="item-qty">×2</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">T-shirts <span class="item-qty">×4</span></span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Loafers or brown leather shoes</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Casual sneakers</span><span class="item-note">Cobblestones aren't kind to dress shoes.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Swim trunks <span class="item-qty">×2</span></span><span class="item-note">Multiple pools + Mediterranean.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Sandals / pool slides</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Light sweater</span><span class="item-note">Sea breeze at night.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Undergarments <span class="item-qty">×8</span></span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">03</div>
+          <div class="pack-icon">R</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Resort & Evening</div>
+          <div class="sum-desc">Smart-casual dinners, pool time, a blazer that does five nights of work.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/10</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Puente Romano's restaurants and Puerto Banús call for smart-casual.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Linen or cotton blazer</span><span class="item-note">One piece, five different dinners.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Dress shirts <span class="item-qty">×3</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Chinos / linen trousers <span class="item-qty">×2</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">T-shirts <span class="item-qty">×4</span></span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Loafers or brown leather shoes</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Casual sneakers</span><span class="item-note">Cobblestones aren't kind to dress shoes.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Swim trunks <span class="item-qty">×2</span></span><span class="item-note">Multiple pools + Mediterranean.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Sandals / pool slides</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Light sweater</span><span class="item-note">Sea breeze at night.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Undergarments <span class="item-qty">×8</span></span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">04</div>
-      <div class="pack-icon">D</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Travel Documents</div>
-      <div class="sum-desc">Passport, confirmation J9QL8P, ETIAS, euros — all in your personal item.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/8</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Everything here lives in your personal item, not the overhead.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Passport</span><span class="item-note">Expires ≥ 6 months after trip end — verify.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">United confirmation J9QL8P</span><span class="item-note">Screenshot + printed backup.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">ETIAS / EU entry confirmation</span><span class="item-note">Check current requirements.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf International itinerary</span><span class="item-note">Physical copy — driver uses it.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Driver's license</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Credit cards (2) + notify issuers</span><span class="item-note">Amex spotty at smaller clubs.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Euros cash <span class="item-qty">€200–300</span></span><span class="item-note">Caddies, drivers, locker attendants.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Travel insurance info</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">04</div>
+          <div class="pack-icon">D</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Travel Documents</div>
+          <div class="sum-desc">Passport, confirmation J9QL8P, ETIAS, euros — all in your personal item.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/8</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Everything here lives in your personal item, not the overhead.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Passport</span><span class="item-note">Expires ≥ 6 months after trip end — verify.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">United confirmation J9QL8P</span><span class="item-note">Screenshot + printed backup.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">ETIAS / EU entry confirmation</span><span class="item-note">Check current requirements.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Golf International itinerary</span><span class="item-note">Physical copy — driver uses it.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Driver's license</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Credit cards (2) + notify issuers</span><span class="item-note">Amex spotty at smaller clubs.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Euros cash <span class="item-qty">€200–300</span></span><span class="item-note">Caddies, drivers, locker attendants.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Travel insurance info</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">05</div>
-      <div class="pack-icon">T</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Tech & Power</div>
-      <div class="sum-desc">EU adapters, battery pack, noise-cancelling headphones, AirTags.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/9</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Spain uses Type C/F plugs (230V). Polaris pods have AC and USB.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Phone + charger</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">EU plug adapters <span class="item-qty">×2</span></span><span class="item-note">Type C — two round pins.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Portable battery pack</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Noise-cancelling headphones</span><span class="item-note">The 757 is noisy.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rangefinder charger</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Camera (or phone with storage)</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">AirTags (bag + clubs)</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">International data plan activated</span><span class="item-note">Call carrier or buy eSIM.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Kindle / book</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">05</div>
+          <div class="pack-icon">T</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Tech & Power</div>
+          <div class="sum-desc">EU adapters, battery pack, noise-cancelling headphones, AirTags.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/9</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Spain uses Type C/F plugs (230V). Polaris pods have AC and USB.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Phone + charger</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">EU plug adapters <span class="item-qty">×2</span></span><span class="item-note">Type C — two round pins.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Portable battery pack</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Noise-cancelling headphones</span><span class="item-note">The 757 is noisy.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Rangefinder charger</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Camera (or phone with storage)</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">AirTags (bag + clubs)</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">International data plan activated</span><span class="item-note">Call carrier or buy eSIM.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Kindle / book</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">06</div>
-      <div class="pack-icon">H</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Health & Toiletries</div>
-      <div class="sum-desc">SPF 50, personal meds, electrolytes for 36-hole days, eye mask for the overnight.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/11</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Puente Romano provides quality amenities — pack what's personal.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">SPF 50 sunscreen</span><span class="item-note">Reapply between 9 and 10 on 36-hole days.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Lip balm with SPF</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Personal medications</span><span class="item-note">Original containers, carry-on.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Advil / Tylenol</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Electrolyte packets</span><span class="item-note">The 36-hole days will thank you.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Blister plasters</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Toothbrush / paste / floss</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Razor + shave kit</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Deodorant</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">KT tape / athletic tape</span><span class="item-note">Whatever gets taxed on day three.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Eye mask + ear plugs</span><span class="item-note">For the overnight Polaris.</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">06</div>
+          <div class="pack-icon">H</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Health & Toiletries</div>
+          <div class="sum-desc">SPF 50, personal meds, electrolytes for 36-hole days, eye mask for the overnight.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/11</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Puente Romano provides quality amenities — pack what's personal.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">SPF 50 sunscreen</span><span class="item-note">Reapply between 9 and 10 on 36-hole days.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Lip balm with SPF</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Personal medications</span><span class="item-note">Original containers, carry-on.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Advil / Tylenol</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Electrolyte packets</span><span class="item-note">The 36-hole days will thank you.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Blister plasters</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Toothbrush / paste / floss</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Razor + shave kit</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Deodorant</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">KT tape / athletic tape</span><span class="item-note">Whatever gets taxed on day three.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Eye mask + ear plugs</span><span class="item-note">For the overnight Polaris.</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">07</div>
-      <div class="pack-icon">F</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">For the Flight</div>
-      <div class="sum-desc">Compression socks, cashmere layer, empty bottle, change of shirt.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/7</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">EWR → AGP is 7h 45m overnight. Sleep is the goal.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Compression socks</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Travel cashmere / layer</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Empty water bottle</span><span class="item-note">Fill past security.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Snacks</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Change of shirt in carry-on</span><span class="item-note">In case clubs arrive and you don't.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Downloaded entertainment</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Pen for customs</span></span></label>
-  </div>
-</details>
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">07</div>
+          <div class="pack-icon">F</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">For the Flight</div>
+          <div class="sum-desc">Compression socks, cashmere layer, empty bottle, change of shirt.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/7</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">EWR → AGP is 7h 45m overnight. Sleep is the goal.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Compression socks</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Travel cashmere / layer</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Empty water bottle</span><span class="item-note">Fill past security.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Snacks</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Change of shirt in carry-on</span><span class="item-note">In case clubs arrive and you don't.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Downloaded entertainment</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Pen for customs</span></span></label>
+      </div>
+    </details>
 
-<details data-pack-section>
-  <summary>
-    <div class="sum-date">
-      <div class="sum-day">08</div>
-      <div class="pack-icon">N</div>
-    </div>
-    <div class="sum-main">
-      <div class="sum-title">Nice-to-Haves</div>
-      <div class="sum-desc">Cigars & cutter, workout kit, a small gift, packing cubes.</div>
-    </div>
-    <div class="sum-right">
-      <span class="section-mini"><span class="done-num">0</span>/6</span>
-      <span class="chevron"></span>
-    </div>
-  </summary>
-  <div class="pack-section-note">Small things that make a very good trip feel effortless.</div>
-  <div class="pack-items">
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Cigars + cutter</span><span class="item-note">A Valderrama tradition. Check TSA on butane.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small gift for the group</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Workout clothes</span><span class="item-note">Full gym + tennis courts at hotel.</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Book — e.g. "A Good Walk Spoiled"</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Laundry bag / packing cubes</span></span></label>
-    <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small flask <span class="item-qty">optional</span></span></span></label>
-  </div>
-</details>
-```
+    <details data-pack-section>
+      <summary>
+        <div class="sum-date">
+          <div class="sum-day">08</div>
+          <div class="pack-icon">N</div>
+        </div>
+        <div class="sum-main">
+          <div class="sum-title">Nice-to-Haves</div>
+          <div class="sum-desc">Cigars & cutter, workout kit, a small gift, packing cubes.</div>
+        </div>
+        <div class="sum-right">
+          <span class="section-mini"><span class="done-num">0</span>/6</span>
+          <span class="chevron"></span>
+        </div>
+      </summary>
+      <div class="pack-section-note">Small things that make a very good trip feel effortless.</div>
+      <div class="pack-items">
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Cigars + cutter</span><span class="item-note">A Valderrama tradition. Check TSA on butane.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small gift for the group</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Workout clothes</span><span class="item-note">Full gym + tennis courts at hotel.</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Book — e.g. "A Good Walk Spoiled"</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Laundry bag / packing cubes</span></span></label>
+        <label class="pack-item"><input type="checkbox"><span class="item-body"><span class="item-label">Small flask <span class="item-qty">optional</span></span></span></label>
+      </div>
+    </details>
 
   </section>
 
   <!-- SHOPPING LIST -->
-
   <section class="tab-panel" id="shopping">
 
-```
-<div class="shop-header">
-  <h2>Things to <em>buy</em> before you go.</h2>
-  <p>Add items below, check them off as you buy them, and filter by category. Your list saves automatically in this browser. Use Export/Import to sync across devices.</p>
-  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-    <button class="tool-btn" id="shop-export-btn">↓ Export List</button>
-    <label class="tool-btn" style="cursor:pointer;margin:0;">↑ Import List<input type="file" id="shop-import-input" accept=".json" style="display:none;"></label>
-  </div>
-</div>
+    <div class="shop-header">
+      <h2>Things to <em>buy</em> before you go.</h2>
+      <p>Add items below, check them off as you buy them, and filter by category. Your list saves automatically in this browser. Use Export/Import to sync across devices.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <button class="tool-btn" id="shop-export-btn">↓ Export List</button>
+        <label class="tool-btn" style="cursor:pointer;margin:0;">↑ Import List<input type="file" id="shop-import-input" accept=".json" style="display:none;"></label>
+      </div>
+    </div>
 
-<div class="shop-add">
-  <input type="text" class="shop-input" id="shop-input" placeholder="e.g. New golf glove, extra sunscreen..." maxlength="120">
-  <select class="shop-select" id="shop-category">
-    <option value="apparel">Apparel</option>
-    <option value="equipment">Equipment</option>
-    <option value="tech">Tech</option>
-    <option value="toiletries">Toiletries</option>
-    <option value="other" selected>Other</option>
-  </select>
-  <button class="shop-add-btn" id="shop-add-btn">+ Add Item</button>
-</div>
+    <div class="shop-add">
+      <input type="text" class="shop-input" id="shop-input" placeholder="e.g. New golf glove, extra sunscreen..." maxlength="120">
+      <select class="shop-select" id="shop-category">
+        <option value="apparel">Apparel</option>
+        <option value="equipment">Equipment</option>
+        <option value="tech">Tech</option>
+        <option value="toiletries">Toiletries</option>
+        <option value="other" selected>Other</option>
+      </select>
+      <button class="shop-add-btn" id="shop-add-btn">+ Add Item</button>
+    </div>
 
-<div class="shop-filters" id="shop-filters">
-  <button class="shop-filter active" data-filter="all">All <span class="cat-count" data-count="all">0</span></button>
-  <button class="shop-filter" data-filter="apparel">Apparel <span class="cat-count" data-count="apparel">0</span></button>
-  <button class="shop-filter" data-filter="equipment">Equipment <span class="cat-count" data-count="equipment">0</span></button>
-  <button class="shop-filter" data-filter="tech">Tech <span class="cat-count" data-count="tech">0</span></button>
-  <button class="shop-filter" data-filter="toiletries">Toiletries <span class="cat-count" data-count="toiletries">0</span></button>
-  <button class="shop-filter" data-filter="other">Other <span class="cat-count" data-count="other">0</span></button>
-</div>
+    <div class="shop-filters" id="shop-filters">
+      <button class="shop-filter active" data-filter="all">All <span class="cat-count" data-count="all">0</span></button>
+      <button class="shop-filter" data-filter="apparel">Apparel <span class="cat-count" data-count="apparel">0</span></button>
+      <button class="shop-filter" data-filter="equipment">Equipment <span class="cat-count" data-count="equipment">0</span></button>
+      <button class="shop-filter" data-filter="tech">Tech <span class="cat-count" data-count="tech">0</span></button>
+      <button class="shop-filter" data-filter="toiletries">Toiletries <span class="cat-count" data-count="toiletries">0</span></button>
+      <button class="shop-filter" data-filter="other">Other <span class="cat-count" data-count="other">0</span></button>
+    </div>
 
-<ul class="shop-list" id="shop-list"></ul>
+    <ul class="shop-list" id="shop-list"></ul>
 
-<div class="shop-empty" id="shop-empty">
-  Nothing on the list yet. Add the first item above.
-</div>
+    <div class="shop-empty" id="shop-empty">
+      Nothing on the list yet. Add the first item above.
+    </div>
 
-<div class="shop-summary" id="shop-summary" style="display:none;">
-  <span><strong id="shop-bought">0</strong>of <strong id="shop-total">0</strong>items purchased</span>
-  <button class="clear-btn" id="shop-clear-bought">Clear Purchased</button>
-</div>
-```
+    <div class="shop-summary" id="shop-summary" style="display:none;">
+      <span><strong id="shop-bought">0</strong>of <strong id="shop-total">0</strong>items purchased</span>
+      <button class="clear-btn" id="shop-clear-bought">Clear Purchased</button>
+    </div>
 
   </section>
 
@@ -1910,6 +1898,5 @@ justify-self: start;
 
   renderShop();
 </script>
-
 </body>
 </html>
