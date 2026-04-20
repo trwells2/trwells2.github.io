@@ -1,3 +1,7 @@
+-----
+
+## layout: none
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -1601,7 +1605,11 @@ justify-self: start;
 ```
 <div class="shop-header">
   <h2>Things to <em>buy</em> before you go.</h2>
-  <p>A running list of items you still need to pick up. Add what's missing, check things off as you get them, and filter by category.</p>
+  <p>Add items below, check them off as you buy them, and filter by category. Your list saves automatically in this browser. Use Export/Import to sync across devices.</p>
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+    <button class="tool-btn" id="shop-export-btn">↓ Export List</button>
+    <label class="tool-btn" style="cursor:pointer;margin:0;">↑ Import List<input type="file" id="shop-import-input" accept=".json" style="display:none;"></label>
+  </div>
 </div>
 
 <div class="shop-add">
@@ -1864,6 +1872,40 @@ justify-self: start;
     shopItems = shopItems.filter(i => !i.bought);
     saveShopState();
     renderShop();
+  });
+
+  // Export
+  document.getElementById('shop-export-btn').addEventListener('click', () => {
+    const data = JSON.stringify({ items: shopItems, nextId }, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'wells-shopping-list.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Import
+  document.getElementById('shop-import-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.items && Array.isArray(data.items)) {
+          shopItems = data.items;
+          nextId = data.nextId || shopItems.length + 1;
+          saveShopState();
+          renderShop();
+        }
+      } catch(err) {
+        alert('Could not read that file. Make sure it\'s a valid shopping list export.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   });
 
   renderShop();
