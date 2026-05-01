@@ -92,7 +92,7 @@ button { font: inherit; cursor: pointer; }
   align-items: center;
   gap: 0.6rem;
   font-family: var(--serif);
-  font-style: italic;
+  font-style: bold;
   font-weight: 500;
   font-size: 1.05rem;
   letter-spacing: -0.01em;
