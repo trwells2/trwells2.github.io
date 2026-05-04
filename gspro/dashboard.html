@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GSPro Dashboard</title>
 <style>
-  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#fafaf7; color:#222; }
-  #root:empty + #status { display:block; }
-  #status { padding: 32px; text-align: center; color:#666; }
+  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#0a0a0a; color:#eee; }
+  #status { padding: 40px; text-align: center; font-size: 14px; color: #888; }
+  #status .err { color: #e57373; text-align: left; max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 20px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; }
 </style>
 </head>
 <body>
 <div id="root"></div>
-<div id="status">Initializing…</div>
+<div id="status"><span id="status-text">Loading shots from Google Sheets…</span></div>
 
 <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
@@ -20,15 +20,15 @@
 <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
 
 <script>
-// Map UMD globals to the names the compiled code expects.
-const { useState, useMemo, useEffect, useRef } = React;
+// Expose React hooks and Recharts components as globals for the compiled app
+const { useState, useMemo, useEffect, useRef, useCallback } = React;
 const {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid,
   Tooltip, Legend, LineChart, Line, BarChart, Bar, ReferenceLine, ReferenceArea,
   Cell, AreaChart, Area
 } = Recharts;
 
-// Inline SVG shims for the 3 lucide-react icons used in the dashboard.
+// Lucide icon shims
 function makeIcon(paths) {
   return function Icon({ size = 16, color = "currentColor", style = {}, ...rest }) {
     return React.createElement("svg", {
@@ -38,55 +38,40 @@ function makeIcon(paths) {
     }, paths.map((d, i) => React.createElement("path", { key: i, d })));
   };
 }
-const Calendar = makeIcon([
-  "M8 2v4", "M16 2v4",
-  "M3 10h18",
-  "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
-]);
-const Database = makeIcon([
-  "M12 8c4.97 0 9-1.79 9-4s-4.03-4-9-4-9 1.79-9 4 4.03 4 9 4z",
-  "M3 5v6c0 2.21 4.03 4 9 4s9-1.79 9-4V5",
-  "M3 11v6c0 2.21 4.03 4 9 4s9-1.79 9-4v-6"
-]);
-const X = makeIcon([
-  "M18 6L6 18", "M6 6l12 12"
-]);
+const Calendar = makeIcon(["M8 2v4","M16 2v4","M3 10h18","M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"]);
+const Database = makeIcon(["M12 8c4.97 0 9-1.79 9-4s-4.03-4-9-4-9 1.79-9 4 4.03 4 9 4z","M3 5v6c0 2.21 4.03 4 9 4s9-1.79 9-4V5","M3 11v6c0 2.21 4.03 4 9 4s9-1.79 9-4v-6"]);
+const X = makeIcon(["M18 6L6 18","M6 6l12 12"]);
 </script>
 
 <script>
-
 // ============================================================
-// CONFIG — edit these three values, then save and reload
+// CONFIG — edit these, save the file, and reload
 // ============================================================
 const CONFIG = {
-  // Your Google Sheet ID (from the URL: docs.google.com/spreadsheets/d/{ID}/edit)
   SHEET_ID: "1mJKdfPwQaDn_DriNKPYF4CyGuNt5baHX18ASEywUREA",
-
-  // Your Google Sheets API key (Cloud Console -> Credentials)
-  // NOTE: This key is visible in browser source. It cannot read private sheets;
-  // your sheet still must be set to "Anyone with the link can view".
-  API_KEY: "AIzaSyBmrzqriC6i3Dkscu2rh8NMGg9_mwXhLGE",
-
-  // Sheet/tab name and range (default 'Sheet1' covers the whole tab)
-  RANGE: "Tom",
+  API_KEY:  "AIzaSyBmrzqriC6i3Dkscu2rh8NMGg9_mwXhLGE",
+  RANGE:    "Tom",   // tab name; change if your tab is named differently
 };
 
-// Map your CSV column headers (left) to the dashboard field names (right).
-// If your GSPro PlayerShots CSV uses different header names, edit the LEFT side.
-// The dashboard expects the names on the RIGHT side, do not change those.
+// Map your CSV column headers to the dashboard field names.
+// Left side = your Google Sheet header exactly as it appears in row 1.
+// Right side = the internal field name the dashboard uses (do not change).
 const COLUMN_MAP = {
-  // identifier / time
+  // identity / time
   "id":              "id",
-  "Date":            "ts",            // unix timestamp OR a parseable date string
+  "Date":            "ts",
   "ts":              "ts",
+  "Timestamp":       "ts",
   "session_id":      "session_id",
   "Session":         "session_id",
   "shot_number":     "shot_number",
   "Shot":            "shot_number",
+  "Shot Number":     "shot_number",
   "Hole":            "hole",
   "hole":            "hole",
   "Course":          "course",
   "course":          "course",
+  // club
   "Club":            "club",
   "club":            "club",
   // ball metrics
@@ -135,19 +120,18 @@ const COLUMN_MAP = {
 };
 
 const NUMERIC_FIELDS = new Set([
-  "id", "ts", "shot_number", "hole",
-  "ball_speed", "club_speed", "carry", "total_dist", "offline",
-  "peak_height", "desc_angle", "hla", "vla",
-  "total_spin", "back_spin", "side_spin", "spin_axis",
-  "attack_angle", "club_path", "face_to_target",
+  "id","ts","shot_number","hole",
+  "ball_speed","club_speed","carry","total_dist","offline",
+  "peak_height","desc_angle","hla","vla",
+  "total_spin","back_spin","side_spin","spin_axis",
+  "attack_angle","club_path","face_to_target",
 ]);
 
-function parseCellValue(field, raw) {
+function parseCell(field, raw) {
   if (raw === undefined || raw === null || raw === "") return undefined;
   if (NUMERIC_FIELDS.has(field)) {
-    const n = Number(raw);
+    const n = parseFloat(raw);
     if (!isNaN(n)) return n;
-    // ts might be a date string — try Date.parse, return seconds
     if (field === "ts") {
       const t = Date.parse(raw);
       if (!isNaN(t)) return t / 1000;
@@ -160,7 +144,7 @@ function parseCellValue(field, raw) {
 async function fetchSheetData() {
   const { SHEET_ID, API_KEY, RANGE } = CONFIG;
   if (SHEET_ID.startsWith("PASTE") || API_KEY.startsWith("PASTE")) {
-    throw new Error("Configure SHEET_ID and API_KEY at the top of dashboard.html");
+    throw new Error("Open dashboard.html in a text editor and fill in SHEET_ID and API_KEY in the CONFIG block near the top, then reload.");
   }
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
   const res = await fetch(url);
@@ -170,19 +154,18 @@ async function fetchSheetData() {
   }
   const data = await res.json();
   const rows = data.values || [];
-  if (rows.length < 2) throw new Error("Sheet has no data rows");
+  if (rows.length < 2) throw new Error("Sheet returned fewer than 2 rows — is it empty, or is the RANGE name wrong?");
 
-  const headers = rows[0];
+  const headers = rows[0].map(h => String(h).trim());
   const dataRows = rows.slice(1);
 
   const shots = dataRows.map((row, i) => {
     const shot = {};
-    headers.forEach((header, colIdx) => {
-      const trimmed = String(header).trim();
-      const targetField = COLUMN_MAP[trimmed];
-      if (!targetField) return;
-      const parsed = parseCellValue(targetField, row[colIdx]);
-      if (parsed !== undefined) shot[targetField] = parsed;
+    headers.forEach((header, ci) => {
+      const field = COLUMN_MAP[header];
+      if (!field) return;
+      const v = parseCell(field, row[ci]);
+      if (v !== undefined) shot[field] = v;
     });
     if (shot.id === undefined) shot.id = i + 1;
     if (shot.source === undefined) shot.source = "google_sheet";
@@ -192,32 +175,37 @@ async function fetchSheetData() {
   return shots;
 }
 
-// Bootstrapping: fetch, then run the React app code (which expects window.SHOTS_RAW)
-(async function bootstrap() {
-  const status = document.getElementById("status");
+// ---- bootstrap ----
+(async function () {
+  const statusEl = document.getElementById("status");
+  const statusText = document.getElementById("status-text");
   try {
-    status.textContent = "Loading shots from Google Sheets…";
+    statusText.textContent = "Loading shots from Google Sheets…";
     const shots = await fetchSheetData();
     if (shots.length === 0) {
-      status.textContent = "No shots found in the sheet. Check column headers / mapping.";
-      return;
+      throw new Error(
+        "Fetched data but found 0 valid shots.\n\n" +
+        "This usually means your sheet headers don't match the COLUMN_MAP in dashboard.html.\n" +
+        "Open the sheet, copy the exact text of row 1 (your column headers), and compare them to the COLUMN_MAP."
+      );
     }
+    // Make SHOTS_RAW available before the app code runs
     window.SHOTS_RAW = shots;
-    status.style.display = "none";
-    // Run the React app
+    statusEl.style.display = "none";
+    // Mount the app
     runApp();
   } catch (err) {
     console.error(err);
-    status.innerHTML = `<div style="color:#c0392b"><b>Error loading data:</b><br>${String(err.message || err)}<br><br>Edit the CONFIG block at the top of <code>dashboard.html</code> and reload.</div>`;
+    statusEl.innerHTML = `<div class="err"><b>Error:</b>\n\n${err.message || err}</div>`;
   }
 })();
+</script>
 
+<script>
+// Pre-compiled React app — runs after SHOTS_RAW is set on window
 function runApp() {
-  // The compiled React code is embedded below; it references SHOTS_RAW as a top-level const.
-  // We re-bind it from window before executing.
   const SHOTS_RAW = window.SHOTS_RAW;
-  /* === COMPILED REACT APP === */
-// ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 // Style tokens
 // ---------------------------------------------------------------------------
 const COLORS = {
@@ -2179,9 +2167,9 @@ function App() {
     }
   }, allShots.length.toLocaleString(), " shots loaded from CSV")));
 }
-  /* === END === */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));
 }
-
 </script>
 
 </body>
