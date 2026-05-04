@@ -129,6 +129,14 @@ const NUMERIC_FIELDS = new Set([
 
 function parseCell(field, raw) {
   if (raw === undefined || raw === null || raw === "") return undefined;
+  if (field === "offline") {
+    const s = String(raw).trim();
+    if (s === "0" || s === "") return 0;
+    const m = s.match(/^([\d.]+)\s*(R|L)$/i);
+    if (m) return parseFloat(m[1]) * (m[2].toUpperCase() === "L" ? -1 : 1);
+    const n = parseFloat(s);
+    return isNaN(n) ? undefined : n;
+  }
   if (NUMERIC_FIELDS.has(field)) {
     const n = parseFloat(raw);
     if (!isNaN(n)) return n;
@@ -222,24 +230,24 @@ const COLORS = {
 };
 const MONO = "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
 const SERIF = "'Instrument Serif', Georgia, serif";
-const BAG_ORDER = ["Dr", "3W", "5W", "7W", "2H", "3H", "4H", "5H", "2i", "3i", "4i", "5i", "6i", "7i", "8i", "9i", "PW", "GW", "SW", "LW", "Putter"];
+const BAG_ORDER = ["DR", "3W", "5W", "7W", "2H", "H3", "4H", "5H", "2i", "3i", "I4", "I5", "I6", "I7", "I8", "I9", "PW", "GW", "SW", "LW", "Putter"];
 const CLUB_COLORS = {
-  "Dr": "#d4ff3a",
+  "DR": "#d4ff3a",
   "3W": "#a3e635",
   "5W": "#84cc16",
   "7W": "#22c55e",
   "2H": "#14b8a6",
-  "3H": "#06b6d4",
+  "H3": "#06b6d4",
   "4H": "#0ea5e9",
   "5H": "#3aa0ff",
   "2i": "#6366f1",
   "3i": "#818cf8",
-  "4i": "#a855f7",
-  "5i": "#c084fc",
-  "6i": "#d946ef",
-  "7i": "#ec4899",
-  "8i": "#f43f5e",
-  "9i": "#ef4444",
+  "I4": "#a855f7",
+  "I5": "#c084fc",
+  "I6": "#d946ef",
+  "I7": "#ec4899",
+  "I8": "#f43f5e",
+  "I9": "#ef4444",
   "PW": "#f97316",
   "GW": "#fb923c",
   "SW": "#fbbf24",
