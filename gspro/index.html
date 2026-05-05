@@ -79,13 +79,14 @@ const CONFIG = {
   // For a public dashboard, see PROXY_URL below to use a backend proxy instead.
   SHEET_ID: "",
   API_KEY:  "",
+  PROXY_URL: "https://gspro.trwells2.workers.dev",
   RANGE:    "Tom",
 
   // Optional: use a backend proxy instead of exposing the API key.
   // If set, the dashboard will call `${PROXY_URL}?range=${RANGE}` and ignore
   // SHEET_ID/API_KEY above. Your proxy should return the raw Sheets API JSON.
   // See "How to set up a proxy" instructions printed at the top of the file.
-  PROXY_URL: "lively-scene-ecbc.trwells2.workers.dev",
+  
 
   // ----- Mishit detection -----
   // A shot is a mishit if its offline distance exceeds the larger of:
