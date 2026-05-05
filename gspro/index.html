@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -8,15 +9,35 @@
   body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:#0a0a0a; color:#eee; }
   #status { padding: 40px; text-align: center; font-size: 14px; color: #888; }
   #status .err { color: #e57373; text-align: left; max-width: 600px; margin: 0 auto; background: #1a1a1a; padding: 20px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; }
+  #status .warn { color: #fbbf24; text-align: left; max-width: 700px; margin: 12px auto 0; background: #1a1a1a; padding: 16px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; font-size: 12px; }
+
+/* Responsive grid breakpoints */
+@media (max-width: 900px) {
+.stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+main { padding: 0 12px 12px !important; }
+header { padding: 10px 12px !important; }
+.toolbar { padding: 10px 12px !important; }
+.metrics-bar { padding: 8px 12px 12px !important; }
+}
+@media (max-width: 560px) {
+.stat-grid { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+}
 </style>
+
 </head>
 <body>
 <div id="root"></div>
-<div id="status"><span id="status-text">Loading shots from Google Sheets…</span></div>
+<div id="status">
+  <span id="status-text">Loading shots from Google Sheets…</span>
+  <div id="status-warn" style="display:none"></div>
+</div>
 
 <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+
 <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+
 <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+
 <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
 
 <script>
@@ -25,7 +46,7 @@ const { useState, useMemo, useEffect, useRef, useCallback } = React;
 const {
   ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid,
   Tooltip, Legend, LineChart, Line, BarChart, Bar, ReferenceLine, ReferenceArea,
-  Cell, AreaChart, Area
+  Cell, AreaChart, Area, Customized
 } = Recharts;
 
 // Lucide icon shims
@@ -41,16 +62,58 @@ function makeIcon(paths) {
 const Calendar = makeIcon(["M8 2v4","M16 2v4","M3 10h18","M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"]);
 const Database = makeIcon(["M12 8c4.97 0 9-1.79 9-4s-4.03-4-9-4-9 1.79-9 4 4.03 4 9 4z","M3 5v6c0 2.21 4.03 4 9 4s9-1.79 9-4V5","M3 11v6c0 2.21 4.03 4 9 4s9-1.79 9-4v-6"]);
 const X = makeIcon(["M18 6L6 18","M6 6l12 12"]);
+const Download = makeIcon(["M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4","M7 10l5 5 5-5","M12 15V3"]);
 </script>
 
 <script>
 // ============================================================
-// CONFIG — edit these, save the file, and reload
+// CONFIG — central knobs for the dashboard
 // ============================================================
 const CONFIG = {
-  SHEET_ID: "1mJKdfPwQaDn_DriNKPYF4CyGuNt5baHX18ASEywUREA",
-  API_KEY:  "AIzaSyBmrzqriC6i3Dkscu2rh8NMGg9_mwXhLGE",
-  RANGE:    "Tom",   // tab name; change if your tab is named differently
+  // ----- Data source -----
+  // SECURITY NOTE: Exposing an API key in client-side code is risky.
+  // For a private/personal dashboard, restrict the key in Google Cloud Console:
+  //   1. APIs & Services → Credentials → click your API key
+  //   2. Application restrictions → "HTTP referrers" → add your dashboard URL
+  //   3. API restrictions → "Restrict key" → enable only "Google Sheets API"
+  // For a public dashboard, see PROXY_URL below to use a backend proxy instead.
+  SHEET_ID: "",
+  API_KEY:  "",
+  RANGE:    "Tom",
+
+  // Optional: use a backend proxy instead of exposing the API key.
+  // If set, the dashboard will call `${PROXY_URL}?range=${RANGE}` and ignore
+  // SHEET_ID/API_KEY above. Your proxy should return the raw Sheets API JSON.
+  // See "How to set up a proxy" instructions printed at the top of the file.
+  PROXY_URL: "lively-scene-ecbc.trwells2.workers.dev",
+
+  // ----- Mishit detection -----
+  // A shot is a mishit if its offline distance exceeds the larger of:
+  //   - MISHIT_MIN_YD: an absolute minimum (so near-target putts/chips don't false-flag)
+  //   - MISHIT_PCT * total_dist: a proportional threshold (so a 20yd offline
+  //     drive from 250yd isn't flagged as harshly as 20yd from 90yd)
+  MISHIT_MIN_YD: 15,
+  MISHIT_PCT: 0.10,
+
+  // ----- Chart sampling -----
+  // Trajectory chart caps total drawn paths so 1000+ shots don't melt the DOM.
+  TRAJECTORY_MAX_TOTAL: 80,
+  TRAJECTORY_MIN_PER_CLUB: 3,
+
+  // ----- Confidence ellipse -----
+  // Chi-squared inverse CDF for 2 degrees of freedom at given confidence.
+  // 5.991 = 95%, 4.605 = 90%, 9.210 = 99%.
+  ELLIPSE_CHI2: 5.991,
+
+  // ----- Feed -----
+  FEED_PAGE_SIZE: 50,   // shots rendered per page (virtual-scroll-ish)
+  FEED_MAX_RENDER: 500, // hard cap regardless
+
+  // ----- Distance-over-time -----
+  // A club appears on the trend chart only if it has at least this many
+  // shots across at least this many time buckets.
+  TREND_MIN_BUCKETS: 2,
+  TREND_MIN_SHOTS: 3,
 };
 
 // Map your CSV column headers to the dashboard field names.
@@ -119,6 +182,7 @@ const COLUMN_MAP = {
   "source":          "source",
 };
 
+// Fields the dashboard treats as numeric (everything else is kept as a string).
 const NUMERIC_FIELDS = new Set([
   "id","ts","shot_number","hole",
   "ball_speed","club_speed","carry","total_dist","offline",
@@ -127,34 +191,70 @@ const NUMERIC_FIELDS = new Set([
   "attack_angle","club_path","face_to_target",
 ]);
 
+// Fields the dashboard actually charts. Used by the schema validator
+// to warn if the user's sheet is missing critical columns.
+const REQUIRED_FIELDS = ["ts", "club"];
+const RECOMMENDED_FIELDS = ["carry", "total_dist", "offline", "peak_height", "vla", "hla", "ball_speed", "total_spin"];
+
+// Robust offline parser: handles "10R", "10 R", "10.5 L ", "-10", "10",
+// trailing whitespace, mixed case, etc. Returns a signed yard value where
+// positive = right, negative = left.
+function parseOffline(raw) {
+  const s = String(raw).replace(/\s+/g, "").toUpperCase();
+  if (s === "" || s === "0") return 0;
+  // "10.5R" or "10.5L"
+  const m = s.match(/^(-?[\d.]+)([RL])$/);
+  if (m) {
+    const n = parseFloat(m[1]);
+    if (Number.isNaN(n)) return undefined;
+    return n * (m[2] === "L" ? -1 : 1);
+  }
+  // Plain signed number
+  const n = parseFloat(s);
+  return Number.isNaN(n) ? undefined : n;
+}
+
 function parseCell(field, raw) {
   if (raw === undefined || raw === null || raw === "") return undefined;
-  if (field === "offline") {
-    const s = String(raw).trim();
-    if (s === "0" || s === "") return 0;
-    const m = s.match(/^([\d.]+)\s*(R|L)$/i);
-    if (m) return parseFloat(m[1]) * (m[2].toUpperCase() === "L" ? -1 : 1);
-    const n = parseFloat(s);
-    return isNaN(n) ? undefined : n;
-  }
+  if (field === "offline") return parseOffline(raw);
   if (NUMERIC_FIELDS.has(field)) {
     const n = parseFloat(raw);
-    if (!isNaN(n)) return n;
+    if (!Number.isNaN(n)) return n;
     if (field === "ts") {
       const t = Date.parse(raw);
-      if (!isNaN(t)) return t / 1000;
+      if (!Number.isNaN(t)) return t / 1000;
     }
     return undefined;
   }
   return String(raw);
 }
 
-async function fetchSheetData() {
-  const { SHEET_ID, API_KEY, RANGE } = CONFIG;
-  if (SHEET_ID.startsWith("PASTE") || API_KEY.startsWith("PASTE")) {
-    throw new Error("Open dashboard.html in a text editor and fill in SHEET_ID and API_KEY in the CONFIG block near the top, then reload.");
+// Validate that the sheet's headers cover what the dashboard needs.
+// Returns { mappedFields, unmappedHeaders, missingRequired, missingRecommended }
+function validateSchema(headers) {
+  const mappedFields = new Set();
+  const unmappedHeaders = [];
+  for (const h of headers) {
+    const f = COLUMN_MAP[h];
+    if (f) mappedFields.add(f);
+    else unmappedHeaders.push(h);
   }
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
+  const missingRequired = REQUIRED_FIELDS.filter(f => !mappedFields.has(f));
+  const missingRecommended = RECOMMENDED_FIELDS.filter(f => !mappedFields.has(f));
+  return { mappedFields, unmappedHeaders, missingRequired, missingRecommended };
+}
+
+async function fetchSheetData() {
+  const { SHEET_ID, API_KEY, RANGE, PROXY_URL } = CONFIG;
+  let url;
+  if (PROXY_URL) {
+    url = `${PROXY_URL}?range=${encodeURIComponent(RANGE)}`;
+  } else {
+    if (SHEET_ID.startsWith("PASTE") || API_KEY.startsWith("PASTE")) {
+      throw new Error("Open dashboard.html in a text editor and fill in SHEET_ID and API_KEY in the CONFIG block near the top, then reload.");
+    }
+    url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(RANGE)}?key=${API_KEY}`;
+  }
   const res = await fetch(url);
   if (!res.ok) {
     const txt = await res.text();
@@ -166,6 +266,8 @@ async function fetchSheetData() {
 
   const headers = rows[0].map(h => String(h).trim());
   const dataRows = rows.slice(1);
+
+  const schema = validateSchema(headers);
 
   const shots = dataRows.map((row, i) => {
     const shot = {};
@@ -180,27 +282,40 @@ async function fetchSheetData() {
     return shot;
   }).filter(s => s.club && s.ts !== undefined);
 
-  return shots;
+  return { shots, schema, totalRows: dataRows.length };
 }
 
 // ---- bootstrap ----
 (async function () {
   const statusEl = document.getElementById("status");
   const statusText = document.getElementById("status-text");
+  const statusWarn = document.getElementById("status-warn");
   try {
     statusText.textContent = "Loading shots from Google Sheets…";
-    const shots = await fetchSheetData();
-    if (shots.length === 0) {
+    const { shots, schema, totalRows } = await fetchSheetData();
+
+    if (schema.missingRequired.length > 0) {
       throw new Error(
-        "Fetched data but found 0 valid shots.\n\n" +
-        "This usually means your sheet headers don't match the COLUMN_MAP in dashboard.html.\n" +
-        "Open the sheet, copy the exact text of row 1 (your column headers), and compare them to the COLUMN_MAP."
+        `Your sheet is missing required column(s): ${schema.missingRequired.join(", ")}.\n\n` +
+        `Required columns map to these fields: ${REQUIRED_FIELDS.join(", ")}.\n` +
+        `Check the COLUMN_MAP in dashboard.html and your sheet's row 1 headers.`
       );
     }
-    // Make SHOTS_RAW available before the app code runs
+    if (shots.length === 0) {
+      throw new Error(
+        `Fetched ${totalRows} rows but found 0 valid shots (every row was missing 'club' or 'ts').\n\n` +
+        `Open the sheet, copy the exact text of row 1 (your column headers), and compare them to the COLUMN_MAP.`
+      );
+    }
+
+    // Surface non-fatal schema warnings inline once the dashboard loads
     window.SHOTS_RAW = shots;
+    window.SCHEMA_WARNINGS = {
+      missingRecommended: schema.missingRecommended,
+      unmappedHeaders: schema.unmappedHeaders,
+      droppedRows: totalRows - shots.length,
+    };
     statusEl.style.display = "none";
-    // Mount the app
     runApp();
   } catch (err) {
     console.error(err);
@@ -213,1734 +328,977 @@ async function fetchSheetData() {
 // Pre-compiled React app — runs after SHOTS_RAW is set on window
 function runApp() {
   const SHOTS_RAW = window.SHOTS_RAW;
-  // ---------------------------------------------------------------------------
-// Style tokens
-// ---------------------------------------------------------------------------
-const COLORS = {
-  bg: "#0a0a0a",
-  panel: "#111111",
-  panel2: "#161616",
-  line: "#1f1f1f",
-  ink: "#ededed",
-  inkDim: "#8a8a8a",
-  inkFaint: "#525252",
-  accent: "#d4ff3a",
-  warn: "#ff5e3a",
-  cool: "#3aa0ff"
-};
-const MONO = "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
-const SERIF = "'Instrument Serif', Georgia, serif";
-const BAG_ORDER = ["DR", "3W", "5W", "7W", "2H", "H3", "4H", "5H", "2i", "3i", "I4", "I5", "I6", "I7", "I8", "I9", "PW", "GW", "SW", "LW", "Putter"];
-const CLUB_COLORS = {
-  "DR": "#d4ff3a",
-  "3W": "#a3e635",
-  "5W": "#84cc16",
-  "7W": "#22c55e",
-  "2H": "#14b8a6",
-  "H3": "#06b6d4",
-  "4H": "#0ea5e9",
-  "5H": "#3aa0ff",
-  "2i": "#6366f1",
-  "3i": "#818cf8",
-  "I4": "#a855f7",
-  "I5": "#c084fc",
-  "I6": "#d946ef",
-  "I7": "#ec4899",
-  "I8": "#f43f5e",
-  "I9": "#ef4444",
-  "PW": "#f97316",
-  "GW": "#fb923c",
-  "SW": "#fbbf24",
-  "LW": "#facc15",
-  "Putter": "#9ca3af"
-};
-const colorFor = c => CLUB_COLORS[c] || COLORS.inkDim;
-const fmt = (v, d = 1) => v === null || v === undefined || Number.isNaN(v) ? "—" : Number(v).toFixed(d);
-const fmt0 = v => fmt(v, 0);
-const DAY = 86400 * 1000;
-const toInputDate = d => {
-  const y = d.getFullYear(),
-    m = String(d.getMonth() + 1).padStart(2, "0"),
-    day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-};
-const fromInputDate = s => {
-  if (!s) return null;
-  const [y, m, d] = s.split("-").map(Number);
-  return new Date(y, m - 1, d);
-};
-const startOfDay = d => {
-  const c = new Date(d);
-  c.setHours(0, 0, 0, 0);
-  return c.getTime() / 1000;
-};
-const endOfDay = d => {
-  const c = new Date(d);
-  c.setHours(23, 59, 59, 999);
-  return c.getTime() / 1000;
-};
-const PRESETS = [{
-  id: "today",
-  label: "TODAY",
-  days: 0
-}, {
-  id: "7d",
-  label: "7D",
-  days: 7
-}, {
-  id: "30d",
-  label: "30D",
-  days: 30
-}, {
-  id: "90d",
-  label: "90D",
-  days: 90
-}, {
-  id: "all",
-  label: "ALL",
-  days: null
-}];
+  const SCHEMA_WARNINGS = window.SCHEMA_WARNINGS || {};
 
-// ---------------------------------------------------------------------------
-const Panel = ({
-  children,
-  style,
-  onClick
-}) => /*#__PURE__*/React.createElement("div", {
-  onClick: onClick,
-  style: {
-    background: COLORS.panel,
-    border: `1px solid ${COLORS.line}`,
-    cursor: onClick ? "pointer" : "default",
-    ...style
+  // -------------------------------------------------------------------------
+  // Style tokens
+  // -------------------------------------------------------------------------
+  const COLORS = {
+    bg: "#0a0a0a",
+    panel: "#111111",
+    panel2: "#161616",
+    line: "#1f1f1f",
+    ink: "#ededed",
+    inkDim: "#8a8a8a",
+    inkFaint: "#525252",
+    accent: "#d4ff3a",
+    warn: "#ff5e3a",
+    cool: "#3aa0ff"
+  };
+  const MONO = "'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace";
+  const SERIF = "'Instrument Serif', Georgia, serif";
+  const BAG_ORDER = ["DR", "3W", "5W", "7W", "2H", "H3", "4H", "5H", "2i", "3i", "I4", "I5", "I6", "I7", "I8", "I9", "PW", "GW", "SW", "LW", "Putter"];
+
+  // Field display labels (replaces cryptic names like 'vla', 'hla' in tooltips/legends)
+  const FIELD_LABELS = {
+    ts: "Date",
+    ball_speed: "Ball speed",
+    club_speed: "Club speed",
+    carry: "Carry",
+    total_dist: "Total distance",
+    offline: "Offline",
+    peak_height: "Peak height",
+    desc_angle: "Descent angle",
+    vla: "Launch angle (VLA)",
+    hla: "Direction (HLA)",
+    total_spin: "Total spin",
+    back_spin: "Back spin",
+    side_spin: "Side spin",
+    spin_axis: "Spin axis",
+    attack_angle: "Attack angle",
+    club_path: "Club path",
+    face_to_target: "Face to target",
+  };
+
+  const CLUB_COLORS = {
+    "DR": "#d4ff3a", "3W": "#a3e635", "5W": "#84cc16", "7W": "#22c55e",
+    "2H": "#14b8a6", "H3": "#06b6d4", "4H": "#0ea5e9", "5H": "#3aa0ff",
+    "2i": "#6366f1", "3i": "#818cf8", "I4": "#a855f7", "I5": "#c084fc",
+    "I6": "#d946ef", "I7": "#ec4899", "I8": "#f43f5e", "I9": "#ef4444",
+    "PW": "#f97316", "GW": "#fb923c", "SW": "#fbbf24", "LW": "#facc15",
+    "Putter": "#9ca3af"
+  };
+  const colorFor = c => CLUB_COLORS[c] || COLORS.inkDim;
+  const fmt = (v, d = 1) => v === null || v === undefined || Number.isNaN(v) ? "—" : Number(v).toFixed(d);
+  const fmt0 = v => fmt(v, 0);
+
+  const DAY = 86400 * 1000;
+  const toInputDate = d => {
+    const y = d.getFullYear(),
+      m = String(d.getMonth() + 1).padStart(2, "0"),
+      day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+  const fromInputDate = s => {
+    if (!s) return null;
+    const [y, m, d] = s.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+  const startOfDay = d => {
+    const c = new Date(d);
+    c.setHours(0, 0, 0, 0);
+    return c.getTime() / 1000;
+  };
+  const endOfDay = d => {
+    const c = new Date(d);
+    c.setHours(23, 59, 59, 999);
+    return c.getTime() / 1000;
+  };
+  const PRESETS = [
+    { id: "today", label: "TODAY", days: 0 },
+    { id: "7d",    label: "7D",    days: 7 },
+    { id: "30d",   label: "30D",   days: 30 },
+    { id: "90d",   label: "90D",   days: 90 },
+    { id: "all",   label: "ALL",   days: null }
+  ];
+
+  // -------------------------------------------------------------------------
+  // CSV export utility
+  // -------------------------------------------------------------------------
+  function exportShotsToCSV(shots, filename = "gspro-shots.csv") {
+    if (!shots.length) return;
+    // Build column list from union of keys, ordered by COLUMN_MAP appearance
+    const seen = new Set();
+    for (const s of shots) for (const k of Object.keys(s)) seen.add(k);
+    const cols = [];
+    const orderedFields = ["ts","club","carry","total_dist","offline","peak_height","vla","hla","ball_speed","club_speed","total_spin","back_spin","side_spin","spin_axis","attack_angle","club_path","face_to_target","desc_angle","source","id","session_id","shot_number","hole","course"];
+    for (const f of orderedFields) if (seen.has(f)) cols.push(f);
+    for (const f of seen) if (!cols.includes(f)) cols.push(f);
+
+    const escape = v => {
+      if (v == null) return "";
+      const s = String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const headerLine = cols.map(c => FIELD_LABELS[c] || c).join(",");
+    const lines = [headerLine];
+    for (const s of shots) {
+      lines.push(cols.map(c => {
+        if (c === "ts" && s.ts != null) return new Date(s.ts * 1000).toISOString();
+        return escape(s[c]);
+      }).join(","));
+    }
+    const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
-}, children);
-function Stat({
-  label,
-  avg,
-  min,
-  max,
-  unit,
-  accent,
-  format = fmt,
-  selected,
-  onClick
-}) {
-  return /*#__PURE__*/React.createElement(Panel, {
+
+  // -------------------------------------------------------------------------
+  // Generic chart wrapper (centralizes Recharts axis/grid styling)
+  // -------------------------------------------------------------------------
+  const CHART_THEME = {
+    grid: "#1c1c1c",
+    tickFill: "#6a6a6a",
+    tickFontSize: 10,
+    labelFill: "#525252",
+    labelFontSize: 10,
+    tooltipStyle: { background: "#0a0a0a", border: "1px solid #2a2a2a", fontSize: 11 },
+  };
+
+  // -------------------------------------------------------------------------
+  // Layout primitives (Panel, Stat, SectionTitle, Toggle)
+  // -------------------------------------------------------------------------
+  const Panel = ({ children, style, onClick }) => /*#__PURE__*/React.createElement("div", {
     onClick: onClick,
     style: {
-      padding: "12px 14px",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      minWidth: 0,
-      minHeight: 104,
-      borderColor: selected ? COLORS.accent : COLORS.line,
-      boxShadow: selected ? `0 0 0 1px ${COLORS.accent} inset` : "none"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "baseline",
-      gap: 6
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.18em",
-      color: COLORS.inkDim
-    }
-  }, label), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 9,
-      color: COLORS.inkFaint,
-      letterSpacing: "0.1em"
-    }
-  }, "AVG")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "baseline",
-      gap: 5,
-      marginTop: 4
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 26,
-      fontWeight: 500,
-      fontVariantNumeric: "tabular-nums",
-      color: accent || COLORS.ink,
-      lineHeight: 1.1
-    }
-  }, format(avg)), unit && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11,
-      color: COLORS.inkDim
-    }
-  }, unit)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 10,
-      display: "flex",
-      alignItems: "center",
-      fontSize: 10,
-      color: COLORS.inkFaint,
-      fontVariantNumeric: "tabular-nums",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.inkDim,
-      minWidth: 28,
-      textAlign: "left"
-    }
-  }, format(min)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      position: "relative",
-      height: 1,
-      background: COLORS.line
-    }
-  }, min != null && max != null && max > min && avg != null && /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "absolute",
-      left: `${Math.min(100, Math.max(0, (avg - min) / (max - min) * 100))}%`,
-      top: "-2px",
-      width: 4,
-      height: 4,
-      background: accent || COLORS.ink,
-      transform: "translateX(-50%)"
-    }
-  })), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.inkDim,
-      minWidth: 28,
-      textAlign: "right"
-    }
-  }, format(max))));
-}
-function SectionTitle({
-  n,
-  children,
-  right,
-  subtitle
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
-      marginBottom: 10,
-      gap: 12,
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 12
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: COLORS.inkFaint
-    }
-  }, n), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      fontSize: 11,
-      textTransform: "uppercase",
-      letterSpacing: "0.28em",
-      margin: 0,
-      fontWeight: 500
-    }
-  }, children)), subtitle && /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      color: COLORS.inkFaint,
-      marginTop: 4,
-      marginLeft: 22
-    }
-  }, subtitle)), right && /*#__PURE__*/React.createElement("div", null, right));
-}
-function Toggle({
-  options,
-  value,
-  onChange
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      border: `1px solid ${COLORS.line}`
-    }
-  }, options.map((opt, i) => {
-    const active = value === opt.value;
-    return /*#__PURE__*/React.createElement("button", {
-      key: opt.value,
-      onClick: () => onChange(opt.value),
-      style: {
-        padding: "4px 10px",
-        fontSize: 10,
-        letterSpacing: "0.15em",
-        textTransform: "uppercase",
-        background: active ? COLORS.accent : "transparent",
-        color: active ? "#000" : COLORS.ink,
-        border: "none",
-        borderRight: i < options.length - 1 ? `1px solid ${COLORS.line}` : "none",
-        fontFamily: MONO,
-        cursor: "pointer"
-      }
-    }, opt.label);
-  }));
-}
-
-// ---------------------------------------------------------------------------
-function DateRangeBar({
-  range,
-  setRange,
-  shotsInRange,
-  totalShots
-}) {
-  const [customOpen, setCustomOpen] = useState(range.preset === "custom");
-  const applyPreset = preset => {
-    setCustomOpen(false);
-    if (preset.id === "all") {
-      setRange({
-        preset: "all",
-        from: null,
-        to: null
-      });
-      return;
-    }
-    const now = new Date();
-    const from = preset.days === 0 ? startOfDay(now) : startOfDay(new Date(now.getTime() - preset.days * DAY));
-    setRange({
-      preset: preset.id,
-      from,
-      to: endOfDay(now)
-    });
-  };
-  const applyCustom = (fromStr, toStr) => {
-    const f = fromInputDate(fromStr),
-      t = fromInputDate(toStr);
-    if (!f && !t) return;
-    setRange({
-      preset: "custom",
-      from: f ? startOfDay(f) : null,
-      to: t ? endOfDay(t) : null
-    });
-  };
-  const fromVal = range.from ? toInputDate(new Date(range.from * 1000)) : "";
-  const toVal = range.to ? toInputDate(new Date(range.to * 1000)) : "";
-  const btn = active => ({
-    padding: "5px 10px",
-    fontSize: 10,
-    letterSpacing: "0.18em",
-    border: `1px solid ${active ? COLORS.accent : COLORS.line}`,
-    background: active ? COLORS.accent : "transparent",
-    color: active ? "#000" : COLORS.ink,
-    fontFamily: MONO,
-    cursor: "pointer",
-    textTransform: "uppercase"
-  });
-  const dateInput = {
-    background: COLORS.bg,
-    border: `1px solid ${COLORS.line}`,
-    color: COLORS.ink,
-    fontFamily: MONO,
-    fontSize: 11,
-    padding: "4px 8px",
-    colorScheme: "dark"
-  };
-  const rangeLabel = (() => {
-    if (range.preset === "all" || !range.from && !range.to) return "all time";
-    if (!range.from) return `start → ${toInputDate(new Date(range.to * 1000))}`;
-    if (!range.to) return `${toInputDate(new Date(range.from * 1000))} → now`;
-    return `${toInputDate(new Date(range.from * 1000))} → ${toInputDate(new Date(range.to * 1000))}`;
-  })();
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 10
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 12,
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement(Calendar, {
-    size: 12,
-    color: COLORS.inkDim
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.28em",
-      color: COLORS.inkDim
-    }
-  }, "Range"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 4
-    }
-  }, PRESETS.map(p => /*#__PURE__*/React.createElement("button", {
-    key: p.id,
-    onClick: () => applyPreset(p),
-    style: btn(range.preset === p.id)
-  }, p.label)), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setCustomOpen(v => !v),
-    style: btn(range.preset === "custom")
-  }, "CUSTOM")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      color: COLORS.inkFaint,
-      letterSpacing: "0.08em"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.ink
-    }
-  }, shotsInRange.toLocaleString()), " shots", /*#__PURE__*/React.createElement("span", {
-    style: {
-      margin: "0 8px"
-    }
-  }, "\xB7"), rangeLabel, /*#__PURE__*/React.createElement("span", {
-    style: {
-      margin: "0 8px"
-    }
-  }, "\xB7"), totalShots.toLocaleString(), " total")), customOpen && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 10,
-      paddingTop: 10,
-      borderTop: `1px solid ${COLORS.line}`,
-      display: "flex",
-      alignItems: "center",
-      gap: 10,
-      flexWrap: "wrap"
-    }
-  }, /*#__PURE__*/React.createElement("label", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.2em",
-      color: COLORS.inkDim
-    }
-  }, "From"), /*#__PURE__*/React.createElement("input", {
-    type: "date",
-    value: fromVal,
-    max: toVal || undefined,
-    onChange: e => applyCustom(e.target.value, toVal),
-    style: dateInput
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.inkFaint
-    }
-  }, "\u2192"), /*#__PURE__*/React.createElement("label", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.2em",
-      color: COLORS.inkDim
-    }
-  }, "To"), /*#__PURE__*/React.createElement("input", {
-    type: "date",
-    value: toVal,
-    min: fromVal || undefined,
-    onChange: e => applyCustom(fromVal, e.target.value),
-    style: dateInput
-  })));
-}
-
-// ---------------------------------------------------------------------------
-function ClubStrip({
-  activeClub,
-  setClub,
-  shotsByClub
-}) {
-  const btn = (active, c) => ({
-    padding: "5px 9px",
-    fontSize: 11,
-    border: `1px solid ${active ? COLORS.accent : COLORS.line}`,
-    borderLeft: `3px solid ${active ? COLORS.accent : c ? colorFor(c) : COLORS.line}`,
-    background: active ? COLORS.accent : "transparent",
-    color: active ? "#000" : COLORS.ink,
-    fontFamily: MONO,
-    cursor: "pointer",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: 6
-  });
-  const badge = active => ({
-    fontSize: 9,
-    color: active ? "#000" : COLORS.inkDim,
-    fontVariantNumeric: "tabular-nums"
-  });
-  const total = Object.values(shotsByClub).reduce((a, b) => a + b, 0);
-  const clubsPresent = BAG_ORDER.filter(c => shotsByClub[c]);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: COLORS.panel2,
+      background: COLORS.panel,
       border: `1px solid ${COLORS.line}`,
-      padding: 6,
-      display: "flex",
-      flexWrap: "wrap",
-      gap: 4,
-      alignItems: "center"
+      cursor: onClick ? "pointer" : "default",
+      ...style
     }
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setClub(null),
-    style: btn(!activeClub, null)
-  }, "ALL ", /*#__PURE__*/React.createElement("span", {
-    style: badge(!activeClub)
-  }, total.toLocaleString())), clubsPresent.map(c => {
-    const active = activeClub === c;
-    return /*#__PURE__*/React.createElement("button", {
-      key: c,
-      onClick: () => setClub(c),
-      style: btn(active, c)
-    }, c, " ", /*#__PURE__*/React.createElement("span", {
-      style: badge(active)
-    }, shotsByClub[c]));
-  }), activeClub && /*#__PURE__*/React.createElement("button", {
-    onClick: () => setClub(null),
-    style: {
-      marginLeft: "auto",
-      padding: "4px 8px",
-      fontSize: 10,
-      letterSpacing: "0.15em",
-      background: "transparent",
-      border: `1px solid ${COLORS.line}`,
-      color: COLORS.inkDim,
-      cursor: "pointer",
-      fontFamily: MONO,
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 4
-    }
-  }, /*#__PURE__*/React.createElement(X, {
-    size: 10
-  }), " CLEAR FILTER"));
-}
+  }, children);
 
-// ---------------------------------------------------------------------------
-// 95% confidence ellipse from 2D points (for "filled range" mode)
-// ---------------------------------------------------------------------------
-function computeEllipse(points) {
-  if (points.length < 3) return null;
-  const n = points.length;
-  let sx = 0,
-    sy = 0;
-  for (const p of points) {
-    sx += p.x;
-    sy += p.y;
-  }
-  const cx = sx / n,
-    cy = sy / n;
-  let sxx = 0,
-    syy = 0,
-    sxy = 0;
-  for (const p of points) {
-    const dx = p.x - cx,
-      dy = p.y - cy;
-    sxx += dx * dx;
-    syy += dy * dy;
-    sxy += dx * dy;
-  }
-  sxx /= n - 1;
-  syy /= n - 1;
-  sxy /= n - 1;
-  const trace = sxx + syy,
-    det = sxx * syy - sxy * sxy;
-  const disc = Math.max(0, trace * trace / 4 - det);
-  const l1 = trace / 2 + Math.sqrt(disc);
-  const l2 = trace / 2 - Math.sqrt(disc);
-  // chi2 inv for 2 dof @ 95% = 5.991
-  const k = Math.sqrt(5.991);
-  const rx = k * Math.sqrt(Math.max(0, l1));
-  const ry = k * Math.sqrt(Math.max(0, l2));
-  const theta = Math.atan2(l1 - sxx, sxy);
-  return {
-    cx,
-    cy,
-    rx,
-    ry,
-    theta,
-    n
-  };
-}
-function EllipseLayer({
-  clubs,
-  ellipsesByClub,
-  xAxisMap,
-  yAxisMap,
-  onClubClick
-}) {
-  if (!xAxisMap || !yAxisMap) return null;
-  const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
-  const yAxis = yAxisMap[Object.keys(yAxisMap)[0]];
-  const sx = xAxis.scale,
-    sy = yAxis.scale;
-  return /*#__PURE__*/React.createElement("g", null, clubs.map(c => {
-    const e = ellipsesByClub[c];
-    if (!e) return null;
-    const cx = sx(e.cx),
-      cy = sy(e.cy);
-    const screenRx = Math.abs(sx(e.cx + e.rx) - sx(e.cx));
-    const screenRy = Math.abs(sy(e.cy + e.ry) - sy(e.cy));
-    const deg = e.theta * 180 / Math.PI;
-    return /*#__PURE__*/React.createElement("g", {
-      key: c,
-      transform: `rotate(${deg} ${cx} ${cy})`,
+  function Stat({ label, avg, min, max, unit, accent, format = fmt, selected, onClick, hint }) {
+    return /*#__PURE__*/React.createElement(Panel, {
+      onClick: onClick,
       style: {
-        cursor: onClubClick ? "pointer" : "default"
+        padding: "12px 14px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        minWidth: 0,
+        minHeight: 104,
+        borderColor: selected ? COLORS.accent : COLORS.line,
+        boxShadow: selected ? `0 0 0 1px ${COLORS.accent} inset` : "none"
       },
-      onClick: () => onClubClick && onClubClick(c)
-    }, /*#__PURE__*/React.createElement("ellipse", {
-      cx: cx,
-      cy: cy,
-      rx: screenRx,
-      ry: screenRy,
-      fill: colorFor(c),
-      fillOpacity: 0.12,
-      stroke: colorFor(c),
-      strokeOpacity: 0.7,
-      strokeWidth: 1
-    }), /*#__PURE__*/React.createElement("circle", {
-      cx: cx,
-      cy: cy,
-      r: 2.5,
-      fill: colorFor(c)
-    }), /*#__PURE__*/React.createElement("text", {
-      x: cx,
-      y: cy - screenRy - 4,
-      textAnchor: "middle",
-      style: {
-        fontSize: 10,
-        fill: colorFor(c),
-        fontFamily: MONO
-      }
-    }, c));
-  }));
-}
-
-// ---------------------------------------------------------------------------
-function FinishScatter({
-  shots,
-  onClubClick
-}) {
-  const [mode, setMode] = useState("points");
-
-  // Mishits are flagged proportionally: a shot is a mishit if its offline
-  // distance exceeds the larger of:
-  //   - 15 yd absolute (so near-target putts/chips don't get false-flagged)
-  //   - 10% of its total distance (so a 20-yd offline drive from 250 yd
-  //     out isn't flagged as harshly as a 20-yd offline wedge from 90 yd)
-  const isMishit = (offline, totalDist) => Math.abs(offline) > Math.max(15, (totalDist || 0) * 0.10);
-  const {
-    seriesByClub,
-    ellipsesByClub,
-    maxDist,
-    maxAbsOffline,
-    total,
-    mishits
-  } = useMemo(() => {
-    const map = {};
-    let mishitCount = 0;
-    for (const s of shots) {
-      if (s.total_dist == null || s.offline == null || !s.club) continue;
-      const mishit = isMishit(s.offline, s.total_dist);
-      // Flipped axes: x = offline (signed L/R), y = total distance
-      (map[s.club] ||= []).push({
-        x: Math.round(s.offline * 10) / 10,
-        y: Math.round(s.total_dist * 10) / 10,
-        club: s.club,
-        id: s.id,
-        mishit
-      });
-      if (mishit) mishitCount++;
-    }
-    const flat = Object.values(map).flat();
-    const maxDist = Math.max(50, ...flat.map(p => p.y)) * 1.05;
-    const maxAbsOffline = Math.max(10, ...flat.map(p => Math.abs(p.x))) * 1.15;
-    const ellipses = {};
-    for (const [c, pts] of Object.entries(map)) {
-      const e = computeEllipse(pts);
-      if (e) ellipses[c] = e;
-    }
-    return {
-      seriesByClub: map,
-      ellipsesByClub: ellipses,
-      maxDist,
-      maxAbsOffline,
-      total: flat.length,
-      mishits: mishitCount
-    };
-  }, [shots]);
-  const present = BAG_ORDER.filter(c => seriesByClub[c]);
-
-  // Distance rings at tidy round numbers (every 50 yd up to maxDist)
-  const distanceRings = useMemo(() => {
-    const rings = [];
-    for (let d = 50; d < maxDist; d += 50) rings.push(d);
-    return rings;
-  }, [maxDist]);
-  const mishitPct = total ? (mishits / total * 100).toFixed(0) : 0;
-
-  // Symmetric x-axis ticks around 0
-  const xTicks = useMemo(() => {
-    const step = maxAbsOffline > 60 ? 20 : maxAbsOffline > 30 ? 10 : 5;
-    const arr = [0];
-    for (let v = step; v <= maxAbsOffline; v += step) arr.push(v, -v);
-    return arr.sort((a, b) => a - b);
-  }, [maxAbsOffline]);
-
-  // Build a flat list of Scatter series (NOT wrapped in Fragments — Recharts
-  // uses static child introspection to discover series and skips anything
-  // inside a Fragment, which would silently hide them).
-  const scatterSeries = [];
-  if (mode === "points") {
-    for (const c of present) {
-      const pts = seriesByClub[c];
-      const onTarget = pts.filter(p => !p.mishit);
-      const mishitPts = pts.filter(p => p.mishit);
-      if (onTarget.length > 0) {
-        scatterSeries.push(/*#__PURE__*/React.createElement(Scatter, {
-          key: `${c}-ok`,
-          name: c,
-          data: onTarget,
-          fill: colorFor(c),
-          fillOpacity: 0.7,
-          onClick: () => onClubClick && onClubClick(c),
-          style: {
-            cursor: "pointer"
-          }
-        }));
-      }
-      if (mishitPts.length > 0) {
-        scatterSeries.push(/*#__PURE__*/React.createElement(Scatter, {
-          key: `${c}-miss`,
-          name: `${c} mishit`,
-          data: mishitPts,
-          fill: "none",
-          stroke: colorFor(c),
-          strokeWidth: 1.2,
-          strokeOpacity: 0.85,
-          onClick: () => onClubClick && onClubClick(c),
-          style: {
-            cursor: "pointer"
-          }
-        }));
-      }
-    }
+      title: hint
+    },
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 6 } },
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: COLORS.inkDim } }, label),
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 9, color: COLORS.inkFaint, letterSpacing: "0.1em" } }, "AVG")
+      ),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 5, marginTop: 4 } },
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 26, fontWeight: 500, fontVariantNumeric: "tabular-nums", color: accent || COLORS.ink, lineHeight: 1.1 } }, format(avg)),
+        unit && /*#__PURE__*/React.createElement("span", { style: { fontSize: 11, color: COLORS.inkDim } }, unit)
+      ),
+      /*#__PURE__*/React.createElement("div", { style: { marginTop: 10, display: "flex", alignItems: "center", fontSize: 10, color: COLORS.inkFaint, fontVariantNumeric: "tabular-nums", gap: 8 } },
+        /*#__PURE__*/React.createElement("span", { style: { color: COLORS.inkDim, minWidth: 28, textAlign: "left" } }, format(min)),
+        /*#__PURE__*/React.createElement("div", { style: { flex: 1, position: "relative", height: 1, background: COLORS.line } },
+          min != null && max != null && max > min && avg != null && /*#__PURE__*/React.createElement("div", {
+            style: {
+              position: "absolute",
+              left: `${Math.min(100, Math.max(0, (avg - min) / (max - min) * 100))}%`,
+              top: "-2px", width: 4, height: 4, background: accent || COLORS.ink, transform: "translateX(-50%)"
+            }
+          })
+        ),
+        /*#__PURE__*/React.createElement("span", { style: { color: COLORS.inkDim, minWidth: 28, textAlign: "right" } }, format(max))
+      )
+    );
   }
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 16,
-      height: 440
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    n: "01 /",
-    subtitle: mode === "points" ? `${total.toLocaleString()} shots · bird's-eye view · ±10 yd corridor shaded · ${mishits} mishits (${mishitPct}%) shown as hollow circles` : `${present.length} clubs · 95% confidence zones · click a zone to filter`,
-    right: /*#__PURE__*/React.createElement(Toggle, {
-      value: mode,
-      onChange: setMode,
-      options: [{
-        value: "points",
-        label: "All shots"
-      }, {
-        value: "density",
-        label: "Filled range"
-      }]
-    })
-  }, "Finish \xB7 offline vs total distance"), /*#__PURE__*/React.createElement(ResponsiveContainer, {
-    width: "100%",
-    height: "88%"
-  }, /*#__PURE__*/React.createElement(ScatterChart, {
-    margin: {
-      top: 8,
-      right: 40,
-      bottom: 20,
-      left: 0
-    }
-  }, /*#__PURE__*/React.createElement(CartesianGrid, {
-    stroke: "#1c1c1c"
-  }), /*#__PURE__*/React.createElement(ReferenceArea, {
-    x1: -10,
-    x2: 10,
-    fill: COLORS.accent,
-    fillOpacity: 0.05,
-    stroke: "none"
-  }), distanceRings.map(d => /*#__PURE__*/React.createElement(ReferenceLine, {
-    key: `ring-${d}`,
-    y: d,
-    stroke: "#1a1a1a",
-    strokeDasharray: "1 3",
-    label: {
-      value: `${d}`,
-      position: "right",
-      fill: "#3a3a3a",
-      fontSize: 9,
-      offset: 8
-    }
-  })), /*#__PURE__*/React.createElement(ReferenceLine, {
-    x: 0,
-    stroke: "#4a4a4a",
-    strokeDasharray: "4 4"
-  }), /*#__PURE__*/React.createElement(XAxis, {
-    type: "number",
-    dataKey: "x",
-    name: "offline",
-    domain: [-maxAbsOffline, maxAbsOffline],
-    ticks: xTicks,
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1),
-    label: {
-      value: "OFFLINE (yd) · L ← 0 → R",
-      fill: "#525252",
-      fontSize: 10,
-      dy: 14
-    }
-  }), /*#__PURE__*/React.createElement(YAxis, {
-    type: "number",
-    dataKey: "y",
-    name: "distance",
-    domain: [0, maxDist],
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1),
-    label: {
-      value: "TOTAL DISTANCE (yd)",
-      fill: "#525252",
-      fontSize: 10,
-      angle: -90,
-      dx: -6
-    }
-  }), /*#__PURE__*/React.createElement(ZAxis, {
-    range: [24, 24]
-  }), /*#__PURE__*/React.createElement(Tooltip, {
-    cursor: {
-      stroke: "#2a2a2a"
-    },
-    contentStyle: {
-      background: "#0a0a0a",
-      border: "1px solid #2a2a2a",
-      fontSize: 11
-    },
-    formatter: (v, k) => [fmt(v, 1), k]
-  }), scatterSeries, mode === "density" && /*#__PURE__*/React.createElement(Customized, {
-    component: props => /*#__PURE__*/React.createElement(EllipseLayer, {
-      clubs: present,
-      ellipsesByClub: ellipsesByClub,
-      xAxisMap: props.xAxisMap,
-      yAxisMap: props.yAxisMap,
-      onClubClick: onClubClick
-    })
-  }))));
-}
 
-// ---------------------------------------------------------------------------
-// Realistic trajectory: asymmetric arc using VLA (rising) + descent angle
-// ---------------------------------------------------------------------------
-function TrajectoryChart({
-  shots,
-  activeClub
-}) {
-  const {
-    series,
-    maxDist,
-    maxHeight,
-    sampled
-  } = useMemo(() => {
-    const usable = shots.filter(s => s.carry != null && s.total_dist != null && s.peak_height != null && s.carry > 0 && s.peak_height > 0 && s.club && s.vla != null && s.vla > 0);
-    let picked = usable,
-      wasSampled = false;
-    const MAX_TOTAL = 80;
-    if (!activeClub && usable.length > MAX_TOTAL) {
-      wasSampled = true;
-      const byClub = {};
-      for (const s of usable) (byClub[s.club] ||= []).push(s);
-      const clubs = Object.keys(byClub);
-      const perClub = Math.max(3, Math.floor(MAX_TOTAL / clubs.length));
-      picked = [];
-      for (const c of clubs) {
-        const arr = byClub[c];
-        const step = Math.max(1, Math.floor(arr.length / perClub));
-        for (let i = 0; i < arr.length && picked.length < MAX_TOTAL; i += step) {
-          picked.push(arr[i]);
+  function SectionTitle({ n, children, right, subtitle }) {
+    return /*#__PURE__*/React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10, gap: 12, flexWrap: "wrap" } },
+      /*#__PURE__*/React.createElement("div", null,
+        /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12 } },
+          /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkFaint } }, n),
+          /*#__PURE__*/React.createElement("h2", { style: { fontSize: 11, textTransform: "uppercase", letterSpacing: "0.28em", margin: 0, fontWeight: 500 } }, children)
+        ),
+        subtitle && /*#__PURE__*/React.createElement("div", { style: { fontSize: 10, color: COLORS.inkFaint, marginTop: 4, marginLeft: 22 } }, subtitle)
+      ),
+      right && /*#__PURE__*/React.createElement("div", null, right)
+    );
+  }
+
+  function Toggle({ options, value, onChange }) {
+    return /*#__PURE__*/React.createElement("div", { style: { display: "flex", border: `1px solid ${COLORS.line}` } },
+      options.map((opt, i) => {
+        const active = value === opt.value;
+        return /*#__PURE__*/React.createElement("button", {
+          key: opt.value,
+          onClick: () => onChange(opt.value),
+          style: {
+            padding: "4px 10px", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase",
+            background: active ? COLORS.accent : "transparent",
+            color: active ? "#000" : COLORS.ink,
+            border: "none",
+            borderRight: i < options.length - 1 ? `1px solid ${COLORS.line}` : "none",
+            fontFamily: MONO, cursor: "pointer"
+          }
+        }, opt.label);
+      })
+    );
+  }
+
+  function EmptyState({ title, hint }) {
+    return /*#__PURE__*/React.createElement("div", { style: { height: "86%", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", color: COLORS.inkFaint, fontSize: 11, gap: 6, padding: 20, textAlign: "center" } },
+      /*#__PURE__*/React.createElement("div", { style: { color: COLORS.inkDim, letterSpacing: "0.1em", textTransform: "uppercase", fontSize: 10 } }, title),
+      hint && /*#__PURE__*/React.createElement("div", null, hint)
+    );
+  }
+
+  // Schema-warning banner (shown when sheet has unmapped/missing columns)
+  function SchemaBanner({ warnings }) {
+    const { missingRecommended = [], unmappedHeaders = [], droppedRows = 0 } = warnings;
+    const hasIssue = missingRecommended.length > 0 || droppedRows > 0;
+    if (!hasIssue) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      style: {
+        margin: "10px 24px 0", padding: "8px 12px",
+        background: "#1a1610", border: `1px solid #3a2c10`,
+        color: "#fbbf24", fontSize: 11, fontFamily: MONO, lineHeight: 1.5
+      }
+    },
+      /*#__PURE__*/React.createElement("strong", null, "Schema notes: "),
+      missingRecommended.length > 0 && `${missingRecommended.length} recommended field(s) missing (${missingRecommended.join(", ")}). `,
+      droppedRows > 0 && `${droppedRows} row(s) skipped (no club/ts). `,
+      unmappedHeaders.length > 0 && `Unmapped column(s) ignored: ${unmappedHeaders.join(", ")}.`
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function DateRangeBar({ range, setRange, shotsInRange, totalShots, dataEnd }) {
+    const [customOpen, setCustomOpen] = useState(range.preset === "custom");
+
+    // Reference date: data end (latest shot) when in historical mode, else current time.
+    // This fixes the "today preset uses real today even on a 6-month-old dataset" bug.
+    const [refMode, setRefMode] = useState("data"); // "data" | "now"
+    const refTimeMs = refMode === "data" && dataEnd ? dataEnd * 1000 : Date.now();
+
+    const applyPreset = preset => {
+      setCustomOpen(false);
+      if (preset.id === "all") { setRange({ preset: "all", from: null, to: null }); return; }
+      const ref = new Date(refTimeMs);
+      const from = preset.days === 0 ? startOfDay(ref) : startOfDay(new Date(ref.getTime() - preset.days * DAY));
+      setRange({ preset: preset.id, from, to: endOfDay(ref) });
+    };
+    const applyCustom = (fromStr, toStr) => {
+      const f = fromInputDate(fromStr), t = fromInputDate(toStr);
+      if (!f && !t) return;
+      setRange({ preset: "custom", from: f ? startOfDay(f) : null, to: t ? endOfDay(t) : null });
+    };
+    const fromVal = range.from ? toInputDate(new Date(range.from * 1000)) : "";
+    const toVal = range.to ? toInputDate(new Date(range.to * 1000)) : "";
+    const btn = active => ({
+      padding: "5px 10px", fontSize: 10, letterSpacing: "0.18em",
+      border: `1px solid ${active ? COLORS.accent : COLORS.line}`,
+      background: active ? COLORS.accent : "transparent",
+      color: active ? "#000" : COLORS.ink,
+      fontFamily: MONO, cursor: "pointer", textTransform: "uppercase"
+    });
+    const dateInput = {
+      background: COLORS.bg, border: `1px solid ${COLORS.line}`, color: COLORS.ink,
+      fontFamily: MONO, fontSize: 11, padding: "4px 8px", colorScheme: "dark"
+    };
+    const rangeLabel = (() => {
+      if (range.preset === "all" || (!range.from && !range.to)) return "all time";
+      if (!range.from) return `start → ${toInputDate(new Date(range.to * 1000))}`;
+      if (!range.to) return `${toInputDate(new Date(range.from * 1000))} → now`;
+      return `${toInputDate(new Date(range.from * 1000))} → ${toInputDate(new Date(range.to * 1000))}`;
+    })();
+
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 10 } },
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" } },
+        /*#__PURE__*/React.createElement(Calendar, { size: 12, color: COLORS.inkDim }),
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.28em", color: COLORS.inkDim } }, "Range"),
+        /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 4 } },
+          PRESETS.map(p => /*#__PURE__*/React.createElement("button", { key: p.id, onClick: () => applyPreset(p), style: btn(range.preset === p.id) }, p.label)),
+          /*#__PURE__*/React.createElement("button", { onClick: () => setCustomOpen(v => !v), style: btn(range.preset === "custom") }, "CUSTOM")
+        ),
+        /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, paddingLeft: 8, borderLeft: `1px solid ${COLORS.line}` } },
+          /*#__PURE__*/React.createElement("span", { style: { fontSize: 9, textTransform: "uppercase", letterSpacing: "0.2em", color: COLORS.inkFaint } }, "ref"),
+          /*#__PURE__*/React.createElement(Toggle, {
+            value: refMode, onChange: setRefMode,
+            options: [{ value: "data", label: "Data end" }, { value: "now", label: "Now" }]
+          })
+        ),
+        /*#__PURE__*/React.createElement("div", { style: { flex: 1 } }),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 10, color: COLORS.inkFaint, letterSpacing: "0.08em" } },
+          /*#__PURE__*/React.createElement("span", { style: { color: COLORS.ink } }, shotsInRange.toLocaleString()), " shots",
+          /*#__PURE__*/React.createElement("span", { style: { margin: "0 8px" } }, "·"), rangeLabel,
+          /*#__PURE__*/React.createElement("span", { style: { margin: "0 8px" } }, "·"), totalShots.toLocaleString(), " total"
+        )
+      ),
+      customOpen && /*#__PURE__*/React.createElement("div", { style: { marginTop: 10, paddingTop: 10, borderTop: `1px solid ${COLORS.line}`, display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" } },
+        /*#__PURE__*/React.createElement("label", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: COLORS.inkDim } }, "From"),
+        /*#__PURE__*/React.createElement("input", { type: "date", value: fromVal, max: toVal || undefined, onChange: e => applyCustom(e.target.value, toVal), style: dateInput }),
+        /*#__PURE__*/React.createElement("span", { style: { color: COLORS.inkFaint } }, "→"),
+        /*#__PURE__*/React.createElement("label", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.2em", color: COLORS.inkDim } }, "To"),
+        /*#__PURE__*/React.createElement("input", { type: "date", value: toVal, min: fromVal || undefined, onChange: e => applyCustom(fromVal, e.target.value), style: dateInput })
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function ClubStrip({ activeClub, setClub, shotsByClub }) {
+    const btn = (active, c) => ({
+      padding: "5px 9px", fontSize: 11,
+      border: `1px solid ${active ? COLORS.accent : COLORS.line}`,
+      borderLeft: `3px solid ${active ? COLORS.accent : c ? colorFor(c) : COLORS.line}`,
+      background: active ? COLORS.accent : "transparent",
+      color: active ? "#000" : COLORS.ink,
+      fontFamily: MONO, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6
+    });
+    const badge = active => ({ fontSize: 9, color: active ? "#000" : COLORS.inkDim, fontVariantNumeric: "tabular-nums" });
+    const total = Object.values(shotsByClub).reduce((a, b) => a + b, 0);
+    const clubsPresent = BAG_ORDER.filter(c => shotsByClub[c]);
+
+    return /*#__PURE__*/React.createElement("div", { style: { background: COLORS.panel2, border: `1px solid ${COLORS.line}`, padding: 6, display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" } },
+      /*#__PURE__*/React.createElement("button", { onClick: () => setClub(null), style: btn(!activeClub, null) },
+        "ALL ", /*#__PURE__*/React.createElement("span", { style: badge(!activeClub) }, total.toLocaleString())
+      ),
+      clubsPresent.map(c => {
+        const active = activeClub === c;
+        return /*#__PURE__*/React.createElement("button", { key: c, onClick: () => setClub(c), style: btn(active, c) },
+          c, " ", /*#__PURE__*/React.createElement("span", { style: badge(active) }, shotsByClub[c])
+        );
+      }),
+      activeClub && /*#__PURE__*/React.createElement("button", {
+        onClick: () => setClub(null),
+        style: { marginLeft: "auto", padding: "4px 8px", fontSize: 10, letterSpacing: "0.15em", background: "transparent", border: `1px solid ${COLORS.line}`, color: COLORS.inkDim, cursor: "pointer", fontFamily: MONO, display: "inline-flex", alignItems: "center", gap: 4 }
+      }, /*#__PURE__*/React.createElement(X, { size: 10 }), " CLEAR FILTER")
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // 95% confidence ellipse from 2D points (used by "filled range" mode)
+  // -------------------------------------------------------------------------
+  function computeEllipse(points) {
+    if (points.length < 3) return null;
+    const n = points.length;
+    let sx = 0, sy = 0;
+    for (const p of points) { sx += p.x; sy += p.y; }
+    const cx = sx / n, cy = sy / n;
+    let sxx = 0, syy = 0, sxy = 0;
+    for (const p of points) {
+      const dx = p.x - cx, dy = p.y - cy;
+      sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+    }
+    sxx /= n - 1; syy /= n - 1; sxy /= n - 1;
+    const trace = sxx + syy, det = sxx * syy - sxy * sxy;
+    const disc = Math.max(0, trace * trace / 4 - det);
+    const l1 = trace / 2 + Math.sqrt(disc);
+    const l2 = trace / 2 - Math.sqrt(disc);
+    const k = Math.sqrt(CONFIG.ELLIPSE_CHI2);
+    const rx = k * Math.sqrt(Math.max(0, l1));
+    const ry = k * Math.sqrt(Math.max(0, l2));
+    const theta = Math.atan2(l1 - sxx, sxy);
+    return { cx, cy, rx, ry, theta, n };
+  }
+
+  function EllipseLayer({ clubs, ellipsesByClub, xAxisMap, yAxisMap, onClubClick }) {
+    if (!xAxisMap || !yAxisMap) return null;
+    const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
+    const yAxis = yAxisMap[Object.keys(yAxisMap)[0]];
+    const sx = xAxis.scale, sy = yAxis.scale;
+    return /*#__PURE__*/React.createElement("g", null,
+      clubs.map(c => {
+        const e = ellipsesByClub[c];
+        if (!e) return null;
+        const cx = sx(e.cx), cy = sy(e.cy);
+        const screenRx = Math.abs(sx(e.cx + e.rx) - sx(e.cx));
+        const screenRy = Math.abs(sy(e.cy + e.ry) - sy(e.cy));
+        const deg = e.theta * 180 / Math.PI;
+        return /*#__PURE__*/React.createElement("g", {
+          key: c, transform: `rotate(${deg} ${cx} ${cy})`,
+          style: { cursor: onClubClick ? "pointer" : "default" },
+          onClick: () => onClubClick && onClubClick(c)
+        },
+          /*#__PURE__*/React.createElement("ellipse", { cx, cy, rx: screenRx, ry: screenRy, fill: colorFor(c), fillOpacity: 0.12, stroke: colorFor(c), strokeOpacity: 0.7, strokeWidth: 1 }),
+          /*#__PURE__*/React.createElement("circle", { cx, cy, r: 2.5, fill: colorFor(c) }),
+          /*#__PURE__*/React.createElement("text", { x: cx, y: cy - screenRy - 4, textAnchor: "middle", style: { fontSize: 10, fill: colorFor(c), fontFamily: MONO } }, c)
+        );
+      })
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // Mishit detection — reused by Stats and FinishScatter
+  // -------------------------------------------------------------------------
+  const isMishit = (offline, totalDist) =>
+    Math.abs(offline) > Math.max(CONFIG.MISHIT_MIN_YD, (totalDist || 0) * CONFIG.MISHIT_PCT);
+
+  // -------------------------------------------------------------------------
+  function FinishScatter({ shots, onClubClick }) {
+    const [mode, setMode] = useState("points");
+    const { seriesByClub, ellipsesByClub, maxDist, maxAbsOffline, total, mishits } = useMemo(() => {
+      const map = {};
+      let mishitCount = 0;
+      for (const s of shots) {
+        if (s.total_dist == null || s.offline == null || !s.club) continue;
+        const mishit = isMishit(s.offline, s.total_dist);
+        (map[s.club] ||= []).push({
+          x: Math.round(s.offline * 10) / 10,
+          y: Math.round(s.total_dist * 10) / 10,
+          club: s.club, id: s.id, mishit
+        });
+        if (mishit) mishitCount++;
+      }
+      const flat = Object.values(map).flat();
+      const maxDist = Math.max(50, ...flat.map(p => p.y)) * 1.05;
+      const maxAbsOffline = Math.max(10, ...flat.map(p => Math.abs(p.x))) * 1.15;
+      const ellipses = {};
+      for (const [c, pts] of Object.entries(map)) {
+        const e = computeEllipse(pts);
+        if (e) ellipses[c] = e;
+      }
+      return { seriesByClub: map, ellipsesByClub: ellipses, maxDist, maxAbsOffline, total: flat.length, mishits: mishitCount };
+    }, [shots]);
+
+    const present = BAG_ORDER.filter(c => seriesByClub[c]);
+    const distanceRings = useMemo(() => {
+      const rings = [];
+      for (let d = 50; d < maxDist; d += 50) rings.push(d);
+      return rings;
+    }, [maxDist]);
+    const mishitPct = total ? (mishits / total * 100).toFixed(0) : 0;
+    const xTicks = useMemo(() => {
+      const step = maxAbsOffline > 60 ? 20 : maxAbsOffline > 30 ? 10 : 5;
+      const arr = [0];
+      for (let v = step; v <= maxAbsOffline; v += step) arr.push(v, -v);
+      return arr.sort((a, b) => a - b);
+    }, [maxAbsOffline]);
+
+    if (total === 0) {
+      return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 440 } },
+        /*#__PURE__*/React.createElement(SectionTitle, { n: "01 /", subtitle: "no offline + total-distance pairs in current selection" }, "Finish · offline vs total distance"),
+        /*#__PURE__*/React.createElement(EmptyState, { title: "No shots to plot", hint: "Try widening the date range or clearing the club filter." })
+      );
+    }
+
+    const scatterSeries = [];
+    if (mode === "points") {
+      for (const c of present) {
+        const pts = seriesByClub[c];
+        const onTarget = pts.filter(p => !p.mishit);
+        const mishitPts = pts.filter(p => p.mishit);
+        if (onTarget.length > 0) {
+          scatterSeries.push(/*#__PURE__*/React.createElement(Scatter, {
+            key: `${c}-ok`, name: c, data: onTarget,
+            fill: colorFor(c), fillOpacity: 0.7,
+            onClick: () => onClubClick && onClubClick(c),
+            style: { cursor: "pointer" }
+          }));
+        }
+        if (mishitPts.length > 0) {
+          scatterSeries.push(/*#__PURE__*/React.createElement(Scatter, {
+            key: `${c}-miss`, name: `${c} mishit`, data: mishitPts,
+            fill: "none", stroke: colorFor(c), strokeWidth: 1.2, strokeOpacity: 0.85,
+            onClick: () => onClubClick && onClubClick(c),
+            style: { cursor: "pointer" }
+          }));
         }
       }
     }
-    const traj = picked.map((s, idx) => {
-      const vla = Math.max(1, s.vla);
-      const tanVla = Math.tan(vla * Math.PI / 180);
-      // apex position derived from launch angle — gives realistic asymmetry
-      let apexX = s.peak_height / tanVla;
-      apexX = Math.max(2, Math.min(apexX, s.carry - 2));
-      const points = [];
-      // Rising leg: y = peak * (2t - t²) — rises quickly, plateaus at apex
-      for (const t of [0, 0.25, 0.5, 0.75, 1]) {
-        const x = apexX * t;
-        const h = s.peak_height * (2 * t - t * t);
-        points.push({
-          d: x,
-          h
-        });
+
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 440 } },
+      /*#__PURE__*/React.createElement(SectionTitle, {
+        n: "01 /",
+        subtitle: mode === "points"
+          ? `${total.toLocaleString()} shots · bird's-eye view · ±10 yd corridor shaded · ${mishits} mishits (${mishitPct}%) shown as hollow circles`
+          : `${present.length} clubs · 95% confidence zones · click a zone to filter`,
+        right: /*#__PURE__*/React.createElement(Toggle, {
+          value: mode, onChange: setMode,
+          options: [{ value: "points", label: "All shots" }, { value: "density", label: "Filled range" }]
+        })
+      }, "Finish · offline vs total distance"),
+      /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "88%" },
+        /*#__PURE__*/React.createElement(ScatterChart, { margin: { top: 8, right: 40, bottom: 20, left: 0 } },
+          /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid }),
+          /*#__PURE__*/React.createElement(ReferenceArea, { x1: -10, x2: 10, fill: COLORS.accent, fillOpacity: 0.05, stroke: "none" }),
+          distanceRings.map(d => /*#__PURE__*/React.createElement(ReferenceLine, {
+            key: `ring-${d}`, y: d, stroke: "#1a1a1a", strokeDasharray: "1 3",
+            label: { value: `${d}`, position: "right", fill: "#3a3a3a", fontSize: 9, offset: 8 }
+          })),
+          /*#__PURE__*/React.createElement(ReferenceLine, { x: 0, stroke: "#4a4a4a", strokeDasharray: "4 4" }),
+          /*#__PURE__*/React.createElement(XAxis, {
+            type: "number", dataKey: "x", name: "offline",
+            domain: [-maxAbsOffline, maxAbsOffline], ticks: xTicks,
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1),
+            label: { value: "OFFLINE (yd) · L ← 0 → R", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, dy: 14 }
+          }),
+          /*#__PURE__*/React.createElement(YAxis, {
+            type: "number", dataKey: "y", name: "distance", domain: [0, maxDist],
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1),
+            label: { value: "TOTAL DISTANCE (yd)", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
+          }),
+          /*#__PURE__*/React.createElement(ZAxis, { range: [24, 24] }),
+          /*#__PURE__*/React.createElement(Tooltip, { cursor: { stroke: "#2a2a2a" }, contentStyle: CHART_THEME.tooltipStyle, formatter: (v, k) => [fmt(v, 1), k] }),
+          scatterSeries,
+          mode === "density" && /*#__PURE__*/React.createElement(Customized, {
+            component: props => /*#__PURE__*/React.createElement(EllipseLayer, {
+              clubs: present, ellipsesByClub, xAxisMap: props.xAxisMap, yAxisMap: props.yAxisMap, onClubClick
+            })
+          })
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function TrajectoryChart({ shots, activeClub }) {
+    const { series, maxDist, maxHeight, sampled } = useMemo(() => {
+      const usable = shots.filter(s =>
+        s.carry != null && s.total_dist != null && s.peak_height != null &&
+        s.carry > 0 && s.peak_height > 0 && s.club && s.vla != null && s.vla > 0
+      );
+      let picked = usable, wasSampled = false;
+      if (!activeClub && usable.length > CONFIG.TRAJECTORY_MAX_TOTAL) {
+        wasSampled = true;
+        const byClub = {};
+        for (const s of usable) (byClub[s.club] ||= []).push(s);
+        const clubs = Object.keys(byClub);
+        const perClub = Math.max(CONFIG.TRAJECTORY_MIN_PER_CLUB, Math.floor(CONFIG.TRAJECTORY_MAX_TOTAL / clubs.length));
+        picked = [];
+        for (const c of clubs) {
+          const arr = byClub[c];
+          const step = Math.max(1, Math.floor(arr.length / perClub));
+          for (let i = 0; i < arr.length && picked.length < CONFIG.TRAJECTORY_MAX_TOTAL; i += step) picked.push(arr[i]);
+        }
       }
-      // Descending leg: y = peak * (1 - u²) — steeper than rise, matches real ball flight
-      const descLen = s.carry - apexX;
-      for (const u of [0.25, 0.5, 0.75, 1]) {
-        const x = apexX + descLen * u;
-        const h = Math.max(0, s.peak_height * (1 - u * u));
-        points.push({
-          d: x,
-          h
-        });
-      }
-      // Roll
-      if (s.total_dist > s.carry + 0.5) points.push({
-        d: s.total_dist,
-        h: 0
+      const traj = picked.map((s, idx) => {
+        const vla = Math.max(1, s.vla);
+        const tanVla = Math.tan(vla * Math.PI / 180);
+        let apexX = s.peak_height / tanVla;
+        apexX = Math.max(2, Math.min(apexX, s.carry - 2));
+        const points = [];
+        for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+          const x = apexX * t;
+          const h = s.peak_height * (2 * t - t * t);
+          points.push({ d: x, h });
+        }
+        const descLen = s.carry - apexX;
+        for (const u of [0.25, 0.5, 0.75, 1]) {
+          const x = apexX + descLen * u;
+          const h = Math.max(0, s.peak_height * (1 - u * u));
+          points.push({ d: x, h });
+        }
+        if (s.total_dist > s.carry + 0.5) points.push({ d: s.total_dist, h: 0 });
+        return { id: `${s.club}-${s.id}-${idx}`, club: s.club, points };
       });
-      return {
-        id: `${s.club}-${s.id}-${idx}`,
-        club: s.club,
-        points
-      };
-    });
-    let mD = 1,
-      mH = 1;
-    for (const t of traj) for (const p of t.points) {
-      if (p.d > mD) mD = p.d;
-      if (p.h > mH) mH = p.h;
-    }
-    return {
-      series: traj,
-      maxDist: mD * 1.05,
-      maxHeight: mH * 1.18,
-      sampled: wasSampled
-    };
-  }, [shots, activeClub]);
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 16,
-      height: 400
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    n: "02 /",
-    subtitle: `asymmetric arc: launch angle → apex → steeper descent · ${series.length} trajectories${sampled ? " (sampled)" : ""}`
-  }, "Trajectory \xB7 distance vs height"), /*#__PURE__*/React.createElement(ResponsiveContainer, {
-    width: "100%",
-    height: "86%"
-  }, /*#__PURE__*/React.createElement(LineChart, {
-    margin: {
-      top: 8,
-      right: 24,
-      bottom: 20,
-      left: 0
-    }
-  }, /*#__PURE__*/React.createElement(CartesianGrid, {
-    stroke: "#1c1c1c"
-  }), /*#__PURE__*/React.createElement(XAxis, {
-    type: "number",
-    dataKey: "d",
-    domain: [0, Math.max(1, maxDist)],
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1),
-    allowDuplicatedCategory: false,
-    label: {
-      value: "DISTANCE (yd) · carry → total",
-      fill: "#525252",
-      fontSize: 10,
-      dy: 14
-    }
-  }), /*#__PURE__*/React.createElement(YAxis, {
-    type: "number",
-    dataKey: "h",
-    domain: [0, maxHeight],
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1),
-    label: {
-      value: "HEIGHT (yd)",
-      fill: "#525252",
-      fontSize: 10,
-      angle: -90,
-      dx: -6
-    }
-  }), /*#__PURE__*/React.createElement(Tooltip, {
-    contentStyle: {
-      background: "#0a0a0a",
-      border: "1px solid #2a2a2a",
-      fontSize: 11
-    },
-    formatter: (v, k) => [fmt(v, 1), k === "d" ? "distance" : "height"]
-  }), series.map(t => /*#__PURE__*/React.createElement(Line, {
-    key: t.id,
-    data: t.points,
-    dataKey: "h",
-    type: "monotone",
-    stroke: colorFor(t.club),
-    strokeWidth: 1,
-    strokeOpacity: 0.55,
-    dot: false,
-    isAnimationActive: false,
-    connectNulls: true,
-    legendType: "none"
-  })))));
-}
-
-// ---------------------------------------------------------------------------
-function DistanceOverTime({
-  shots,
-  onClubClick
-}) {
-  const [metric, setMetric] = useState("total_dist");
-  const {
-    bucketList,
-    seriesByClub,
-    hasData,
-    bucketSize,
-    present
-  } = useMemo(() => {
-    const timestamps = shots.map(s => s.ts).filter(t => t != null);
-    if (!timestamps.length) return {
-      bucketList: [],
-      seriesByClub: {},
-      hasData: false,
-      bucketSize: "weekly",
-      present: []
-    };
-    const minTs = Math.min(...timestamps),
-      maxTs = Math.max(...timestamps);
-    const spanDays = (maxTs - minTs) / 86400;
-    const bucketSize = spanDays > 21 ? "weekly" : "daily";
-    const bucketOf = ts => {
-      const d = new Date(ts * 1000);
-      if (bucketSize === "daily") return toInputDate(d);
-      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      const dayNum = t.getUTCDay() || 7;
-      t.setUTCDate(t.getUTCDate() + 4 - dayNum);
-      const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-      const weekNo = Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
-      return `${t.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
-    };
-    const bucketAnchor = ts => {
-      const d = new Date(ts * 1000);
-      if (bucketSize === "daily") {
-        d.setHours(12, 0, 0, 0);
-        return d.getTime() / 1000;
+      let mD = 1, mH = 1;
+      for (const t of traj) for (const p of t.points) {
+        if (p.d > mD) mD = p.d;
+        if (p.h > mH) mH = p.h;
       }
-      const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-      const dayNum = t.getUTCDay() || 7;
-      t.setUTCDate(t.getUTCDate() + 4 - dayNum);
-      return t.getTime() / 1000;
-    };
-    const grouped = {};
-    const bucketSet = new Set();
-    for (const s of shots) {
-      if (!s.club || s[metric] == null) continue;
-      const b = bucketOf(s.ts),
-        anchor = bucketAnchor(s.ts);
-      bucketSet.add(`${b}|${anchor}`);
-      if (!grouped[s.club]) grouped[s.club] = {};
-      if (!grouped[s.club][b]) grouped[s.club][b] = {
-        sum: 0,
-        n: 0,
-        anchor
-      };
-      grouped[s.club][b].sum += s[metric];
-      grouped[s.club][b].n += 1;
-    }
-    const bucketList = [...bucketSet].map(x => {
-      const [b, a] = x.split("|");
-      return {
-        bucket: b,
-        anchor: +a
-      };
-    }).sort((a, b) => a.anchor - b.anchor);
-    const seriesByClub = {};
-    for (const [club, buckets] of Object.entries(grouped)) {
-      const keys = Object.keys(buckets);
-      const totalShots = keys.reduce((a, k) => a + buckets[k].n, 0);
-      if (keys.length < 2 || totalShots < 3) continue;
-      seriesByClub[club] = bucketList.map(({
-        bucket,
-        anchor
-      }) => {
-        const b = buckets[bucket];
-        return b ? {
-          t: anchor,
-          avg: Math.round(b.sum / b.n * 10) / 10,
-          n: b.n,
-          bucket,
-          club
-        } : null;
-      }).filter(Boolean);
-    }
-    const present = BAG_ORDER.filter(c => seriesByClub[c]);
-    return {
-      bucketList,
-      seriesByClub,
-      bucketSize,
-      hasData: present.length > 0,
-      present
-    };
-  }, [shots, metric]);
-  const xDomain = bucketList.length ? [bucketList[0].anchor, bucketList[bucketList.length - 1].anchor] : [0, 1];
-  const maxY = Math.max(1, ...Object.values(seriesByClub).flat().map(p => p.avg)) * 1.08;
-  const xFormat = ts => new Date(ts * 1000).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric"
-  });
-  const metricLabel = metric === "total_dist" ? "Total" : "Carry";
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 16,
-      height: 400
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    n: "03 /",
-    subtitle: hasData ? `${present.length} clubs · ${bucketSize} buckets · avg ${metricLabel.toLowerCase()} · click a line to filter` : "Need ≥3 shots across ≥2 time periods per club",
-    right: /*#__PURE__*/React.createElement(Toggle, {
-      value: metric,
-      onChange: setMetric,
-      options: [{
-        value: "carry",
-        label: "Carry"
-      }, {
-        value: "total_dist",
-        label: "Total"
-      }]
-    })
-  }, "Distance over time"), hasData ? /*#__PURE__*/React.createElement(ResponsiveContainer, {
-    width: "100%",
-    height: "86%"
-  }, /*#__PURE__*/React.createElement(LineChart, {
-    margin: {
-      top: 8,
-      right: 24,
-      bottom: 20,
-      left: 0
-    }
-  }, /*#__PURE__*/React.createElement(CartesianGrid, {
-    stroke: "#1c1c1c"
-  }), /*#__PURE__*/React.createElement(XAxis, {
-    type: "number",
-    dataKey: "t",
-    domain: xDomain,
-    tickFormatter: xFormat,
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    scale: "time",
-    allowDuplicatedCategory: false,
-    label: {
-      value: "DATE",
-      fill: "#525252",
-      fontSize: 10,
-      dy: 14
-    }
-  }), /*#__PURE__*/React.createElement(YAxis, {
-    type: "number",
-    domain: [0, maxY],
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1),
-    label: {
-      value: `AVG ${metricLabel.toUpperCase()} (yd)`,
-      fill: "#525252",
-      fontSize: 10,
-      angle: -90,
-      dx: -6
-    }
-  }), /*#__PURE__*/React.createElement(Tooltip, {
-    contentStyle: {
-      background: "#0a0a0a",
-      border: "1px solid #2a2a2a",
-      fontSize: 11
-    },
-    labelFormatter: t => xFormat(t),
-    formatter: (v, name, entry) => [`${fmt(v, 1)} yd (${entry.payload.n} shots)`, name]
-  }), present.map(c => /*#__PURE__*/React.createElement(Line, {
-    key: c,
-    name: c,
-    data: seriesByClub[c],
-    dataKey: "avg",
-    type: "monotone",
-    stroke: colorFor(c),
-    strokeWidth: 1.6,
-    strokeOpacity: 0.9,
-    dot: {
-      r: 2.5,
-      fill: colorFor(c),
-      strokeWidth: 0
-    },
-    activeDot: {
-      r: 5,
-      onClick: () => onClubClick && onClubClick(c),
-      style: {
-        cursor: "pointer"
-      }
-    },
-    isAnimationActive: false,
-    connectNulls: true,
-    legendType: "none"
-  })))) : /*#__PURE__*/React.createElement("div", {
-    style: {
-      height: "86%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: COLORS.inkFaint,
-      fontSize: 11
-    }
-  }, "Not enough data in range \xB7 widen the date range or clear the club filter"));
-}
+      return { series: traj, maxDist: mD * 1.05, maxHeight: mH * 1.18, sampled: wasSampled };
+    }, [shots, activeClub]);
 
-// ---------------------------------------------------------------------------
-function ClubBars({
-  shots,
-  onClubClick,
-  activeClub
-}) {
-  const data = useMemo(() => {
-    const groups = {};
-    for (const s of shots) {
-      if (!s.club || s.carry == null) continue;
-      (groups[s.club] ||= []).push(s);
+    if (series.length === 0) {
+      return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 400 } },
+        /*#__PURE__*/React.createElement(SectionTitle, { n: "02 /", subtitle: "needs carry, peak height, and launch angle" }, "Trajectory · distance vs height"),
+        /*#__PURE__*/React.createElement(EmptyState, { title: "No trajectories to draw", hint: "Selected shots are missing peak height, carry, or launch angle." })
+      );
     }
-    return Object.entries(groups).filter(([, arr]) => arr.length >= 3).map(([club, arr]) => ({
-      club,
-      carry: Math.round(arr.reduce((a, b) => a + b.carry, 0) / arr.length * 10) / 10,
-      shots: arr.length
-    })).sort((a, b) => {
-      const ai = BAG_ORDER.indexOf(a.club),
-        bi = BAG_ORDER.indexOf(b.club);
-      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-    });
-  }, [shots]);
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 16,
-      height: 240
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    n: "04 /",
-    right: /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 10,
-        color: COLORS.inkFaint
-      }
-    }, "avg carry \xB7 click to filter")
-  }, "Bag"), /*#__PURE__*/React.createElement(ResponsiveContainer, {
-    width: "100%",
-    height: "84%"
-  }, /*#__PURE__*/React.createElement(BarChart, {
-    data: data,
-    margin: {
-      top: 8,
-      right: 8,
-      bottom: 4,
-      left: 0
-    },
-    onClick: e => {
-      if (e && e.activeLabel && onClubClick) onClubClick(e.activeLabel);
-    }
-  }, /*#__PURE__*/React.createElement(CartesianGrid, {
-    stroke: "#1c1c1c",
-    vertical: false
-  }), /*#__PURE__*/React.createElement(XAxis, {
-    dataKey: "club",
-    tick: {
-      fill: "#8a8a8a",
-      fontSize: 10
-    }
-  }), /*#__PURE__*/React.createElement(YAxis, {
-    tick: {
-      fill: "#6a6a6a",
-      fontSize: 10
-    },
-    tickFormatter: v => v.toFixed(1)
-  }), /*#__PURE__*/React.createElement(Tooltip, {
-    contentStyle: {
-      background: "#0a0a0a",
-      border: "1px solid #2a2a2a",
-      fontSize: 11
-    },
-    formatter: v => [fmt(v, 1) + " yd", "carry"],
-    labelFormatter: l => `${l} · ${(data.find(d => d.club === l) || {}).shots || 0} shots`
-  }), /*#__PURE__*/React.createElement(Bar, {
-    dataKey: "carry",
-    fillOpacity: 0.9,
-    style: {
-      cursor: "pointer"
-    },
-    shape: p => /*#__PURE__*/React.createElement("rect", {
-      x: p.x,
-      y: p.y,
-      width: p.width,
-      height: p.height,
-      fill: colorFor(p.club),
-      stroke: activeClub === p.club ? "#fff" : "none",
-      strokeWidth: activeClub === p.club ? 1.5 : 0
-    })
-  }))));
-}
 
-// ---------------------------------------------------------------------------
-function SourcesPanel({
-  shots
-}) {
-  const rows = useMemo(() => {
-    const byS = new Map();
-    for (const s of shots) {
-      const key = s.source || "live";
-      if (!byS.has(key)) byS.set(key, {
-        source: key,
-        n: 0,
-        firstTs: Infinity,
-        lastTs: -Infinity
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 400 } },
+      /*#__PURE__*/React.createElement(SectionTitle, { n: "02 /", subtitle: `asymmetric arc: launch angle → apex → steeper descent · ${series.length} trajectories${sampled ? " (sampled)" : ""}` }, "Trajectory · distance vs height"),
+      /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "86%" },
+        /*#__PURE__*/React.createElement(LineChart, { margin: { top: 8, right: 24, bottom: 20, left: 0 } },
+          /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid }),
+          /*#__PURE__*/React.createElement(XAxis, {
+            type: "number", dataKey: "d", domain: [0, Math.max(1, maxDist)],
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1), allowDuplicatedCategory: false,
+            label: { value: "DISTANCE (yd) · carry → total", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, dy: 14 }
+          }),
+          /*#__PURE__*/React.createElement(YAxis, {
+            type: "number", dataKey: "h", domain: [0, maxHeight],
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1),
+            label: { value: "HEIGHT (yd)", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
+          }),
+          /*#__PURE__*/React.createElement(Tooltip, { contentStyle: CHART_THEME.tooltipStyle, formatter: (v, k) => [fmt(v, 1), k === "d" ? "distance" : "height"] }),
+          series.map(t => /*#__PURE__*/React.createElement(Line, {
+            key: t.id, data: t.points, dataKey: "h", type: "monotone",
+            stroke: colorFor(t.club), strokeWidth: 1, strokeOpacity: 0.55,
+            dot: false, isAnimationActive: false, connectNulls: true, legendType: "none"
+          }))
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function DistanceOverTime({ shots, onClubClick }) {
+    const [metric, setMetric] = useState("total_dist");
+    const { bucketList, seriesByClub, hasData, bucketSize, present } = useMemo(() => {
+      const timestamps = shots.map(s => s.ts).filter(t => t != null);
+      if (!timestamps.length) return { bucketList: [], seriesByClub: {}, hasData: false, bucketSize: "weekly", present: [] };
+      const minTs = Math.min(...timestamps), maxTs = Math.max(...timestamps);
+      const spanDays = (maxTs - minTs) / 86400;
+      const bucketSize = spanDays > 21 ? "weekly" : "daily";
+      const bucketOf = ts => {
+        const d = new Date(ts * 1000);
+        if (bucketSize === "daily") return toInputDate(d);
+        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        const dayNum = t.getUTCDay() || 7;
+        t.setUTCDate(t.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+        const weekNo = Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
+        return `${t.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+      };
+      const bucketAnchor = ts => {
+        const d = new Date(ts * 1000);
+        if (bucketSize === "daily") {
+          d.setHours(12, 0, 0, 0);
+          return d.getTime() / 1000;
+        }
+        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        const dayNum = t.getUTCDay() || 7;
+        t.setUTCDate(t.getUTCDate() + 4 - dayNum);
+        return t.getTime() / 1000;
+      };
+      const grouped = {};
+      const bucketSet = new Set();
+      for (const s of shots) {
+        if (!s.club || s[metric] == null) continue;
+        const b = bucketOf(s.ts), anchor = bucketAnchor(s.ts);
+        bucketSet.add(`${b}|${anchor}`);
+        if (!grouped[s.club]) grouped[s.club] = {};
+        if (!grouped[s.club][b]) grouped[s.club][b] = { sum: 0, n: 0, anchor };
+        grouped[s.club][b].sum += s[metric];
+        grouped[s.club][b].n += 1;
+      }
+      const bucketList = [...bucketSet].map(x => {
+        const [b, a] = x.split("|");
+        return { bucket: b, anchor: +a };
+      }).sort((a, b) => a.anchor - b.anchor);
+      const seriesByClub = {};
+      for (const [club, buckets] of Object.entries(grouped)) {
+        const keys = Object.keys(buckets);
+        const totalShots = keys.reduce((a, k) => a + buckets[k].n, 0);
+        if (keys.length < CONFIG.TREND_MIN_BUCKETS || totalShots < CONFIG.TREND_MIN_SHOTS) continue;
+        seriesByClub[club] = bucketList.map(({ bucket, anchor }) => {
+          const b = buckets[bucket];
+          return b ? { t: anchor, avg: Math.round(b.sum / b.n * 10) / 10, n: b.n, bucket, club } : null;
+        }).filter(Boolean);
+      }
+      const present = BAG_ORDER.filter(c => seriesByClub[c]);
+      return { bucketList, seriesByClub, bucketSize, hasData: present.length > 0, present };
+    }, [shots, metric]);
+
+    const xDomain = bucketList.length ? [bucketList[0].anchor, bucketList[bucketList.length - 1].anchor] : [0, 1];
+    const maxY = Math.max(1, ...Object.values(seriesByClub).flat().map(p => p.avg)) * 1.08;
+    const xFormat = ts => new Date(ts * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    const metricLabel = metric === "total_dist" ? "Total" : "Carry";
+
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 400 } },
+      /*#__PURE__*/React.createElement(SectionTitle, {
+        n: "03 /",
+        subtitle: hasData ? `${present.length} clubs · ${bucketSize} buckets · avg ${metricLabel.toLowerCase()} · click a line to filter` : `Need ≥${CONFIG.TREND_MIN_SHOTS} shots across ≥${CONFIG.TREND_MIN_BUCKETS} time periods per club`,
+        right: /*#__PURE__*/React.createElement(Toggle, {
+          value: metric, onChange: setMetric,
+          options: [{ value: "carry", label: "Carry" }, { value: "total_dist", label: "Total" }]
+        })
+      }, "Distance over time"),
+      hasData ? /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "86%" },
+        /*#__PURE__*/React.createElement(LineChart, { margin: { top: 8, right: 24, bottom: 20, left: 0 } },
+          /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid }),
+          /*#__PURE__*/React.createElement(XAxis, {
+            type: "number", dataKey: "t", domain: xDomain, tickFormatter: xFormat,
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            scale: "time", allowDuplicatedCategory: false,
+            label: { value: "DATE", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, dy: 14 }
+          }),
+          /*#__PURE__*/React.createElement(YAxis, {
+            type: "number", domain: [0, maxY],
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1),
+            label: { value: `AVG ${metricLabel.toUpperCase()} (yd)`, fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
+          }),
+          /*#__PURE__*/React.createElement(Tooltip, {
+            contentStyle: CHART_THEME.tooltipStyle, labelFormatter: t => xFormat(t),
+            formatter: (v, name, entry) => [`${fmt(v, 1)} yd (${entry.payload.n} shots)`, name]
+          }),
+          present.map(c => /*#__PURE__*/React.createElement(Line, {
+            key: c, name: c, data: seriesByClub[c], dataKey: "avg", type: "monotone",
+            stroke: colorFor(c), strokeWidth: 1.6, strokeOpacity: 0.9,
+            dot: { r: 2.5, fill: colorFor(c), strokeWidth: 0 },
+            activeDot: { r: 5, onClick: () => onClubClick && onClubClick(c), style: { cursor: "pointer" } },
+            isAnimationActive: false, connectNulls: true, legendType: "none"
+          }))
+        )
+      ) : /*#__PURE__*/React.createElement(EmptyState, { title: "Not enough data in range", hint: "Widen the date range or clear the club filter." })
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function ClubBars({ shots, onClubClick, activeClub }) {
+    const data = useMemo(() => {
+      const groups = {};
+      for (const s of shots) {
+        if (!s.club || s.carry == null) continue;
+        (groups[s.club] ||= []).push(s);
+      }
+      return Object.entries(groups).filter(([, arr]) => arr.length >= 3).map(([club, arr]) => ({
+        club,
+        carry: Math.round(arr.reduce((a, b) => a + b.carry, 0) / arr.length * 10) / 10,
+        shots: arr.length
+      })).sort((a, b) => {
+        const ai = BAG_ORDER.indexOf(a.club), bi = BAG_ORDER.indexOf(b.club);
+        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
       });
-      const r = byS.get(key);
-      r.n += 1;
-      if (s.ts < r.firstTs) r.firstTs = s.ts;
-      if (s.ts > r.lastTs) r.lastTs = s.ts;
+    }, [shots]);
+
+    if (data.length === 0) {
+      return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 240 } },
+        /*#__PURE__*/React.createElement(SectionTitle, { n: "04 /" }, "Bag"),
+        /*#__PURE__*/React.createElement(EmptyState, { title: "No clubs with ≥3 shots", hint: "Capture more shots to populate the bag chart." })
+      );
     }
-    return [...byS.values()].sort((a, b) => b.n - a.n);
-  }, [shots]);
-  const total = rows.reduce((a, b) => a + b.n, 0) || 1;
-  const sourceColor = src => {
-    if (src === "live") return COLORS.accent;
-    if (src === "connector") return COLORS.cool;
-    if (src.startsWith("csv")) return "#a855f7";
-    if (src.startsWith("gspro-db")) return COLORS.warn;
-    return COLORS.inkDim;
-  };
-  const prettyDate = ts => ts === Infinity || ts === -Infinity ? "—" : new Date(ts * 1000).toLocaleDateString();
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 16
-    }
-  }, /*#__PURE__*/React.createElement(SectionTitle, {
-    n: "05 /",
-    right: /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 10,
-        color: COLORS.inkFaint,
-        display: "flex",
-        alignItems: "center",
-        gap: 6
+
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 240 } },
+      /*#__PURE__*/React.createElement(SectionTitle, { n: "04 /", right: /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkFaint } }, "avg carry · click to filter") }, "Bag"),
+      /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "84%" },
+        /*#__PURE__*/React.createElement(BarChart, {
+          data, margin: { top: 8, right: 8, bottom: 4, left: 0 },
+          onClick: e => { if (e && e.activeLabel && onClubClick) onClubClick(e.activeLabel); }
+        },
+          /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid, vertical: false }),
+          /*#__PURE__*/React.createElement(XAxis, { dataKey: "club", tick: { fill: "#8a8a8a", fontSize: 10 } }),
+          /*#__PURE__*/React.createElement(YAxis, { tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize }, tickFormatter: v => v.toFixed(1) }),
+          /*#__PURE__*/React.createElement(Tooltip, {
+            contentStyle: CHART_THEME.tooltipStyle,
+            formatter: v => [fmt(v, 1) + " yd", "carry"],
+            labelFormatter: l => `${l} · ${(data.find(d => d.club === l) || {}).shots || 0} shots`
+          }),
+          /*#__PURE__*/React.createElement(Bar, {
+            dataKey: "carry", fillOpacity: 0.9, style: { cursor: "pointer" },
+            shape: p => /*#__PURE__*/React.createElement("rect", {
+              x: p.x, y: p.y, width: p.width, height: p.height,
+              fill: colorFor(p.club),
+              stroke: activeClub === p.club ? "#fff" : "none",
+              strokeWidth: activeClub === p.club ? 1.5 : 0
+            })
+          })
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  function SourcesPanel({ shots }) {
+    const rows = useMemo(() => {
+      const byS = new Map();
+      for (const s of shots) {
+        const key = s.source || "live";
+        if (!byS.has(key)) byS.set(key, { source: key, n: 0, firstTs: Infinity, lastTs: -Infinity });
+        const r = byS.get(key);
+        r.n += 1;
+        if (s.ts < r.firstTs) r.firstTs = s.ts;
+        if (s.ts > r.lastTs) r.lastTs = s.ts;
       }
-    }, /*#__PURE__*/React.createElement(Database, {
-      size: 10
-    }), " ", total.toLocaleString(), " shots")
-  }, "Sources"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      height: 6,
-      background: COLORS.bg,
-      marginBottom: 12
-    }
-  }, rows.map(r => /*#__PURE__*/React.createElement("div", {
-    key: r.source,
-    title: `${r.source}: ${r.n}`,
-    style: {
-      flex: r.n,
-      background: sourceColor(r.source)
-    }
-  }))), /*#__PURE__*/React.createElement("table", {
-    style: {
-      width: "100%",
-      fontSize: 11,
-      borderCollapse: "collapse"
-    }
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
-    style: {
-      color: COLORS.inkFaint,
-      textTransform: "uppercase",
-      letterSpacing: "0.1em",
-      fontSize: 10
-    }
-  }, /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "left",
-      padding: "4px 0",
-      fontWeight: 400
-    }
-  }, "source"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "4px 0",
-      fontWeight: 400
-    }
-  }, "shots"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "4px 0",
-      fontWeight: 400
-    }
-  }, "%"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "4px 0",
-      fontWeight: 400
-    }
-  }, "from"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "4px 0",
-      fontWeight: 400
-    }
-  }, "to"))), /*#__PURE__*/React.createElement("tbody", null, rows.map(r => /*#__PURE__*/React.createElement("tr", {
-    key: r.source,
-    style: {
-      borderTop: `1px solid ${COLORS.line}`
-    }
-  }, /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 0",
-      display: "flex",
-      alignItems: "center",
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 6,
-      height: 6,
-      borderRadius: 999,
-      background: sourceColor(r.source)
-    }
-  }), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.ink
-    }
-  }, r.source)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, r.n.toLocaleString()), /*#__PURE__*/React.createElement("td", {
-    style: {
-      textAlign: "right",
-      color: COLORS.inkDim
-    }
-  }, (r.n / total * 100).toFixed(0), "%"), /*#__PURE__*/React.createElement("td", {
-    style: {
-      textAlign: "right",
-      color: COLORS.inkDim,
-      fontSize: 10
-    }
-  }, prettyDate(r.firstTs)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      textAlign: "right",
-      color: COLORS.inkDim,
-      fontSize: 10
-    }
-  }, prettyDate(r.lastTs)))))));
-}
+      return [...byS.values()].sort((a, b) => b.n - a.n);
+    }, [shots]);
+    const total = rows.reduce((a, b) => a + b.n, 0) || 1;
+    const sourceColor = src => {
+      if (src === "live") return COLORS.accent;
+      if (src === "connector") return COLORS.cool;
+      if (src.startsWith("csv")) return "#a855f7";
+      if (src.startsWith("gspro-db")) return COLORS.warn;
+      return COLORS.inkDim;
+    };
+    const prettyDate = ts => ts === Infinity || ts === -Infinity ? "—" : new Date(ts * 1000).toLocaleDateString();
 
-// ---------------------------------------------------------------------------
-function ShotFeed({
-  shots,
-  onClubClick
-}) {
-  return /*#__PURE__*/React.createElement(Panel, {
-    style: {
-      padding: 0,
-      display: "flex",
-      flexDirection: "column",
-      maxHeight: 440
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: 16,
-      borderBottom: `1px solid ${COLORS.line}`,
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("h2", {
-    style: {
-      fontSize: 11,
-      textTransform: "uppercase",
-      letterSpacing: "0.28em",
-      margin: 0,
-      fontWeight: 500
-    }
-  }, "06 / Feed"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      color: COLORS.inkFaint
-    }
-  }, shots.length.toLocaleString(), " shots \xB7 last 150 \xB7 click club to filter")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      overflow: "auto",
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("table", {
-    style: {
-      width: "100%",
-      fontSize: 11,
-      borderCollapse: "collapse"
-    }
-  }, /*#__PURE__*/React.createElement("thead", {
-    style: {
-      color: COLORS.inkFaint,
-      textTransform: "uppercase",
-      letterSpacing: "0.1em",
-      position: "sticky",
-      top: 0,
-      background: COLORS.panel,
-      zIndex: 1
-    }
-  }, /*#__PURE__*/React.createElement("tr", {
-    style: {
-      borderBottom: `1px solid ${COLORS.line}`
-    }
-  }, /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "left",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "date"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "left",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "club"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "ball"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "spin"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "vla"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "hla"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "peak"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "offline"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "carry"), /*#__PURE__*/React.createElement("th", {
-    style: {
-      textAlign: "right",
-      padding: "8px 10px",
-      fontWeight: 400,
-      fontSize: 9
-    }
-  }, "total"))), /*#__PURE__*/React.createElement("tbody", null, shots.slice().reverse().slice(0, 150).map(s => /*#__PURE__*/React.createElement("tr", {
-    key: s.id,
-    style: {
-      borderBottom: `1px solid ${COLORS.line}`
-    }
-  }, /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      color: COLORS.inkFaint,
-      fontSize: 10
-    }
-  }, new Date(s.ts * 1000).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric"
-  })), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      cursor: onClubClick ? "pointer" : "default"
-    },
-    onClick: () => onClubClick && s.club && onClubClick(s.club)
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 6
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      width: 6,
-      height: 6,
-      borderRadius: 999,
-      background: colorFor(s.club)
-    }
-  }), s.club || "—")), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, fmt(s.ball_speed)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, fmt0(s.total_spin)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, fmt(s.vla)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums",
-      color: Math.abs(s.hla || 0) > 5 ? COLORS.warn : undefined
-    }
-  }, fmt(s.hla)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, fmt(s.peak_height)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums"
-    }
-  }, fmt(s.offline)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums",
-      color: COLORS.accent
-    }
-  }, fmt(s.carry)), /*#__PURE__*/React.createElement("td", {
-    style: {
-      padding: "6px 10px",
-      textAlign: "right",
-      fontVariantNumeric: "tabular-nums",
-      color: COLORS.inkDim
-    }
-  }, fmt(s.total_dist))))))));
-}
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16 } },
+      /*#__PURE__*/React.createElement(SectionTitle, {
+        n: "05 /",
+        right: /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkFaint, display: "flex", alignItems: "center", gap: 6 } },
+          /*#__PURE__*/React.createElement(Database, { size: 10 }), " ", total.toLocaleString(), " shots"
+        )
+      }, "Sources"),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", height: 6, background: COLORS.bg, marginBottom: 12 } },
+        rows.map(r => /*#__PURE__*/React.createElement("div", {
+          key: r.source, title: `${r.source}: ${r.n}`,
+          style: { flex: r.n, background: sourceColor(r.source) }
+        }))
+      ),
+      /*#__PURE__*/React.createElement("table", { style: { width: "100%", fontSize: 11, borderCollapse: "collapse" } },
+        /*#__PURE__*/React.createElement("thead", null,
+          /*#__PURE__*/React.createElement("tr", { style: { color: COLORS.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: 10 } },
+            ["source", "shots", "%", "from", "to"].map((h, i) => /*#__PURE__*/React.createElement("th", {
+              key: h, style: { textAlign: i === 0 ? "left" : "right", padding: "4px 0", fontWeight: 400 }
+            }, h))
+          )
+        ),
+        /*#__PURE__*/React.createElement("tbody", null,
+          rows.map(r => /*#__PURE__*/React.createElement("tr", { key: r.source, style: { borderTop: `1px solid ${COLORS.line}` } },
+            /*#__PURE__*/React.createElement("td", { style: { padding: "6px 0", display: "flex", alignItems: "center", gap: 8 } },
+              /*#__PURE__*/React.createElement("span", { style: { width: 6, height: 6, borderRadius: 999, background: sourceColor(r.source) } }),
+              /*#__PURE__*/React.createElement("span", { style: { color: COLORS.ink } }, r.source)
+            ),
+            /*#__PURE__*/React.createElement("td", { style: { textAlign: "right", fontVariantNumeric: "tabular-nums" } }, r.n.toLocaleString()),
+            /*#__PURE__*/React.createElement("td", { style: { textAlign: "right", color: COLORS.inkDim } }, (r.n / total * 100).toFixed(0), "%"),
+            /*#__PURE__*/React.createElement("td", { style: { textAlign: "right", color: COLORS.inkDim, fontSize: 10 } }, prettyDate(r.firstTs)),
+            /*#__PURE__*/React.createElement("td", { style: { textAlign: "right", color: COLORS.inkDim, fontSize: 10 } }, prettyDate(r.lastTs))
+          ))
+        )
+      )
+    );
+  }
 
-// ---------------------------------------------------------------------------
-function App() {
-  const allShots = useMemo(() => [...SHOTS_RAW].sort((a, b) => a.ts - b.ts), []);
-  const dataStart = allShots[0]?.ts;
-  const dataEnd = allShots[allShots.length - 1]?.ts;
-  const [range, setRange] = useState({
-    preset: "all",
-    from: null,
-    to: null
-  });
-  const [activeClub, setActiveClub] = useState(null);
-  const [showAllStats, setShowAllStats] = useState(false);
+  // -------------------------------------------------------------------------
+  // Paginated shot feed (handles thousands of shots without blowing up the DOM)
+  // -------------------------------------------------------------------------
+  function ShotFeed({ shots, onClubClick }) {
+    const [page, setPage] = useState(0);
+    const reversed = useMemo(() => shots.slice().reverse().slice(0, CONFIG.FEED_MAX_RENDER), [shots]);
+    const totalPages = Math.max(1, Math.ceil(reversed.length / CONFIG.FEED_PAGE_SIZE));
+    const safePage = Math.min(page, totalPages - 1);
+    const slice = reversed.slice(safePage * CONFIG.FEED_PAGE_SIZE, (safePage + 1) * CONFIG.FEED_PAGE_SIZE);
 
-  // Toggle filter via any chart/card click: click same club → clear, new club → set
-  const toggleClub = c => setActiveClub(prev => prev === c ? null : c);
-  const shotsInRange = useMemo(() => allShots.filter(s => {
-    if (range.from != null && s.ts < range.from) return false;
-    if (range.to != null && s.ts > range.to) return false;
-    return true;
-  }), [allShots, range]);
-  const filteredShots = useMemo(() => activeClub ? shotsInRange.filter(s => s.club === activeClub) : shotsInRange, [shotsInRange, activeClub]);
-  const shotsByClub = useMemo(() => {
-    const m = {};
-    for (const s of shotsInRange) if (s.club) m[s.club] = (m[s.club] || 0) + 1;
-    return m;
-  }, [shotsInRange]);
-  const kpis = useMemo(() => {
+    // Reset to page 0 when shots change
+    useEffect(() => { setPage(0); }, [shots]);
+
+    const headerCol = (label, align = "right") =>
+      /*#__PURE__*/React.createElement("th", { style: { textAlign: align, padding: "8px 10px", fontWeight: 400, fontSize: 9 } }, label);
+
+    const pageBtn = (label, onClick, disabled) => /*#__PURE__*/React.createElement("button", {
+      onClick, disabled,
+      style: {
+        padding: "3px 8px", fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase",
+        background: "transparent", border: `1px solid ${disabled ? "#222" : COLORS.line}`,
+        color: disabled ? COLORS.inkFaint : COLORS.ink, fontFamily: MONO,
+        cursor: disabled ? "default" : "pointer"
+      }
+    }, label);
+
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 0, display: "flex", flexDirection: "column", maxHeight: 540 } },
+      /*#__PURE__*/React.createElement("div", { style: { padding: 16, borderBottom: `1px solid ${COLORS.line}`, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" } },
+        /*#__PURE__*/React.createElement("h2", { style: { fontSize: 11, textTransform: "uppercase", letterSpacing: "0.28em", margin: 0, fontWeight: 500 } }, "06 / Feed"),
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkFaint } },
+          shots.length.toLocaleString(), " shots · showing ", slice.length, " of ", reversed.length,
+          reversed.length < shots.length ? ` (capped at ${CONFIG.FEED_MAX_RENDER})` : "",
+          " · click club to filter"
+        ),
+        /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 6, alignItems: "center" } },
+          pageBtn("← Prev", () => setPage(p => Math.max(0, p - 1)), safePage === 0),
+          /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkDim, fontFamily: MONO } }, `${safePage + 1} / ${totalPages}`),
+          pageBtn("Next →", () => setPage(p => Math.min(totalPages - 1, p + 1)), safePage >= totalPages - 1)
+        )
+      ),
+      /*#__PURE__*/React.createElement("div", { style: { overflow: "auto", flex: 1 } },
+        /*#__PURE__*/React.createElement("table", { style: { width: "100%", fontSize: 11, borderCollapse: "collapse" } },
+          /*#__PURE__*/React.createElement("thead", { style: { color: COLORS.inkFaint, textTransform: "uppercase", letterSpacing: "0.1em", position: "sticky", top: 0, background: COLORS.panel, zIndex: 1 } },
+            /*#__PURE__*/React.createElement("tr", { style: { borderBottom: `1px solid ${COLORS.line}` } },
+              headerCol("date", "left"),
+              headerCol("club", "left"),
+              headerCol("ball"),
+              headerCol("spin"),
+              headerCol("vla"),
+              headerCol("hla"),
+              headerCol("peak"),
+              headerCol("offline"),
+              headerCol("carry"),
+              headerCol("total")
+            )
+          ),
+          /*#__PURE__*/React.createElement("tbody", null,
+            slice.map(s => /*#__PURE__*/React.createElement("tr", { key: s.id, style: { borderBottom: `1px solid ${COLORS.line}` } },
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", color: COLORS.inkFaint, fontSize: 10 } },
+                new Date(s.ts * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" })
+              ),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", cursor: onClubClick ? "pointer" : "default" }, onClick: () => onClubClick && s.club && onClubClick(s.club) },
+                /*#__PURE__*/React.createElement("span", { style: { display: "inline-flex", alignItems: "center", gap: 6 } },
+                  /*#__PURE__*/React.createElement("span", { style: { width: 6, height: 6, borderRadius: 999, background: colorFor(s.club) } }),
+                  s.club || "—"
+                )
+              ),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums" } }, fmt(s.ball_speed)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums" } }, fmt0(s.total_spin)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums" }, title: FIELD_LABELS.vla }, fmt(s.vla)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: Math.abs(s.hla || 0) > 5 ? COLORS.warn : undefined }, title: FIELD_LABELS.hla }, fmt(s.hla)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums" } }, fmt(s.peak_height)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums" } }, fmt(s.offline)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: COLORS.accent } }, fmt(s.carry)),
+              /*#__PURE__*/React.createElement("td", { style: { padding: "6px 10px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: COLORS.inkDim } }, fmt(s.total_dist))
+            ))
+          )
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // Field-name legend — replaces cryptic abbreviations with full names
+  // -------------------------------------------------------------------------
+  function FieldLegend() {
+    const [open, setOpen] = useState(false);
+    return /*#__PURE__*/React.createElement("div", { style: { position: "relative" } },
+      /*#__PURE__*/React.createElement("button", {
+        onClick: () => setOpen(v => !v),
+        style: {
+          padding: "4px 10px", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+          fontFamily: MONO, cursor: "pointer", background: "transparent",
+          border: `1px solid ${open ? COLORS.accent : COLORS.line}`,
+          color: open ? COLORS.accent : COLORS.inkDim
+        }
+      }, open ? "Hide legend" : "Field legend"),
+      open && /*#__PURE__*/React.createElement("div", {
+        style: {
+          position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 10,
+          background: COLORS.panel, border: `1px solid ${COLORS.line}`,
+          padding: "10px 14px", fontSize: 11, fontFamily: MONO, minWidth: 220
+        }
+      },
+        Object.entries(FIELD_LABELS).map(([k, v]) =>
+          /*#__PURE__*/React.createElement("div", { key: k, style: { display: "flex", justifyContent: "space-between", gap: 12, padding: "2px 0", color: COLORS.inkDim } },
+            /*#__PURE__*/React.createElement("span", { style: { color: COLORS.ink, fontWeight: 500 } }, k),
+            /*#__PURE__*/React.createElement("span", null, v)
+          )
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // KPI computation (extracted from App for testability/clarity)
+  // -------------------------------------------------------------------------
+  function computeKpis(shots) {
     const stat = key => {
-      const vs = filteredShots.map(s => s[key]).filter(v => v != null);
-      if (!vs.length) return {
-        avg: null,
-        min: null,
-        max: null
-      };
-      let mn = vs[0],
-        mx = vs[0],
-        sum = 0;
-      for (const v of vs) {
-        if (v < mn) mn = v;
-        if (v > mx) mx = v;
-        sum += v;
-      }
-      return {
-        avg: sum / vs.length,
-        min: mn,
-        max: mx
-      };
+      const vs = shots.map(s => s[key]).filter(v => v != null);
+      if (!vs.length) return { avg: null, min: null, max: null };
+      let mn = vs[0], mx = vs[0], sum = 0;
+      for (const v of vs) { if (v < mn) mn = v; if (v > mx) mx = v; sum += v; }
+      return { avg: sum / vs.length, min: mn, max: mx };
     };
-    // Accuracy uses |offline| so left & right misses don't cancel each other.
-    // Lower avg = tighter to the target line.
+    // Accuracy uses |offline| so left & right misses don't cancel.
     const accuracyStat = () => {
-      const vs = filteredShots.map(s => s.offline).filter(v => v != null).map(Math.abs);
-      if (!vs.length) return {
-        avg: null,
-        min: null,
-        max: null
-      };
-      let mn = vs[0],
-        mx = vs[0],
-        sum = 0;
-      for (const v of vs) {
-        if (v < mn) mn = v;
-        if (v > mx) mx = v;
-        sum += v;
-      }
-      return {
-        avg: sum / vs.length,
-        min: mn,
-        max: mx
-      };
+      const vs = shots.map(s => s.offline).filter(v => v != null).map(Math.abs);
+      if (!vs.length) return { avg: null, min: null, max: null };
+      let mn = vs[0], mx = vs[0], sum = 0;
+      for (const v of vs) { if (v < mn) mn = v; if (v > mx) mx = v; sum += v; }
+      return { avg: sum / vs.length, min: mn, max: mx };
+    };
+    // Consistency index: distance-weighted accuracy.
+    // For each shot: |offline| / max(total_dist, 1). Lower = tighter. Multiply
+    // by 100 to read it as "% of distance off-line" (e.g. 5 means avg shot
+    // landed 5% of its distance off the target line).
+    const consistencyStat = () => {
+      const vs = shots
+        .filter(s => s.offline != null && s.total_dist != null && s.total_dist > 0)
+        .map(s => Math.abs(s.offline) / s.total_dist * 100);
+      if (!vs.length) return { avg: null, min: null, max: null };
+      let mn = vs[0], mx = vs[0], sum = 0;
+      for (const v of vs) { if (v < mn) mn = v; if (v > mx) mx = v; sum += v; }
+      return { avg: sum / vs.length, min: mn, max: mx };
     };
     return {
       ball_speed: stat("ball_speed"),
@@ -1951,232 +1309,159 @@ function App() {
       peak_height: stat("peak_height"),
       carry: stat("carry"),
       total_dist: stat("total_dist"),
-      accuracy: accuracyStat()
+      accuracy: accuracyStat(),
+      consistency: consistencyStat(),
     };
-  }, [filteredShots]);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      minHeight: "100vh",
-      background: COLORS.bg,
-      color: COLORS.ink,
-      fontFamily: MONO,
-      fontFeatureSettings: '"tnum" 1',
-      letterSpacing: "-0.01em"
-    }
-  }, /*#__PURE__*/React.createElement("header", {
-    style: {
-      borderBottom: `1px solid ${COLORS.line}`,
-      padding: "10px 24px",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "baseline",
-      gap: 16
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontFamily: SERIF,
-      fontSize: 26
-    }
-  }, "tomGolf"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontFamily: SERIF,
-      fontSize: 14,
-      color: COLORS.inkDim
-    }
-  }, "gspro"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.3em",
-      color: COLORS.inkDim
-    }
-  }, "\xB7 bridge \xB7 historical")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 10,
-      color: COLORS.inkFaint,
-      letterSpacing: "0.2em",
-      textTransform: "uppercase"
-    }
-  }, "data: ", dataStart && new Date(dataStart * 1000).toLocaleDateString(), " \u2192 ", dataEnd && new Date(dataEnd * 1000).toLocaleDateString())), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "10px 24px",
-      borderBottom: `1px solid ${COLORS.line}`,
-      display: "flex",
-      flexDirection: "column",
-      gap: 10
-    }
-  }, /*#__PURE__*/React.createElement(DateRangeBar, {
-    range: range,
-    setRange: setRange,
-    shotsInRange: shotsInRange.length,
-    totalShots: allShots.length
-  }), /*#__PURE__*/React.createElement(ClubStrip, {
-    activeClub: activeClub,
-    setClub: setActiveClub,
-    shotsByClub: shotsByClub
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 24px 0",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 10,
-      textTransform: "uppercase",
-      letterSpacing: "0.28em",
-      color: COLORS.inkDim
-    }
-  }, "Metrics"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setShowAllStats(v => !v),
-    style: {
-      display: "inline-flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "4px 10px",
-      fontSize: 10,
-      letterSpacing: "0.2em",
-      textTransform: "uppercase",
-      fontFamily: MONO,
-      cursor: "pointer",
-      background: "transparent",
-      border: `1px solid ${showAllStats ? COLORS.accent : COLORS.line}`,
-      color: showAllStats ? COLORS.accent : COLORS.inkDim
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      display: "inline-block",
-      width: 22,
-      height: 12,
-      background: showAllStats ? COLORS.accent : COLORS.line,
-      position: "relative",
-      transition: "background 0.15s"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      position: "absolute",
-      top: 1,
-      left: showAllStats ? 11 : 1,
-      width: 10,
-      height: 10,
-      background: showAllStats ? "#000" : COLORS.inkDim,
-      transition: "left 0.15s"
-    }
-  })), "All")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "8px 24px 12px",
-      display: "grid",
-      gridTemplateColumns: showAllStats ? "repeat(4, minmax(0, 1fr))" : "repeat(3, minmax(0, 1fr))",
-      gap: 10
-    }
-  }, showAllStats && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Stat, {
-    label: "Ball speed",
-    avg: kpis.ball_speed.avg,
-    min: kpis.ball_speed.min,
-    max: kpis.ball_speed.max,
-    unit: "mph",
-    accent: COLORS.accent
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Club speed",
-    avg: kpis.club_speed.avg,
-    min: kpis.club_speed.min,
-    max: kpis.club_speed.max,
-    unit: "mph"
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Back spin",
-    avg: kpis.total_spin.avg,
-    min: kpis.total_spin.min,
-    max: kpis.total_spin.max,
-    unit: "rpm",
-    format: fmt0
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Launch angle",
-    avg: kpis.vla.avg,
-    min: kpis.vla.min,
-    max: kpis.vla.max,
-    unit: "\xB0"
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "HLA",
-    avg: kpis.hla.avg,
-    min: kpis.hla.min,
-    max: kpis.hla.max,
-    unit: "\xB0"
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Peak height",
-    avg: kpis.peak_height.avg,
-    min: kpis.peak_height.min,
-    max: kpis.peak_height.max,
-    unit: "yd"
-  })), /*#__PURE__*/React.createElement(Stat, {
-    label: "Carry",
-    avg: kpis.carry.avg,
-    min: kpis.carry.min,
-    max: kpis.carry.max,
-    unit: "yd",
-    accent: COLORS.accent
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Total dist",
-    avg: kpis.total_dist.avg,
-    min: kpis.total_dist.min,
-    max: kpis.total_dist.max,
-    unit: "yd",
-    accent: COLORS.accent
-  }), /*#__PURE__*/React.createElement(Stat, {
-    label: "Accuracy",
-    avg: kpis.accuracy.avg,
-    min: kpis.accuracy.min,
-    max: kpis.accuracy.max,
-    unit: "yd off",
-    accent: COLORS.accent
-  })), /*#__PURE__*/React.createElement("main", {
-    style: {
-      padding: "0 24px 24px",
-      display: "flex",
-      flexDirection: "column",
-      gap: 14
-    }
-  }, /*#__PURE__*/React.createElement(FinishScatter, {
-    shots: filteredShots,
-    onClubClick: toggleClub
-  }), /*#__PURE__*/React.createElement(TrajectoryChart, {
-    shots: filteredShots,
-    activeClub: activeClub
-  }), /*#__PURE__*/React.createElement(DistanceOverTime, {
-    shots: filteredShots,
-    onClubClick: toggleClub
-  }), /*#__PURE__*/React.createElement(ClubBars, {
-    shots: filteredShots,
-    onClubClick: toggleClub,
-    activeClub: activeClub
-  }), /*#__PURE__*/React.createElement(SourcesPanel, {
-    shots: shotsInRange
-  }), /*#__PURE__*/React.createElement(ShotFeed, {
-    shots: filteredShots,
-    onClubClick: toggleClub
-  })), /*#__PURE__*/React.createElement("footer", {
-    style: {
-      borderTop: `1px solid ${COLORS.line}`,
-      padding: "12px 24px",
-      fontSize: 10,
-      color: COLORS.inkFaint,
-      display: "flex",
-      justifyContent: "space-between"
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "gspro-bridge \xB7 viewing imported PlayerShots export"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontFamily: SERIF,
-      fontStyle: "italic"
-    }
-  }, allShots.length.toLocaleString(), " shots loaded from CSV")));
-}
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App));
+  }
+
+  // -------------------------------------------------------------------------
+  // Filters / Header subcomponents (broken out from App)
+  // -------------------------------------------------------------------------
+  function DashboardHeader({ dataStart, dataEnd, onExport, hasShots }) {
+    return /*#__PURE__*/React.createElement("header", { style: { borderBottom: `1px solid ${COLORS.line}`, padding: "10px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" } },
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 16 } },
+        /*#__PURE__*/React.createElement("span", { style: { fontFamily: SERIF, fontSize: 26 } }, "tomGolf"),
+        /*#__PURE__*/React.createElement("span", { style: { fontFamily: SERIF, fontSize: 14, color: COLORS.inkDim } }, "gspro"),
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.3em", color: COLORS.inkDim } }, "· bridge · historical")
+      ),
+      /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 10, alignItems: "center" } },
+        /*#__PURE__*/React.createElement(FieldLegend),
+        /*#__PURE__*/React.createElement("button", {
+          onClick: onExport, disabled: !hasShots,
+          style: {
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "4px 10px", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+            fontFamily: MONO, cursor: hasShots ? "pointer" : "default",
+            background: "transparent", border: `1px solid ${hasShots ? COLORS.line : "#222"}`,
+            color: hasShots ? COLORS.ink : COLORS.inkFaint
+          },
+          title: "Export the currently filtered shots as CSV"
+        },
+          /*#__PURE__*/React.createElement(Download, { size: 11 }), " Export CSV"
+        ),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: 10, color: COLORS.inkFaint, letterSpacing: "0.2em", textTransform: "uppercase" } },
+          "data: ", dataStart && new Date(dataStart * 1000).toLocaleDateString(),
+          " → ", dataEnd && new Date(dataEnd * 1000).toLocaleDateString()
+        )
+      )
+    );
+  }
+
+  function StatsBar({ kpis, showAllStats, setShowAllStats }) {
+    return /*#__PURE__*/React.createElement(React.Fragment, null,
+      /*#__PURE__*/React.createElement("div", { style: { padding: "12px 24px 0", display: "flex", alignItems: "center", justifyContent: "space-between" } },
+        /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.28em", color: COLORS.inkDim } }, "Metrics"),
+        /*#__PURE__*/React.createElement("button", {
+          onClick: () => setShowAllStats(v => !v),
+          style: {
+            display: "inline-flex", alignItems: "center", gap: 8,
+            padding: "4px 10px", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase",
+            fontFamily: MONO, cursor: "pointer", background: "transparent",
+            border: `1px solid ${showAllStats ? COLORS.accent : COLORS.line}`,
+            color: showAllStats ? COLORS.accent : COLORS.inkDim
+          }
+        },
+          /*#__PURE__*/React.createElement("span", { style: { display: "inline-block", width: 22, height: 12, background: showAllStats ? COLORS.accent : COLORS.line, position: "relative", transition: "background 0.15s" } },
+            /*#__PURE__*/React.createElement("span", { style: { position: "absolute", top: 1, left: showAllStats ? 11 : 1, width: 10, height: 10, background: showAllStats ? "#000" : COLORS.inkDim, transition: "left 0.15s" } })
+          ),
+          "All"
+        )
+      ),
+      /*#__PURE__*/React.createElement("div", {
+        className: "stat-grid metrics-bar",
+        style: {
+          padding: "8px 24px 12px", display: "grid",
+          gridTemplateColumns: showAllStats ? "repeat(4, minmax(0, 1fr))" : "repeat(4, minmax(0, 1fr))",
+          gap: 10
+        }
+      },
+        showAllStats && /*#__PURE__*/React.createElement(React.Fragment, null,
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.ball_speed, avg: kpis.ball_speed.avg, min: kpis.ball_speed.min, max: kpis.ball_speed.max, unit: "mph", accent: COLORS.accent }),
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.club_speed, avg: kpis.club_speed.avg, min: kpis.club_speed.min, max: kpis.club_speed.max, unit: "mph" }),
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.total_spin, avg: kpis.total_spin.avg, min: kpis.total_spin.min, max: kpis.total_spin.max, unit: "rpm", format: fmt0 }),
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.vla, avg: kpis.vla.avg, min: kpis.vla.min, max: kpis.vla.max, unit: "°" }),
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.hla, avg: kpis.hla.avg, min: kpis.hla.min, max: kpis.hla.max, unit: "°" }),
+          /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.peak_height, avg: kpis.peak_height.avg, min: kpis.peak_height.min, max: kpis.peak_height.max, unit: "yd" })
+        ),
+        /*#__PURE__*/React.createElement(Stat, { label: FIELD_LABELS.carry, avg: kpis.carry.avg, min: kpis.carry.min, max: kpis.carry.max, unit: "yd", accent: COLORS.accent }),
+        /*#__PURE__*/React.createElement(Stat, { label: "Total dist", avg: kpis.total_dist.avg, min: kpis.total_dist.min, max: kpis.total_dist.max, unit: "yd", accent: COLORS.accent }),
+        /*#__PURE__*/React.createElement(Stat, { label: "Accuracy", avg: kpis.accuracy.avg, min: kpis.accuracy.min, max: kpis.accuracy.max, unit: "yd off", accent: COLORS.accent, hint: "Average absolute distance off the target line." }),
+        /*#__PURE__*/React.createElement(Stat, { label: "Consistency", avg: kpis.consistency.avg, min: kpis.consistency.min, max: kpis.consistency.max, unit: "% off", accent: COLORS.cool, hint: "Distance-weighted accuracy: |offline| ÷ total distance × 100. Lower = tighter relative to shot length. A 20yd miss on a 250yd drive (8%) scores better than a 20yd miss on an 80yd wedge (25%)." })
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  // Top-level App component (now mostly orchestration)
+  // -------------------------------------------------------------------------
+  function App() {
+    const allShots = useMemo(() => [...SHOTS_RAW].sort((a, b) => a.ts - b.ts), []);
+    const dataStart = allShots[0]?.ts;
+    const dataEnd = allShots[allShots.length - 1]?.ts;
+
+    const [range, setRange] = useState({ preset: "all", from: null, to: null });
+    const [activeClub, setActiveClub] = useState(null);
+    const [showAllStats, setShowAllStats] = useState(false);
+
+    const toggleClub = c => setActiveClub(prev => prev === c ? null : c);
+
+    const shotsInRange = useMemo(() => allShots.filter(s => {
+      if (range.from != null && s.ts < range.from) return false;
+      if (range.to != null && s.ts > range.to) return false;
+      return true;
+    }), [allShots, range]);
+
+    const filteredShots = useMemo(() =>
+      activeClub ? shotsInRange.filter(s => s.club === activeClub) : shotsInRange,
+    [shotsInRange, activeClub]);
+
+    const shotsByClub = useMemo(() => {
+      const m = {};
+      for (const s of shotsInRange) if (s.club) m[s.club] = (m[s.club] || 0) + 1;
+      return m;
+    }, [shotsInRange]);
+
+    const kpis = useMemo(() => computeKpis(filteredShots), [filteredShots]);
+
+    const handleExport = useCallback(() => {
+      const tag = activeClub ? `-${activeClub}` : "";
+      exportShotsToCSV(filteredShots, `gspro-shots${tag}-${toInputDate(new Date())}.csv`);
+    }, [filteredShots, activeClub]);
+
+    return /*#__PURE__*/React.createElement("div", {
+      style: { minHeight: "100vh", background: COLORS.bg, color: COLORS.ink, fontFamily: MONO, fontFeatureSettings: '"tnum" 1', letterSpacing: "-0.01em" }
+    },
+      /*#__PURE__*/React.createElement(DashboardHeader, { dataStart, dataEnd, onExport: handleExport, hasShots: filteredShots.length > 0 }),
+      /*#__PURE__*/React.createElement(SchemaBanner, { warnings: SCHEMA_WARNINGS }),
+      /*#__PURE__*/React.createElement("div", {
+        className: "toolbar",
+        style: { padding: "10px 24px", borderBottom: `1px solid ${COLORS.line}`, display: "flex", flexDirection: "column", gap: 10 }
+      },
+        /*#__PURE__*/React.createElement(DateRangeBar, { range, setRange, shotsInRange: shotsInRange.length, totalShots: allShots.length, dataEnd }),
+        /*#__PURE__*/React.createElement(ClubStrip, { activeClub, setClub: setActiveClub, shotsByClub })
+      ),
+      /*#__PURE__*/React.createElement(StatsBar, { kpis, showAllStats, setShowAllStats }),
+      /*#__PURE__*/React.createElement("main", { style: { padding: "0 24px 24px", display: "flex", flexDirection: "column", gap: 14 } },
+        /*#__PURE__*/React.createElement(FinishScatter, { shots: filteredShots, onClubClick: toggleClub }),
+        /*#__PURE__*/React.createElement(TrajectoryChart, { shots: filteredShots, activeClub }),
+        /*#__PURE__*/React.createElement(DistanceOverTime, { shots: filteredShots, onClubClick: toggleClub }),
+        /*#__PURE__*/React.createElement(ClubBars, { shots: filteredShots, onClubClick: toggleClub, activeClub }),
+        /*#__PURE__*/React.createElement(SourcesPanel, { shots: shotsInRange }),
+        /*#__PURE__*/React.createElement(ShotFeed, { shots: filteredShots, onClubClick: toggleClub })
+      ),
+      /*#__PURE__*/React.createElement("footer", {
+        style: { borderTop: `1px solid ${COLORS.line}`, padding: "12px 24px", fontSize: 10, color: COLORS.inkFaint, display: "flex", justifyContent: "space-between" }
+      },
+        /*#__PURE__*/React.createElement("span", null, "gspro-bridge · viewing imported PlayerShots export"),
+        /*#__PURE__*/React.createElement("span", { style: { fontFamily: SERIF, fontStyle: "italic" } },
+          allShots.length.toLocaleString(), " shots loaded from CSV"
+        )
+      )
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(React.createElement(App));
 }
 </script>
 
