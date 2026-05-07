@@ -734,6 +734,34 @@ function runApp() {
     Math.abs(offline) > Math.max(CONFIG.MISHIT_MIN_YD, (totalDist || 0) * CONFIG.MISHIT_PCT);
 
   // -------------------------------------------------------------------------
+  function ScatterTooltip({ active, payload }) {
+    if (!active || !payload || !payload.length) return null;
+    const d = payload[0].payload;
+    const rows = [
+      ["Offline",             d.x,          "yd"],
+      ["Total dist",          d.y,          "yd"],
+      [FIELD_LABELS.carry,    d.carry,      "yd"],
+      [FIELD_LABELS.peak_height, d.peak_height, "yd"],
+      [FIELD_LABELS.ball_speed,  d.ball_speed,  "mph"],
+      [FIELD_LABELS.vla,      d.vla,        "°"],
+      [FIELD_LABELS.hla,      d.hla,        "°"],
+    ];
+    return /*#__PURE__*/React.createElement("div", {
+      style: { ...CHART_THEME.tooltipStyle, padding: "8px 10px", lineHeight: 1.7, minWidth: 180 }
+    },
+      /*#__PURE__*/React.createElement("div", { style: { color: colorFor(d.club), fontWeight: 600, marginBottom: 4, fontSize: 11 } },
+        d.club + (d.mishit ? " · mishit" : "")
+      ),
+      rows.filter(([, v]) => v != null).map(([label, v, unit]) =>
+        /*#__PURE__*/React.createElement("div", { key: label, style: { display: "flex", justifyContent: "space-between", gap: 16, fontSize: 11 } },
+          /*#__PURE__*/React.createElement("span", { style: { color: COLORS.inkDim } }, label),
+          /*#__PURE__*/React.createElement("span", null, fmt(v, 1) + " " + unit)
+        )
+      )
+    );
+  }
+
+  // -------------------------------------------------------------------------
   function FinishScatter({ shots, onClubClick }) {
     const [mode, setMode] = useState("points");
     const { seriesByClub, ellipsesByClub, maxDist, maxAbsOffline, total, mishits } = useMemo(() => {
@@ -745,6 +773,11 @@ function runApp() {
         (map[s.club] ||= []).push({
           x: Math.round(s.offline * 10) / 10,
           y: Math.round(s.total_dist * 10) / 10,
+          carry: s.carry != null ? Math.round(s.carry * 10) / 10 : null,
+          ball_speed: s.ball_speed != null ? Math.round(s.ball_speed * 10) / 10 : null,
+          peak_height: s.peak_height != null ? Math.round(s.peak_height * 10) / 10 : null,
+          vla: s.vla != null ? Math.round(s.vla * 10) / 10 : null,
+          hla: s.hla != null ? Math.round(s.hla * 10) / 10 : null,
           club: s.club, id: s.id, mishit
         });
         if (mishit) mishitCount++;
@@ -840,7 +873,7 @@ function runApp() {
             label: { value: "TOTAL DISTANCE (yd)", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
           }),
           /*#__PURE__*/React.createElement(ZAxis, { range: [24, 24] }),
-          /*#__PURE__*/React.createElement(Tooltip, { cursor: { stroke: "#2a2a2a" }, contentStyle: CHART_THEME.tooltipStyle, formatter: (v, k) => [fmt(v, 1), k] }),
+          /*#__PURE__*/React.createElement(Tooltip, { cursor: { stroke: "#2a2a2a" }, content: props => /*#__PURE__*/React.createElement(ScatterTooltip, props) }),
           scatterSeries,
           mode === "density" && /*#__PURE__*/React.createElement(Customized, {
             component: props => /*#__PURE__*/React.createElement(EllipseLayer, {
@@ -854,23 +887,29 @@ function runApp() {
 
   // -------------------------------------------------------------------------
   function TrajectoryChart({ shots, activeClub }) {
-    const { series, maxDist, maxHeight, sampled } = useMemo(() => {
+    const [hoveredClub, setHoveredClub] = useState(null);
+    const { series, maxDist, maxHeight, sampled, avgMode } = useMemo(() => {
       const usable = shots.filter(s =>
         s.carry != null && s.total_dist != null && s.peak_height != null &&
         s.carry > 0 && s.peak_height > 0 && s.club && s.vla != null && s.vla > 0
       );
-      let picked = usable, wasSampled = false;
-      if (!activeClub && usable.length > CONFIG.TRAJECTORY_MAX_TOTAL) {
-        wasSampled = true;
+      let picked, wasSampled = false, isAvgMode = false;
+      if (!activeClub) {
+        // One average arc per club
+        isAvgMode = true;
         const byClub = {};
         for (const s of usable) (byClub[s.club] ||= []).push(s);
-        const clubs = Object.keys(byClub);
-        const perClub = Math.max(CONFIG.TRAJECTORY_MIN_PER_CLUB, Math.floor(CONFIG.TRAJECTORY_MAX_TOTAL / clubs.length));
-        picked = [];
-        for (const c of clubs) {
-          const arr = byClub[c];
-          const step = Math.max(1, Math.floor(arr.length / perClub));
-          for (let i = 0; i < arr.length && picked.length < CONFIG.TRAJECTORY_MAX_TOTAL; i += step) picked.push(arr[i]);
+        picked = Object.entries(byClub).map(([club, arr]) => {
+          const avg = f => arr.reduce((a, s) => a + s[f], 0) / arr.length;
+          return { club, carry: avg("carry"), total_dist: avg("total_dist"), peak_height: avg("peak_height"), vla: avg("vla"), id: `avg-${club}`, _n: arr.length };
+        });
+      } else {
+        // All shots for selected club
+        picked = usable;
+        if (picked.length > CONFIG.TRAJECTORY_MAX_TOTAL) {
+          wasSampled = true;
+          const step = Math.max(1, Math.floor(picked.length / CONFIG.TRAJECTORY_MAX_TOTAL));
+          picked = picked.filter((_, i) => i % step === 0).slice(0, CONFIG.TRAJECTORY_MAX_TOTAL);
         }
       }
       const traj = picked.map((s, idx) => {
@@ -879,26 +918,30 @@ function runApp() {
         let apexX = s.peak_height / tanVla;
         apexX = Math.max(2, Math.min(apexX, s.carry - 2));
         const points = [];
-        for (const t of [0, 0.25, 0.5, 0.75, 1]) {
-          const x = apexX * t;
-          const h = s.peak_height * (2 * t - t * t);
-          points.push({ d: x, h });
+        const arcSteps = 10;
+        for (let i = 0; i <= arcSteps; i++) {
+          const t = i / arcSteps;
+          points.push({ d: apexX * t, h: s.peak_height * (2 * t - t * t) });
         }
         const descLen = s.carry - apexX;
-        for (const u of [0.25, 0.5, 0.75, 1]) {
-          const x = apexX + descLen * u;
-          const h = Math.max(0, s.peak_height * (1 - u * u));
-          points.push({ d: x, h });
+        for (let i = 1; i <= arcSteps; i++) {
+          const u = i / arcSteps;
+          points.push({ d: apexX + descLen * u, h: Math.max(0, s.peak_height * (1 - u * u)) });
         }
         if (s.total_dist > s.carry + 0.5) points.push({ d: s.total_dist, h: 0 });
-        return { id: `${s.club}-${s.id}-${idx}`, club: s.club, points };
+        return {
+          id: isAvgMode ? `avg-${s.club}` : `${s.club}-${s.id}-${idx}`,
+          club: s.club, points,
+          carry: s.carry, total_dist: s.total_dist, peak_height: s.peak_height, vla: s.vla,
+          _n: s._n || null
+        };
       });
       let mD = 1, mH = 1;
       for (const t of traj) for (const p of t.points) {
         if (p.d > mD) mD = p.d;
         if (p.h > mH) mH = p.h;
       }
-      return { series: traj, maxDist: mD * 1.05, maxHeight: mH * 1.18, sampled: wasSampled };
+      return { series: traj, maxDist: mD * 1.05, maxHeight: mH * 1.18, sampled: wasSampled, avgMode: isAvgMode };
     }, [shots, activeClub]);
 
     if (series.length === 0) {
@@ -909,9 +952,9 @@ function runApp() {
     }
 
     return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 400 } },
-      /*#__PURE__*/React.createElement(SectionTitle, { n: "02 /", subtitle: `asymmetric arc: launch angle → apex → steeper descent · ${series.length} trajectories${sampled ? " (sampled)" : ""}` }, "Trajectory · distance vs height"),
+      /*#__PURE__*/React.createElement(SectionTitle, { n: "02 /", subtitle: avgMode ? `1 avg arc per club · ${series.length} clubs · select a club above to see individual shots` : `all shots · ${series.length} trajectories${sampled ? " (sampled)" : ""} · asymmetric arc` }, "Trajectory · distance vs height"),
       /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "86%" },
-        /*#__PURE__*/React.createElement(LineChart, { margin: { top: 8, right: 24, bottom: 20, left: 0 } },
+        /*#__PURE__*/React.createElement(LineChart, { margin: { top: 8, right: 24, bottom: 20, left: 0 }, onMouseLeave: () => setHoveredClub(null) },
           /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid }),
           /*#__PURE__*/React.createElement(XAxis, {
             type: "number", dataKey: "d", domain: [0, Math.max(1, maxDist)],
@@ -925,11 +968,43 @@ function runApp() {
             tickFormatter: v => v.toFixed(1),
             label: { value: "HEIGHT (yd)", fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
           }),
-          /*#__PURE__*/React.createElement(Tooltip, { contentStyle: CHART_THEME.tooltipStyle, formatter: (v, k) => [fmt(v, 1), k === "d" ? "distance" : "height"] }),
+          /*#__PURE__*/React.createElement(Tooltip, {
+            cursor: false,
+            content: ({ active }) => {
+              if (!active || !hoveredClub) return null;
+              const t = series.find(s => s.club === hoveredClub);
+              if (!t) return null;
+              const rows = [
+                ["Carry",        t.carry,       "yd"],
+                ["Total dist",   t.total_dist,  "yd"],
+                ["Peak height",  t.peak_height, "yd"],
+                ["Launch angle", t.vla,         "°"],
+              ];
+              return /*#__PURE__*/React.createElement("div", {
+                style: { ...CHART_THEME.tooltipStyle, padding: "8px 10px", lineHeight: 1.7, minWidth: 170 }
+              },
+                /*#__PURE__*/React.createElement("div", { style: { color: colorFor(t.club), fontWeight: 600, marginBottom: 4, fontSize: 11 } },
+                  t.club + (t._n ? ` · avg of ${t._n} shots` : "")
+                ),
+                rows.filter(([, v]) => v != null).map(([label, v, unit]) =>
+                  /*#__PURE__*/React.createElement("div", { key: label, style: { display: "flex", justifyContent: "space-between", gap: 16, fontSize: 11 } },
+                    /*#__PURE__*/React.createElement("span", { style: { color: COLORS.inkDim } }, label),
+                    /*#__PURE__*/React.createElement("span", null, `${fmt(v, 1)} ${unit}`)
+                  )
+                )
+              );
+            }
+          }),
           series.map(t => /*#__PURE__*/React.createElement(Line, {
             key: t.id, data: t.points, dataKey: "h", type: "monotone",
-            stroke: colorFor(t.club), strokeWidth: 1, strokeOpacity: 0.55,
-            dot: false, isAnimationActive: false, connectNulls: true, legendType: "none"
+            stroke: colorFor(t.club),
+            strokeWidth: hoveredClub === t.club ? (avgMode ? 3.5 : 2.5) : (avgMode ? 2 : 1),
+            strokeOpacity: hoveredClub ? (hoveredClub === t.club ? 1 : 0.07) : (avgMode ? 0.9 : 0.55),
+            dot: false, isAnimationActive: false, connectNulls: true, legendType: "none",
+            activeDot: {
+              r: 5, fill: colorFor(t.club), stroke: COLORS.bg, strokeWidth: 1.5,
+              onMouseOver: () => setHoveredClub(t.club)
+            }
           }))
         )
       )
@@ -939,76 +1014,71 @@ function runApp() {
   // -------------------------------------------------------------------------
   function DistanceOverTime({ shots, onClubClick }) {
     const [metric, setMetric] = useState("total_dist");
-    const { bucketList, seriesByClub, hasData, bucketSize, present } = useMemo(() => {
-      const timestamps = shots.map(s => s.ts).filter(t => t != null);
-      if (!timestamps.length) return { bucketList: [], seriesByClub: {}, hasData: false, bucketSize: "weekly", present: [] };
-      const minTs = Math.min(...timestamps), maxTs = Math.max(...timestamps);
-      const spanDays = (maxTs - minTs) / 86400;
-      const bucketSize = spanDays > 21 ? "weekly" : "daily";
-      const bucketOf = ts => {
-        const d = new Date(ts * 1000);
-        if (bucketSize === "daily") return toInputDate(d);
-        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        const dayNum = t.getUTCDay() || 7;
-        t.setUTCDate(t.getUTCDate() + 4 - dayNum);
-        const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-        const weekNo = Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
-        return `${t.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
-      };
-      const bucketAnchor = ts => {
-        const d = new Date(ts * 1000);
-        if (bucketSize === "daily") {
-          d.setHours(12, 0, 0, 0);
-          return d.getTime() / 1000;
-        }
-        const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        const dayNum = t.getUTCDay() || 7;
-        t.setUTCDate(t.getUTCDate() + 4 - dayNum);
-        return t.getTime() / 1000;
-      };
-      const grouped = {};
-      const bucketSet = new Set();
+    const ROLL_DAYS = 30;
+
+    const { seriesByClub, present, hasData } = useMemo(() => {
+      const ROLL_SEC = ROLL_DAYS * 86400;
+      const byClub = {};
       for (const s of shots) {
-        if (!s.club || s[metric] == null) continue;
-        const b = bucketOf(s.ts), anchor = bucketAnchor(s.ts);
-        bucketSet.add(`${b}|${anchor}`);
-        if (!grouped[s.club]) grouped[s.club] = {};
-        if (!grouped[s.club][b]) grouped[s.club][b] = { sum: 0, n: 0, anchor };
-        grouped[s.club][b].sum += s[metric];
-        grouped[s.club][b].n += 1;
+        if (!s.club || !s.ts) continue;
+        let val;
+        if (metric === "carry" && s.carry != null) val = s.carry;
+        else if (metric === "total_dist" && s.total_dist != null) val = s.total_dist;
+        else if (metric === "dispersion" && s.offline != null) val = Math.abs(s.offline);
+        else if (metric === "consistency" && s.offline != null && s.total_dist != null && s.total_dist > 0)
+          val = Math.abs(s.offline) / s.total_dist * 100;
+        if (val == null) continue;
+        (byClub[s.club] ||= []).push({ ts: s.ts, val });
       }
-      const bucketList = [...bucketSet].map(x => {
-        const [b, a] = x.split("|");
-        return { bucket: b, anchor: +a };
-      }).sort((a, b) => a.anchor - b.anchor);
       const seriesByClub = {};
-      for (const [club, buckets] of Object.entries(grouped)) {
-        const keys = Object.keys(buckets);
-        const totalShots = keys.reduce((a, k) => a + buckets[k].n, 0);
-        if (keys.length < CONFIG.TREND_MIN_BUCKETS || totalShots < CONFIG.TREND_MIN_SHOTS) continue;
-        seriesByClub[club] = bucketList.map(({ bucket, anchor }) => {
-          const b = buckets[bucket];
-          return b ? { t: anchor, avg: Math.round(b.sum / b.n * 10) / 10, n: b.n, bucket, club } : null;
-        }).filter(Boolean);
+      for (const [club, pts] of Object.entries(byClub)) {
+        const sorted = pts.slice().sort((a, b) => a.ts - b.ts);
+        if (sorted.length < CONFIG.TREND_MIN_SHOTS) continue;
+        const points = sorted.map((pt, i) => {
+          const windowStart = pt.ts - ROLL_SEC;
+          let sum = 0, n = 0;
+          for (let j = i; j >= 0 && sorted[j].ts >= windowStart; j--) { sum += sorted[j].val; n++; }
+          return { t: pt.ts, avg: Math.round(sum / n * 10) / 10, n, club };
+        });
+        const days = new Set(points.map(p => Math.floor(p.t / 86400)));
+        if (days.size < CONFIG.TREND_MIN_BUCKETS) continue;
+        seriesByClub[club] = points;
       }
       const present = BAG_ORDER.filter(c => seriesByClub[c]);
-      return { bucketList, seriesByClub, bucketSize, hasData: present.length > 0, present };
+      return { seriesByClub, present, hasData: present.length > 0 };
     }, [shots, metric]);
 
-    const xDomain = bucketList.length ? [bucketList[0].anchor, bucketList[bucketList.length - 1].anchor] : [0, 1];
-    const maxY = Math.max(1, ...Object.values(seriesByClub).flat().map(p => p.avg)) * 1.08;
+    const allPoints = Object.values(seriesByClub).flat();
+    const xDomain = allPoints.length
+      ? [Math.min(...allPoints.map(p => p.t)), Math.max(...allPoints.map(p => p.t))]
+      : [0, 1];
+    const maxY = Math.max(1, ...allPoints.map(p => p.avg)) * 1.08;
     const xFormat = ts => new Date(ts * 1000).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-    const metricLabel = metric === "total_dist" ? "Total" : "Carry";
+
+    const metricMeta = {
+      carry:       { label: "Carry",       unit: "yd", yLabel: "AVG CARRY (yd)" },
+      total_dist:  { label: "Total",        unit: "yd", yLabel: "AVG TOTAL DIST (yd)" },
+      dispersion:  { label: "Dispersion",   unit: "yd", yLabel: "AVG |OFFLINE| (yd)" },
+      consistency: { label: "Consistency",  unit: "%",  yLabel: "CONSISTENCY (% off)" },
+    };
+    const meta = metricMeta[metric];
 
     return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 400 } },
       /*#__PURE__*/React.createElement(SectionTitle, {
         n: "03 /",
-        subtitle: hasData ? `${present.length} clubs · ${bucketSize} buckets · avg ${metricLabel.toLowerCase()} · click a line to filter` : `Need ≥${CONFIG.TREND_MIN_SHOTS} shots across ≥${CONFIG.TREND_MIN_BUCKETS} time periods per club`,
+        subtitle: hasData
+          ? `${present.length} clubs · ${ROLL_DAYS}-day rolling avg · ${meta.label.toLowerCase()} · click a line to filter`
+          : `Need ≥${CONFIG.TREND_MIN_SHOTS} shots across ≥${CONFIG.TREND_MIN_BUCKETS} days per club`,
         right: /*#__PURE__*/React.createElement(Toggle, {
           value: metric, onChange: setMetric,
-          options: [{ value: "carry", label: "Carry" }, { value: "total_dist", label: "Total" }]
+          options: [
+            { value: "carry",       label: "Carry" },
+            { value: "total_dist",  label: "Total" },
+            { value: "dispersion",  label: "Dispersion" },
+            { value: "consistency", label: "Consistency" },
+          ]
         })
-      }, "Distance over time"),
+      }, "Trend · rolling average"),
       hasData ? /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "86%" },
         /*#__PURE__*/React.createElement(LineChart, { margin: { top: 8, right: 24, bottom: 20, left: 0 } },
           /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid }),
@@ -1022,14 +1092,14 @@ function runApp() {
             type: "number", domain: [0, maxY],
             tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
             tickFormatter: v => v.toFixed(1),
-            label: { value: `AVG ${metricLabel.toUpperCase()} (yd)`, fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
+            label: { value: meta.yLabel, fill: CHART_THEME.labelFill, fontSize: CHART_THEME.labelFontSize, angle: -90, dx: -6 }
           }),
           /*#__PURE__*/React.createElement(Tooltip, {
             contentStyle: CHART_THEME.tooltipStyle, labelFormatter: t => xFormat(t),
-            formatter: (v, name, entry) => [`${fmt(v, 1)} yd (${entry.payload.n} shots)`, name]
+            formatter: (v, name, entry) => [`${fmt(v, 1)} ${meta.unit} (${entry.payload.n} shots in window)`, name]
           }),
           present.map(c => /*#__PURE__*/React.createElement(Line, {
-            key: c, name: c, data: seriesByClub[c], dataKey: "avg", type: "monotone",
+            key: c, name: c, data: seriesByClub[c], dataKey: "avg", type: "natural",
             stroke: colorFor(c), strokeWidth: 1.6, strokeOpacity: 0.9,
             dot: { r: 2.5, fill: colorFor(c), strokeWidth: 0 },
             activeDot: { r: 5, onClick: () => onClubClick && onClubClick(c), style: { cursor: "pointer" } },
@@ -1042,52 +1112,103 @@ function runApp() {
 
   // -------------------------------------------------------------------------
   function ClubBars({ shots, onClubClick, activeClub }) {
-    const data = useMemo(() => {
+    const [bagMetric, setBagMetric] = useState("carry");
+
+    const { data, maxDomain, meta } = useMemo(() => {
+      const bagMeta = {
+        carry:       { label: "Carry",       unit: "yd", get: s => s.carry },
+        total_dist:  { label: "Total Dist",  unit: "yd", get: s => s.total_dist },
+        dispersion:  { label: "Dispersion",  unit: "yd", get: s => s.offline != null ? Math.abs(s.offline) : null },
+        consistency: { label: "Consistency", unit: "%",  get: s => s.offline != null && s.total_dist > 0 ? Math.abs(s.offline) / s.total_dist * 100 : null },
+      };
+      const meta = bagMeta[bagMetric];
       const groups = {};
       for (const s of shots) {
-        if (!s.club || s.carry == null) continue;
-        (groups[s.club] ||= []).push(s);
+        if (!s.club) continue;
+        const v = meta.get(s);
+        if (v == null) continue;
+        (groups[s.club] ||= []).push(v);
       }
-      return Object.entries(groups).filter(([, arr]) => arr.length >= 3).map(([club, arr]) => ({
-        club,
-        carry: Math.round(arr.reduce((a, b) => a + b.carry, 0) / arr.length * 10) / 10,
-        shots: arr.length
-      })).sort((a, b) => {
+      const data = Object.entries(groups).filter(([, arr]) => arr.length >= 3).map(([club, vals]) => {
+        const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+        return {
+          club,
+          val: Math.round(avg * 10) / 10,
+          minVal: Math.round(Math.min(...vals) * 10) / 10,
+          maxVal: Math.round(Math.max(...vals) * 10) / 10,
+          shots: vals.length
+        };
+      }).sort((a, b) => {
         const ai = BAG_ORDER.indexOf(a.club), bi = BAG_ORDER.indexOf(b.club);
         return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
       });
-    }, [shots]);
+      const maxDomain = data.length ? Math.ceil(Math.max(...data.map(d => d.maxVal)) * 1.06) : 1;
+      return { data, maxDomain, meta };
+    }, [shots, bagMetric]);
 
     if (data.length === 0) {
-      return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 240 } },
+      return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 280 } },
         /*#__PURE__*/React.createElement(SectionTitle, { n: "04 /" }, "Bag"),
         /*#__PURE__*/React.createElement(EmptyState, { title: "No clubs with ≥3 shots", hint: "Capture more shots to populate the bag chart." })
       );
     }
 
-    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 240 } },
-      /*#__PURE__*/React.createElement(SectionTitle, { n: "04 /", right: /*#__PURE__*/React.createElement("span", { style: { fontSize: 10, color: COLORS.inkFaint } }, "avg carry · click to filter") }, "Bag"),
-      /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "84%" },
+    return /*#__PURE__*/React.createElement(Panel, { style: { padding: 16, height: 280 } },
+      /*#__PURE__*/React.createElement(SectionTitle, {
+        n: "04 /",
+        subtitle: "bars show min/max range · click to filter",
+        right: /*#__PURE__*/React.createElement(Toggle, {
+          value: bagMetric, onChange: setBagMetric,
+          options: [
+            { value: "carry",       label: "Carry" },
+            { value: "total_dist",  label: "Total" },
+            { value: "dispersion",  label: "Disp" },
+            { value: "consistency", label: "Consist" },
+          ]
+        })
+      }, "Bag"),
+      /*#__PURE__*/React.createElement(ResponsiveContainer, { width: "100%", height: "82%" },
         /*#__PURE__*/React.createElement(BarChart, {
           data, margin: { top: 8, right: 8, bottom: 4, left: 0 },
           onClick: e => { if (e && e.activeLabel && onClubClick) onClubClick(e.activeLabel); }
         },
           /*#__PURE__*/React.createElement(CartesianGrid, { stroke: CHART_THEME.grid, vertical: false }),
           /*#__PURE__*/React.createElement(XAxis, { dataKey: "club", tick: { fill: "#8a8a8a", fontSize: 10 } }),
-          /*#__PURE__*/React.createElement(YAxis, { tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize }, tickFormatter: v => v.toFixed(1) }),
+          /*#__PURE__*/React.createElement(YAxis, {
+            domain: [0, maxDomain],
+            tick: { fill: CHART_THEME.tickFill, fontSize: CHART_THEME.tickFontSize },
+            tickFormatter: v => v.toFixed(1)
+          }),
           /*#__PURE__*/React.createElement(Tooltip, {
             contentStyle: CHART_THEME.tooltipStyle,
-            formatter: v => [fmt(v, 1) + " yd", "carry"],
-            labelFormatter: l => `${l} · ${(data.find(d => d.club === l) || {}).shots || 0} shots`
+            formatter: v => [`${fmt(v, 1)} ${meta.unit}`, `avg ${meta.label.toLowerCase()}`],
+            labelFormatter: l => {
+              const e = data.find(d => d.club === l);
+              return e ? `${l} · ${e.shots} shots · ${fmt(e.minVal, 1)}–${fmt(e.maxVal, 1)} ${meta.unit}` : l;
+            }
           }),
           /*#__PURE__*/React.createElement(Bar, {
-            dataKey: "carry", fillOpacity: 0.9, style: { cursor: "pointer" },
-            shape: p => /*#__PURE__*/React.createElement("rect", {
-              x: p.x, y: p.y, width: p.width, height: p.height,
-              fill: colorFor(p.club),
-              stroke: activeClub === p.club ? "#fff" : "none",
-              strokeWidth: activeClub === p.club ? 1.5 : 0
-            })
+            dataKey: "val", style: { cursor: "pointer" },
+            shape: p => {
+              const { x, y, width, height, club, val, minVal, maxVal } = p;
+              if (!height || !val) return null;
+              const isSelected = activeClub === club;
+              const isDimmed = activeClub && !isSelected;
+              const col = colorFor(club);
+              const op = isDimmed ? 0.2 : 0.85;
+              const baseline = y + height;
+              const pxPerUnit = height / val;
+              const yMin = baseline - pxPerUnit * minVal;
+              const yMax = baseline - pxPerUnit * maxVal;
+              const tickW = Math.max(4, width * 0.5);
+              const cx = x + width / 2;
+              return /*#__PURE__*/React.createElement("g", null,
+                /*#__PURE__*/React.createElement("rect", { x, y, width, height, fill: col, fillOpacity: op, stroke: isSelected ? "#fff" : "none", strokeWidth: isSelected ? 1.5 : 0 }),
+                /*#__PURE__*/React.createElement("line", { x1: cx - tickW / 2, x2: cx + tickW / 2, y1: yMin, y2: yMin, stroke: col, strokeOpacity: isDimmed ? 0.2 : 0.9, strokeWidth: 2 }),
+                /*#__PURE__*/React.createElement("line", { x1: cx, x2: cx, y1: yMin, y2: yMax, stroke: col, strokeOpacity: isDimmed ? 0.15 : 0.45, strokeWidth: 1, strokeDasharray: "2 2" }),
+                /*#__PURE__*/React.createElement("line", { x1: cx - tickW / 2, x2: cx + tickW / 2, y1: yMax, y2: yMax, stroke: isDimmed ? col : "#ffffff", strokeOpacity: isDimmed ? 0.2 : 0.9, strokeWidth: 2 })
+              );
+            }
           })
         )
       )
@@ -1446,8 +1567,7 @@ function runApp() {
         /*#__PURE__*/React.createElement(FinishScatter, { shots: filteredShots, onClubClick: toggleClub }),
         /*#__PURE__*/React.createElement(TrajectoryChart, { shots: filteredShots, activeClub }),
         /*#__PURE__*/React.createElement(DistanceOverTime, { shots: filteredShots, onClubClick: toggleClub }),
-        /*#__PURE__*/React.createElement(ClubBars, { shots: filteredShots, onClubClick: toggleClub, activeClub }),
-        /*#__PURE__*/React.createElement(SourcesPanel, { shots: shotsInRange }),
+        /*#__PURE__*/React.createElement(ClubBars, { shots: shotsInRange, onClubClick: toggleClub, activeClub }),
         /*#__PURE__*/React.createElement(ShotFeed, { shots: filteredShots, onClubClick: toggleClub })
       ),
       /*#__PURE__*/React.createElement("footer", {
