@@ -385,19 +385,12 @@
 
       <!-- PROJECT 5: GSPro Shot Analytics — live project with link -->
       <a href="https://trwells.com" target="_blank" rel="noopener" class="project project--lg" data-project>
-        <div class="project__media">
-          <div class="project__viz project__viz--sql project__viz--react">
-            <pre class="sql">
-<span class="kw">// React + Recharts · Cloudflare Worker API proxy</span>
-
-<span class="fn">const</span> consistency = shots.<span class="fn">reduce</span>((acc, s) =&gt; {
-  <span class="kw">const</span> delta = Math.<span class="fn">abs</span>(s.carry - clubAvg[s.club]);
-  <span class="kw">return</span> acc + (1 / (1 + delta * <span class="str">weightFactor</span>));
-}, 0) / shots.length;
-
-<span class="kw">export</span> <span class="fn">default</span> ShotAnalyticsDashboard;</pre>
-          </div>
-        </div>
+        <div class="project__media project__media--iframe">
+  <img class="project__iframe" src="assets/gspro-preview.png" alt="GSPro Shot Analytics Dashboard" style="width:100%; height:100%; object-fit:cover; object-position:top; transform:none;">
+  <div class="project__iframe-overlay" aria-hidden="true">
+    <span class="project__iframe-label">Live preview · trwells.com/gspro</span>
+  </div>
+</div>
         <div class="project__meta">
           <div class="project__tags">
             <span>React</span><span>Recharts</span><span>Python</span><span>Cloudflare Workers</span><span>Google Sheets API</span>
