@@ -765,16 +765,20 @@ button { font: inherit; cursor: pointer; }
 }
 
 /* iframe live preview */
-.project__media--iframe { overflow: hidden; }
+.project__media--iframe { overflow: hidden; position: relative; }
 .project__iframe {
   position: absolute;
   top: 0; left: 0;
-  width: 200%;           /* renders at 2× then scales down — captures more content */
-  height: 200%;
-  border: none;
-  transform: scale(0.5);
+  /* Render the iframe at 2.5× the container size, then scale it back down.
+     scale(0.4) = 1 / 2.5 — fills the card while showing more dashboard content.
+     margin correction collapses the extra layout space the tall height creates. */
+  width: 250%;
+  height: 250%;
+  transform: scale(0.4);
   transform-origin: top left;
-  pointer-events: none;  /* card click still fires; iframe doesn't intercept */
+  margin-right: -150%;
+  border: none;
+  pointer-events: none;
   background: var(--bg);
 }
 .project__iframe-overlay {
