@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tom Wells — Data &amp; Business Analyst, Power Platform Developer</title>
-  <meta name="description" content="Portfolio of Tom Wells — turning data into decisions and processes into products. Power BI, SQL, Power Apps, Power Automate." />
+  <title>Your Name — Data &amp; Business Analyst, Power Platform Developer</title>
+  <meta name="description" content="Portfolio of Your Name — turning data into decisions and processes into products. Power BI, SQL, Power Apps, Power Automate." />
   <meta name="theme-color" content="#0c0a09" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Tom Wells — Data &amp; Business Analyst" />
+  <meta property="og:title" content="Your Name — Data &amp; Business Analyst" />
   <meta property="og:description" content="Turning data into decisions and processes into products." />
   <meta property="og:type" content="website" />
 
@@ -28,7 +28,7 @@
   <nav class="nav" id="nav">
     <a href="#top" class="nav__logo">
       <span class="nav__logo-mark">▰</span>
-      <span class="nav__logo-text">Tom Wells</span>
+      <span class="nav__logo-text">Your Name</span>
     </a>
     <ul class="nav__links">
       <li><a href="#about">About</a></li>
@@ -265,15 +265,37 @@
     <div class="work__grid">
 
       <!-- PROJECT 1: PAR+ — hero card (full-width) -->
-      <!-- <a href="#" class="project project--lg" data-project>-->
-      <a href="https://trwells.com/Par" target="_blank" rel="noopener" class="project project--lg" data-project>  
-        <div class="project__media project__media--iframe">
-  <img class="project__iframe" src="/assets/par.png" alt="PAR+ Federal Safety Inspection App" style="width:100%; height:100%; object-fit:cover; object-position:top; transform:none;">
-  <div class="project__iframe-overlay" aria-hidden="true">
-    <span class="project__iframe-label">Live preview · trwells.com/par</span>
-  </div>
-</div>
-        
+      <a href="/par.html" class="project project--lg" data-project>
+        <div class="project__media">
+          <div class="project__viz project__viz--app">
+            <div class="app__topbar">
+              <span class="app__topbar-label">PAR+ · DOE Fermilab Site Office</span>
+              <span class="app__topbar-dot"></span>
+            </div>
+            <div class="app__form-row">
+              <div class="app__form-field app__form-field--wide">
+                <div class="app__form-label">Inspection Type</div>
+                <div class="app__form-value">Safety Walkthrough — Q3</div>
+              </div>
+              <div class="app__form-field">
+                <div class="app__form-label">Status</div>
+                <div class="app__form-value app__form-value--good">Complete</div>
+              </div>
+            </div>
+            <div class="app__form-row">
+              <div class="app__form-field app__form-field--wide">
+                <div class="app__form-label">Findings</div>
+                <div class="app__form-check"><span>✓</span> Corrective action logged</div>
+                <div class="app__form-check"><span>✓</span> Photo evidence attached</div>
+                <div class="app__form-check"><span>✓</span> Responsible party notified</div>
+              </div>
+            </div>
+            <div class="app__stat-row">
+              <div class="app__stat"><div class="app__stat-num">282<span>%</span></div><div class="app__stat-lbl">more oversight data captured</div></div>
+              <div class="app__stat"><div class="app__stat-num">0</div><div class="app__stat-lbl">paper forms remaining</div></div>
+            </div>
+          </div>
+        </div>
         <div class="project__meta">
           <div class="project__tags">
             <span>Power Apps</span><span>Dataverse</span><span>Power Automate</span><span>DOE</span>
@@ -361,14 +383,22 @@
         </div>
       </a>
 
-      <!-- PROJECT 5: GSPro Shot Analytics — live project with link -->
-      <a href="https://trwells.com/gspro/" target="_blank" rel="noopener" class="project project--lg" data-project>
+      <!-- PROJECT 5: GSPro Shot Analytics — live project with iframe preview -->
+      <a href="https://trwells.com/gspro" target="_blank" rel="noopener" class="project project--lg" data-project>
         <div class="project__media project__media--iframe">
-  <img class="project__iframe" src="assets/gspro-preview.png" alt="GSPro Shot Analytics Dashboard" style="width:100%; height:100%; object-fit:cover; object-position:top; transform:none;">
-  <div class="project__iframe-overlay" aria-hidden="true">
-    <span class="project__iframe-label">Live preview · trwells.com/gspro</span>
-  </div>
-</div>
+          <iframe
+            class="project__iframe"
+            src="https://trwells.com/gspro"
+            title="GSPro Shot Analytics Dashboard — live preview"
+            loading="lazy"
+            scrolling="no"
+            tabindex="-1"
+            aria-hidden="true"
+          ></iframe>
+          <div class="project__iframe-overlay" aria-hidden="true">
+            <span class="project__iframe-label">Live preview · trwells.com/gspro</span>
+          </div>
+        </div>
         <div class="project__meta">
           <div class="project__tags">
             <span>React</span><span>Recharts</span><span>Python</span><span>Cloudflare Workers</span><span>Google Sheets API</span>
@@ -377,7 +407,7 @@
             <span class="project__live-badge">Live ↗</span>
           </h3>
           <p class="project__desc">Full-stack golf shot analytics app built in React and Recharts — club-segmented visualizations, a custom distance-weighted consistency metric, a paginated shot feed, and CSV export. A Cloudflare Worker serves as a server-side API proxy so Google Sheets credentials never reach the client. Python pipelines collect and normalize data against third-party APIs on a schedule, with retry/resume logic and structured logging.</p>
-          <div class="project__cta">Visit trwells.com/gspro<span>→</span></div>
+          <div class="project__cta">Visit trwells.com <span>→</span></div>
         </div>
       </a>
 
@@ -423,11 +453,11 @@
   <!-- ============= FOOTER ============= -->
   <footer class="footer">
     <div class="footer__col">
-      <div class="footer__brand">Tom Wells</div>
+      <div class="footer__brand">Your Name</div>
       <div class="footer__tag">Data &amp; Business Analyst · Power Platform Developer</div>
     </div>
     <div class="footer__col footer__col--right">
-      <div class="footer__copy">© <span id="year">2026</span> Tom Wells. Built with care, hosted on GitHub Pages.</div>
+      <div class="footer__copy">© <span id="year">2026</span> Your Name. Built with care, hosted on GitHub Pages.</div>
     </div>
   </footer>
 

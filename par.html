@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PAR+ — Federal Safety Inspection App · Tom Wells</title>
+  <meta name="description" content="Case study: PAR+, a Canvas Power App built for the U.S. Department of Energy Fermilab Site Office, replacing paper safety inspections and increasing captured oversight data by 282%." />
+  <meta name="theme-color" content="#0c0a09" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/par.css" />
+</head>
+<body>
+
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- NAV (reused exactly) -->
+  <nav class="nav" id="nav">
+    <a href="/" class="nav__logo">
+      <span class="nav__logo-mark">▰</span>
+      <span class="nav__logo-text">Tom Wells</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#portfolio">Work</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <a href="/#contact" class="nav__cta">
+      <span>Get in touch</span>
+      <span class="nav__cta-arrow">→</span>
+    </a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="cs-breadcrumb">
+    <div class="cs-breadcrumb__inner">
+      <a href="/#portfolio" class="cs-breadcrumb__back">
+        <span>←</span> Selected work
+      </a>
+      <span class="cs-breadcrumb__sep">/</span>
+      <span class="cs-breadcrumb__current">PAR+</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="cs-hero">
+    <div class="cs-hero__inner">
+
+      <div class="cs-hero__meta">
+        <span class="cs-hero__tag">Power Apps · Dataverse · Power Automate</span>
+        <span class="cs-hero__dot"></span>
+        <span class="cs-hero__client">U.S. Department of Energy — Fermilab Site Office</span>
+      </div>
+
+      <h1 class="cs-hero__title">
+        <span class="cs-hero__line">PAR<em>+</em></span>
+        <span class="cs-hero__line cs-hero__line--sub">Federal Safety</span>
+        <span class="cs-hero__line cs-hero__line--sub">Inspection App</span>
+      </h1>
+
+      <p class="cs-hero__lede">
+        A Canvas Power App that replaced paper-based contractor safety inspections for the U.S. Department of Energy, increasing captured oversight data by <strong>282%</strong> and eliminating manual record entry across a federal oversight organization.
+      </p>
+
+      <div class="cs-hero__outcomes">
+        <div class="cs-outcome">
+          <div class="cs-outcome__num">282<span>%</span></div>
+          <div class="cs-outcome__label">More oversight data captured vs. paper process</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome__num">0</div>
+          <div class="cs-outcome__label">Paper inspection forms remaining</div>
+        </div>
+        <div class="cs-outcome">
+          <div class="cs-outcome__num">7<span>+</span></div>
+          <div class="cs-outcome__label">Years in active production use</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hero image — replace with your best PAR+ screenshot -->
+    <div class="cs-hero__img-wrap">
+      <div class="cs-hero__img-slot">
+        <img
+          src="assets/par-hero.png"
+          alt="PAR+ app — main inspection screen"
+          class="cs-hero__img"
+          onerror="this.closest('.cs-hero__img-slot').classList.add('cs-img--missing')"
+        />
+        <span class="cs-img__placeholder-label">par-hero.png</span>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- OVERVIEW -->
+  <section class="cs-section cs-overview">
+    <div class="cs-section__inner cs-section__inner--split">
+
+      <div class="cs-overview__left">
+        <div class="cs-label">Overview</div>
+        <h2 class="cs-h2">The problem with paper.</h2>
+        <p>
+          The DOE Fermilab Site Office is responsible for federal oversight of contractor safety performance at the Fermi National Accelerator Laboratory. Inspections were conducted on paper forms — filled out by hand in the field, then manually re-entered into a tracking system back at the office.
+        </p>
+        <p>
+          The process was slow, error-prone, and left a meaningful portion of inspection findings unrecorded or recorded too late to drive timely corrective action. Leadership needed a solution that field staff would actually use, with zero friction at the point of inspection.
+        </p>
+      </div>
+
+      <div class="cs-overview__right">
+        <div class="cs-meta-block">
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">My role</div>
+            <div class="cs-meta-value">End-to-end owner — requirements through production support</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Client</div>
+            <div class="cs-meta-value">U.S. Department of Energy, Fermilab Site Office</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Employer</div>
+            <div class="cs-meta-value">RER Solutions, Inc.</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Timeline</div>
+            <div class="cs-meta-value">2018 – Present (ongoing enhancements)</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">Stack</div>
+            <div class="cs-meta-value">Power Apps (Canvas), Dataverse, Power Automate, Power BI, SharePoint Online</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROCESS TIMELINE -->
+  <section class="cs-section cs-process">
+    <div class="cs-section__inner">
+      <div class="cs-label">How it was built</div>
+      <h2 class="cs-h2">From requirement to runway.</h2>
+
+      <div class="cs-timeline">
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">01</span>
+            <span class="cs-timeline__line"></span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">Requirements & discovery</h3>
+            <p class="cs-timeline__body">
+              Interviewed contracting officers and inspectors to map the existing paper workflow step by step. Documented what data was being captured, what was being lost, and what the downstream consumers of that data actually needed. Translated field observations into a formal requirements document before touching any tooling.
+            </p>
+          </div>
+        </div>
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">02</span>
+            <span class="cs-timeline__line"></span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">UI prototyping in HTML</h3>
+            <p class="cs-timeline__body">
+              Before building a single screen in Power Apps Studio, I prototyped the inspection form layout in HTML and CSS and walked end users through it. This let us validate information architecture and field sequencing cheaply — catching UX issues that would have been expensive to rework inside the app. Rework and post-release change requests dropped significantly as a result.
+            </p>
+          </div>
+        </div>
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">03</span>
+            <span class="cs-timeline__line"></span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">Data modeling in Dataverse</h3>
+            <p class="cs-timeline__body">
+              Designed the Dataverse schema to mirror the real-world inspection hierarchy: Site → Inspection → Finding → Corrective Action. Defined relationships, field types, and business rules at the data layer so the app logic stayed clean and reporting downstream stayed consistent.
+            </p>
+          </div>
+        </div>
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">04</span>
+            <span class="cs-timeline__line"></span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">Canvas app build</h3>
+            <p class="cs-timeline__body">
+              Built the Canvas app screen by screen, following accessibility and usability standards from the validated HTML prototype. Power Fx formulas drove conditional logic — different inspection types surfacing different field sets — while keeping the experience consistent regardless of path. Photo capture and offline-aware patterns were built in from the start.
+            </p>
+          </div>
+        </div>
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">05</span>
+            <span class="cs-timeline__line"></span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">Automation & notifications</h3>
+            <p class="cs-timeline__body">
+              Power Automate flows handle downstream actions on inspection submission: routing findings to responsible parties, triggering corrective action tracking, and notifying supervisors via HTML-formatted Outlook emails and Teams Adaptive Cards. The paper handoff was replaced entirely.
+            </p>
+          </div>
+        </div>
+
+        <div class="cs-timeline__item">
+          <div class="cs-timeline__marker">
+            <span class="cs-timeline__num">06</span>
+          </div>
+          <div class="cs-timeline__content">
+            <h3 class="cs-timeline__title">Documentation & ongoing support</h3>
+            <p class="cs-timeline__body">
+              Produced federal-standard documentation covering data definitions, flow logic, and app administration. Established data quality checks and knowledge-transfer materials to meet DOE recordkeeping and organizational compliance requirements. The app has been in active production use for 7+ years with iterative enhancements delivered throughout.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GALLERY -->
+  <section class="cs-section cs-gallery-section">
+    <div class="cs-section__inner">
+      <div class="cs-label">App screens</div>
+      <h2 class="cs-h2">Inside PAR<em>+</em></h2>
+      <p class="cs-gallery-intro">
+        Add your screenshots to <code>assets/</code> and update the <code>src</code> and <code>alt</code> attributes below. Click any image to open the lightbox.
+      </p>
+    </div>
+
+    <div class="cs-gallery">
+
+      <!-- GALLERY ITEM 1 — replace src with your screenshot -->
+      <button class="cs-gallery__item cs-gallery__item--lg" data-lightbox data-src="assets/par-01.png" data-caption="Home screen — inspection dashboard and recent activity">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-01.png" alt="PAR+ home screen" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-01.png</span>
+        </div>
+        <div class="cs-gallery__caption">Home screen — inspection dashboard</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+      <!-- GALLERY ITEM 2 -->
+      <button class="cs-gallery__item" data-lightbox data-src="assets/par-02.png" data-caption="New inspection form — site and type selection">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-02.png" alt="New inspection form" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-02.png</span>
+        </div>
+        <div class="cs-gallery__caption">New inspection — site & type selection</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+      <!-- GALLERY ITEM 3 -->
+      <button class="cs-gallery__item" data-lightbox data-src="assets/par-03.png" data-caption="Finding detail — observation entry with photo capture">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-03.png" alt="Finding entry screen" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-03.png</span>
+        </div>
+        <div class="cs-gallery__caption">Finding entry with photo capture</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+      <!-- GALLERY ITEM 4 -->
+      <button class="cs-gallery__item" data-lightbox data-src="assets/par-04.png" data-caption="Corrective action tracking — status and ownership">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-04.png" alt="Corrective action screen" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-04.png</span>
+        </div>
+        <div class="cs-gallery__caption">Corrective action tracking</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+      <!-- GALLERY ITEM 5 -->
+      <button class="cs-gallery__item" data-lightbox data-src="assets/par-05.png" data-caption="Inspection history — completed records and trends">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-05.png" alt="Inspection history" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-05.png</span>
+        </div>
+        <div class="cs-gallery__caption">Inspection history & records</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+      <!-- GALLERY ITEM 6 -->
+      <button class="cs-gallery__item cs-gallery__item--lg" data-lightbox data-src="assets/par-06.png" data-caption="Power BI dashboard — contractor performance and oversight summary">
+        <div class="cs-gallery__img-wrap">
+          <img src="assets/par-06.png" alt="Power BI oversight dashboard" loading="lazy"
+            onerror="this.closest('.cs-gallery__item').classList.add('cs-img--missing')" />
+          <span class="cs-img__placeholder-label">par-06.png</span>
+        </div>
+        <div class="cs-gallery__caption">Power BI — contractor performance overview</div>
+        <span class="cs-gallery__zoom" aria-hidden="true">⤢</span>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- OUTCOMES -->
+  <section class="cs-section cs-results">
+    <div class="cs-section__inner">
+      <div class="cs-label">Results</div>
+      <h2 class="cs-h2">What it delivered.</h2>
+
+      <div class="cs-results__grid">
+
+        <div class="cs-result-card">
+          <div class="cs-result-card__num">282<span>%</span></div>
+          <div class="cs-result-card__title">More oversight data captured</div>
+          <p class="cs-result-card__body">
+            The volume of inspection findings recorded in the system increased 282% compared to the manual paper process — not because more problems were found, but because the app made capturing them frictionless.
+          </p>
+        </div>
+
+        <div class="cs-result-card">
+          <div class="cs-result-card__num">0</div>
+          <div class="cs-result-card__title">Paper forms remaining</div>
+          <p class="cs-result-card__body">
+            The entire inspection record lifecycle — from initiation to finding to corrective action to closure — now lives in Dataverse. No manual re-entry. No lost forms.
+          </p>
+        </div>
+
+        <div class="cs-result-card">
+          <div class="cs-result-card__num">↓</div>
+          <div class="cs-result-card__title">Rework & change requests</div>
+          <p class="cs-result-card__body">
+            HTML prototyping before Power Apps build validated the UX with real users cheaply. Post-release change requests dropped materially compared to previous projects built without a prototype stage.
+          </p>
+        </div>
+
+        <div class="cs-result-card">
+          <div class="cs-result-card__num">7<span>+</span></div>
+          <div class="cs-result-card__title">Years in production</div>
+          <p class="cs-result-card__body">
+            PAR+ has been in continuous active use since 2018, with iterative enhancements delivered throughout. A solution that outlasts its builder is the goal — this one has.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH CALLOUT -->
+  <section class="cs-section cs-tech">
+    <div class="cs-section__inner">
+      <div class="cs-label">Technology</div>
+      <h2 class="cs-h2">Stack breakdown.</h2>
+      <div class="cs-tech__grid">
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">Power Apps (Canvas)</div>
+          <div class="cs-tech__role">Primary interface — inspection forms, finding entry, corrective action tracking, photo capture</div>
+        </div>
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">Dataverse</div>
+          <div class="cs-tech__role">Data layer — relational schema modeling the Site → Inspection → Finding → Corrective Action hierarchy</div>
+        </div>
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">Power Automate</div>
+          <div class="cs-tech__role">Downstream automation — routing notifications, triggering corrective action workflows, Teams Adaptive Cards</div>
+        </div>
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">Power BI</div>
+          <div class="cs-tech__role">Reporting layer — contractor performance dashboards and oversight trend analysis for Site Office leadership</div>
+        </div>
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">SharePoint Online</div>
+          <div class="cs-tech__role">Document storage integration and supplemental list data</div>
+        </div>
+        <div class="cs-tech__item">
+          <div class="cs-tech__name">HTML / CSS</div>
+          <div class="cs-tech__role">Pre-build UI prototyping — validated layout and field sequencing with end users before Power Apps build</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACK / NEXT NAV -->
+  <nav class="cs-pagination">
+    <a href="/#portfolio" class="cs-pagination__link cs-pagination__link--back">
+      <span class="cs-pagination__dir">← Back to</span>
+      <span class="cs-pagination__title">Selected work</span>
+    </a>
+    <a href="/#contact" class="cs-pagination__link cs-pagination__link--next">
+      <span class="cs-pagination__dir">Want to build something?</span>
+      <span class="cs-pagination__title">Get in touch →</span>
+    </a>
+  </nav>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__col">
+      <div class="footer__brand">Tom Wells</div>
+      <div class="footer__tag">Data &amp; Business Analyst · Power Platform Developer</div>
+    </div>
+    <div class="footer__col footer__col--right">
+      <div class="footer__copy">© <span id="year">2026</span> Tom Wells. Built with care, hosted on GitHub Pages.</div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close">✕</button>
+    <button class="lightbox__prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+    <button class="lightbox__next" id="lightboxNext" aria-label="Next image">›</button>
+    <div class="lightbox__stage">
+      <img class="lightbox__img" id="lightboxImg" src="" alt="" />
+      <div class="lightbox__caption" id="lightboxCaption"></div>
+    </div>
+    <div class="lightbox__counter" id="lightboxCounter"></div>
+  </div>
+  <div class="lightbox__backdrop" id="lightboxBackdrop"></div>
+
+  <script src="/assets/script.js"></script>
+  <script src="/assets/par.js"></script>
+</body>
+</html>
