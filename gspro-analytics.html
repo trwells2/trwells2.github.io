@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PAR+ — Federal Safety Inspection App · Tom Wells</title>
-<meta name="description" content="Case study: PAR+, a Power Apps canvas app built for the U.S. Department of Energy Fermilab Site Office, increasing captured oversight data by 282% and eliminating paper inspection forms.">
+<title>GSPro Shot Analytics — Golf Simulator Dashboard · Tom Wells</title>
+<meta name="description" content="Case study: GSPro Shot Analytics, a React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live at trwells.com/gspro.">
 <meta name="theme-color" content="#0B2231">
-<meta property="og:title" content="PAR+ — Federal Safety Inspection App">
-<meta property="og:description" content="A canvas app that replaced paper safety inspections for the DOE Fermilab Site Office.">
+<meta property="og:title" content="GSPro Shot Analytics — Golf Simulator Dashboard">
+<meta property="og:description" content="Every shot leaves a track: a React dashboard over a Google Sheets pipeline, live at trwells.com/gspro.">
 <meta property="og:type" content="article">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-width='1.9' stroke-linecap='round'%3E%3Cpath d='M21 2v10' stroke='%23E4EEF2'/%3E%3Cpath d='M21 12a9 9 0 0 1-9 9a7.5 7.5 0 0 1-7.5-7.5a6 6 0 0 1 6-6a4.5 4.5 0 0 1 4.5 4.5a3 3 0 0 1-3 3' stroke='%23FF4A3D'/%3E%3C/svg%3E">
 <style>
@@ -370,7 +370,7 @@ html:not(.motion) .cap.idle{display:none}
 <body>
 <a class="skip" href="#screens">Skip to the screens</a>
 
-<canvas id="chamber" aria-hidden="true" data-mark="ev. 01"></canvas>
+<canvas id="chamber" aria-hidden="true" data-mark="ev. 05"></canvas>
 <div class="vig" aria-hidden="true"></div>
 <div class="fid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
@@ -387,7 +387,7 @@ html:not(.motion) .cap.idle{display:none}
 
 <main>
 <nav class="crumb" aria-label="Breadcrumb">
-  <a href="/#portfolio">&#8592; selected work</a><span>/</span><b>event 01 — PAR+</b>
+  <a href="/#portfolio">&#8592; selected work</a><span>/</span><b>event 05 — GSPro Shot Analytics</b>
 </nav>
 
 <!-- ================= HERO ================= -->
@@ -395,21 +395,19 @@ html:not(.motion) .cap.idle{display:none}
   <div class="cs-in">
     <div class="cs-head">
       <div>
-        <p class="mono fx">event 01 / 05 &nbsp;·&nbsp; U.S. Department of Energy, Fermilab Site Office</p>
-        <h1 class="cs-title" data-split>PAR+</h1>
-        <p class="cs-sub fx" style="--d:.15s">Federal safety inspections, captured where they happen.</p>
-        <p class="cs-lede fx" style="--d:.3s">A Power Apps canvas app that replaced paper-based contractor safety inspections for the U.S. Department of Energy, increasing captured oversight data by 282% and eliminating manual record entry across a federal oversight organization.</p>
+        <p class="mono fx">event 05 / 05 &nbsp;·&nbsp; personal project, live now</p>
+        <h1 class="cs-title" data-split>GSPro Shot Analytics</h1>
+        <p class="cs-sub fx" style="--d:.15s">Every swing leaves a track. This reads them.</p>
+        <p class="cs-lede fx" style="--d:.3s">A full-stack React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live data comes from Google Sheets through a Cloudflare Worker, so the API key never reaches the browser.</p>
       </div>
       <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
     </div>
     <div class="cs-kpis">
-      <div class="cs-kpi mark">
-        <span class="mv"><div class="v">282%</div><svg class="ann" viewBox="0 0 320 170" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M300 84C300 118 233 146 160 146C87 146 20 118 20 84C20 50 87 22 160 22C233 22 300 50 300 84C300 92 292 100 276 108"/></svg></span>
-        <div class="k">more oversight data captured than the paper process</div>
-      </div>
-      <div class="cs-kpi"><div class="v">0</div><div class="k">paper inspection forms remaining</div></div>
-      <div class="cs-kpi"><div class="v">7+</div><div class="k">years in active production use</div></div>
+      <div class="cs-kpi"><div class="v">1</div><div class="k">custom metric: distance-weighted consistency, per club</div></div>
+      <div class="cs-kpi"><div class="v">0</div><div class="k">credentials exposed to the client</div></div>
+      <div class="cs-kpi mark"><span class="mv"><div class="v">live</div><svg class="ann" viewBox="0 0 320 170" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M300 84C300 118 233 146 160 146C87 146 20 118 20 84C20 50 87 22 160 22C233 22 300 50 300 84C300 92 292 100 276 108"/></svg></span><div class="k">in production at trwells.com/gspro</div></div>
     </div>
+    <p class="fx" style="--d:.45s;margin-top:34px"><a class="fr-link" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app</a></p>
   </div>
 </section>
 
@@ -417,18 +415,18 @@ html:not(.motion) .cap.idle{display:none}
 <section class="cs-sec" aria-labelledby="ov-h">
   <div class="cs-wrap cs-split">
     <div class="cs-body">
-      <h2 class="sec-h" id="ov-h" data-split>The problem with paper.</h2>
-      <p class="fx" style="--d:.2s;margin-top:24px">The Fermilab Site Office is responsible for federal oversight of contractor safety performance at the Fermi National Accelerator Laboratory. Inspections were conducted on paper: filled out by hand in the field, then re-entered by hand into a tracking system back at the office.</p>
-      <p class="fx" style="--d:.3s">The process was slow and error-prone, and it left a meaningful share of findings unrecorded, or recorded too late to drive timely corrective action. Leadership needed something field staff would actually use, with no friction at the point of inspection.</p>
-      <p class="fx" style="--d:.4s">PAR+ is that app. <strong>Every inspection now starts and ends in one place</strong> — findings, photographs, responsible parties and corrective actions — and the reporting layer reads the same records the inspectors write.</p>
+      <h2 class="sec-h" id="ov-h" data-split>A simulator makes data. Spreadsheets don&#8217;t make sense of it.</h2>
+      <p class="fx" style="--d:.2s;margin-top:24px">A golf simulator records every shot: club, carry, total, offline, ball speed. After a few sessions that is thousands of rows in a sheet, and a sheet can tell you your average 7-iron. It cannot tell you which club you can actually trust on a given shot.</p>
+      <p class="fx" style="--d:.3s">GSPro Shot Analytics answers that question. Shots are colour-coded by club and plotted as dispersion, so the shape of a miss is visible rather than averaged away. A <strong>distance-weighted consistency metric</strong> ranks clubs by how tightly they group relative to how far they carry, which is the comparison a raw standard deviation gets wrong.</p>
+      <p class="fx" style="--d:.4s">It is the same pattern as the federal work, at hobby scale: a messy source, one model over it, and a surface that answers a question. That is why it is on this site.</p>
     </div>
     <div class="plate rec-card fx" style="--d:.25s">
       <div class="hd">RECORD</div>
-      <div class="rec-row"><span class="k">ROLE</span><span>End-to-end owner — requirements through production support</span></div>
-      <div class="rec-row"><span class="k">CLIENT</span><span>U.S. Department of Energy, Fermilab Site Office</span></div>
-      <div class="rec-row"><span class="k">EMPLOYER</span><span>RER Solutions, Inc.</span></div>
-      <div class="rec-row"><span class="k">PERIOD</span><span>2018 — present, with ongoing enhancements</span></div>
-      <div class="rec-row"><span class="k">STACK</span><span>Power Apps (canvas), Dataverse, Power Automate, Power BI, SharePoint Online</span></div>
+      <div class="rec-row"><span class="k">ROLE</span><span>Sole builder — pipeline, API layer, front end, deployment</span></div>
+      <div class="rec-row"><span class="k">TYPE</span><span>Personal project, in active use</span></div>
+      <div class="rec-row"><span class="k">LIVE AT</span><span><a href="https://trwells.com/gspro" target="_blank" rel="noopener">trwells.com/gspro</a></span></div>
+      <div class="rec-row"><span class="k">SOURCE</span><span>Google Sheets, read through a Cloudflare Worker at api.trwells.com</span></div>
+      <div class="rec-row"><span class="k">STACK</span><span>React, Recharts, Cloudflare Workers, Google Sheets API, Python, GitHub Pages</span></div>
     </div>
   </div>
 </section>
@@ -436,39 +434,39 @@ html:not(.motion) .cap.idle{display:none}
 <!-- ================= PROCESS ================= -->
 <section class="cs-sec" aria-labelledby="pr-h">
   <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="pr-h">From requirement to runway.</h2>
-    <p class="cs-lede fx" style="--d:.2s">Six stages, in order. The prototype stage is the one that paid for itself.</p>
+    <h2 class="sec-h" data-split id="pr-h">How it was built.</h2>
+    <p class="cs-lede fx" style="--d:.2s">Six stages, from a session log to a dashboard that loads in a browser tab.</p>
     <div class="track">
       <div class="rail" aria-hidden="true"><i></i></div>
       <div class="step">
         <span class="dot" aria-hidden="true">01</span>
-        <h3>Requirements &amp; discovery</h3>
-        <p>Interviewed contracting officers and inspectors to map the existing paper workflow step by step: what was being captured, what was being lost, and what the downstream consumers of that data actually needed. Field observations became a formal requirements document before any tooling was opened.</p>
+        <h3>Get the shots out of the simulator</h3>
+        <p>Session data lands in Google Sheets, which is the right store for this: free, editable by hand when a shot needs correcting, and already synced. Python collects and normalises the rows on a schedule, with retry and resume logic so an interrupted run does not duplicate or lose a session.</p>
       </div>
       <div class="step">
         <span class="dot" aria-hidden="true">02</span>
-        <h3>UI prototyping in HTML</h3>
-        <p>Before building a single screen in Power Apps Studio, I prototyped the inspection form in HTML and CSS and walked end users through it. That validated information architecture and field sequencing cheaply, catching problems that would have been expensive to rework inside the app. Rework and post-release change requests dropped as a result.</p>
+        <h3>Normalise the record</h3>
+        <p>Club names, units and outliers are reconciled into one consistent shape before anything reads them, so a 7-iron logged three different ways is still one club. Structured logging makes a bad session traceable rather than mysterious.</p>
       </div>
       <div class="step">
         <span class="dot" aria-hidden="true">03</span>
-        <h3>Data modelling in Dataverse</h3>
-        <p>The schema mirrors the real inspection hierarchy: site, inspection, finding, corrective action. Relationships, field types and business rules live at the data layer, so app logic stays clean and downstream reporting stays consistent.</p>
+        <h3>Put a Worker in front of the key</h3>
+        <p>A Cloudflare Worker at api.trwells.com proxies the Google Sheets API. The browser talks to the Worker; the Worker holds the credential. Nothing sensitive ships to the client, and the front end stays a static file on GitHub Pages.</p>
       </div>
       <div class="step">
         <span class="dot" aria-hidden="true">04</span>
-        <h3>Canvas app build</h3>
-        <p>Built screen by screen from the validated prototype, following accessibility and usability standards. Power Fx drives the conditional logic — different inspection types surface different field sets — while the experience stays consistent whichever path a user takes. Photo capture and offline-aware patterns were in from the start.</p>
+        <h3>Build the dashboard</h3>
+        <p>React and Recharts in a single self-contained page: club-colour-coded dispersion and distance views, a paginated shot feed for reading individual swings, and CSV export for anything the dashboard does not answer.</p>
       </div>
       <div class="step">
         <span class="dot" aria-hidden="true">05</span>
-        <h3>Automation &amp; notifications</h3>
-        <p>Power Automate handles everything downstream of submission: routing findings to responsible parties, opening corrective action tracking, and notifying supervisors through HTML-formatted Outlook mail and Teams Adaptive Cards. The paper handoff disappeared entirely.</p>
+        <h3>Define the consistency metric</h3>
+        <p>Grouping tightness means little without distance: a wedge and a driver cannot be compared on spread alone. The distance-weighted consistency score normalises for carry, so clubs can be ranked against each other and tracked over time.</p>
       </div>
       <div class="step">
         <span class="dot" aria-hidden="true">06</span>
-        <h3>Documentation &amp; support</h3>
-        <p>Federal-standard documentation covering data definitions, flow logic and app administration, plus data quality checks and knowledge-transfer material for DOE recordkeeping and compliance requirements. The app has run in production for seven years with enhancements delivered throughout.</p>
+        <h3>Ship it and keep using it</h3>
+        <p>Deployed on GitHub Pages at trwells.com/gspro and refined against real sessions since. Every change has to survive the only user who matters: the one standing on the mat wondering which club to hit.</p>
       </div>
     </div>
   </div>
@@ -477,32 +475,24 @@ html:not(.motion) .cap.idle{display:none}
 <!-- ================= SCREENS ================= -->
 <section class="cs-sec" id="screens" aria-labelledby="sc-h">
   <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="sc-h">Inside the app.</h2>
-    <p class="cs-lede fx" style="--d:.2s">Six frames from the production app and the reporting layer that reads it. Select any frame to enlarge.</p>
+    <h2 class="sec-h" data-split id="sc-h">Inside the dashboard.</h2>
+    <p class="cs-lede fx" style="--d:.2s">Four frames from the live app. Select any frame to enlarge, or open the real thing.</p>
     <div class="gal">
-      <button class="shot lg" type="button" data-src="assets/par-01.png" data-caption="Home screen — inspection dashboard and recent activity">
-        <span class="fig" data-ok-missing><img src="assets/par-01.png" alt="PAR+ home screen showing the inspection dashboard" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-01.png</span></span>
-        <span class="cap"><span>Home screen — inspection dashboard</span><b>01</b></span>
+      <button class="shot lg" type="button" data-src="assets/gspro-01.png" data-caption="Dispersion view — every shot, colour-coded by club">
+        <span class="fig" data-ok-missing><img src="assets/gspro-01.png" alt="Dispersion chart with shots colour-coded by club" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-01.png</span></span>
+        <span class="cap"><span>Dispersion — colour-coded by club</span><b>01</b></span>
       </button>
-      <button class="shot" type="button" data-src="assets/par-02.png" data-caption="New inspection — site and type selection">
-        <span class="fig" data-ok-missing><img src="assets/par-02.png" alt="New inspection form with site and type selection" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-02.png</span></span>
-        <span class="cap"><span>New inspection — site &amp; type</span><b>02</b></span>
+      <button class="shot lg" type="button" data-src="assets/gspro-02.png" data-caption="Club summary — carry, total and the consistency score">
+        <span class="fig" data-ok-missing><img src="assets/gspro-02.png" alt="Club summary table with carry, total and consistency" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-02.png</span></span>
+        <span class="cap"><span>Club summary &amp; consistency</span><b>02</b></span>
       </button>
-      <button class="shot" type="button" data-src="assets/par-03.png" data-caption="Finding detail — observation entry with photo capture">
-        <span class="fig" data-ok-missing><img src="assets/par-03.png" alt="Finding entry screen with photo capture" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-03.png</span></span>
-        <span class="cap"><span>Finding entry with photo capture</span><b>03</b></span>
+      <button class="shot" type="button" data-src="assets/gspro-03.png" data-caption="Shot feed — paginated, one swing per row">
+        <span class="fig" data-ok-missing><img src="assets/gspro-03.png" alt="Paginated shot feed listing individual swings" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-03.png</span></span>
+        <span class="cap"><span>Paginated shot feed</span><b>03</b></span>
       </button>
-      <button class="shot" type="button" data-src="assets/par-04.png" data-caption="Corrective action tracking — status and ownership">
-        <span class="fig" data-ok-missing><img src="assets/par-04.png" alt="Corrective action tracking screen" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-04.png</span></span>
-        <span class="cap"><span>Corrective action tracking</span><b>04</b></span>
-      </button>
-      <button class="shot" type="button" data-src="assets/par-05.png" data-caption="Inspection history — completed records and trends">
-        <span class="fig" data-ok-missing><img src="assets/par-05.png" alt="Inspection history and completed records" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-05.png</span></span>
-        <span class="cap"><span>Inspection history &amp; records</span><b>05</b></span>
-      </button>
-      <button class="shot lg" type="button" data-src="assets/par-06.png" data-caption="Power BI — contractor performance and oversight summary">
-        <span class="fig" data-ok-missing><img src="assets/par-06.png" alt="Power BI dashboard for contractor performance" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>par-06.png</span></span>
-        <span class="cap"><span>Power BI — contractor performance</span><b>06</b></span>
+      <button class="shot" type="button" data-src="assets/gspro-04.png" data-caption="Distance trend — carry by club across sessions">
+        <span class="fig" data-ok-missing><img src="assets/gspro-04.png" alt="Distance trend chart across sessions" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-04.png</span></span>
+        <span class="cap"><span>Distance trend by session</span><b>04</b></span>
       </button>
     </div>
   </div>
@@ -511,27 +501,27 @@ html:not(.motion) .cap.idle{display:none}
 <!-- ================= RESULTS ================= -->
 <section class="cs-sec" aria-labelledby="rs-h">
   <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="rs-h">What it delivered.</h2>
+    <h2 class="sec-h" data-split id="rs-h">What it does.</h2>
     <div class="cards">
       <div class="card fx">
-        <div class="v">282%</div>
-        <h3>More oversight data captured</h3>
-        <p>Findings recorded in the system rose 282% against the manual paper process — not because more problems appeared, but because capturing them stopped being work.</p>
+        <div class="v">&#9679;</div>
+        <h3>Shows the shape of a miss</h3>
+        <p>Club-coloured dispersion makes a two-way miss look different from a consistent fade. An average hides that; a scatter does not.</p>
       </div>
       <div class="card fx" style="--d:.1s">
-        <div class="v">0</div>
-        <h3>Paper forms remaining</h3>
-        <p>The whole record lifecycle — initiation, finding, corrective action, closure — lives in Dataverse. No re-entry, no lost forms.</p>
+        <div class="v">1</div>
+        <h3>One number per club</h3>
+        <p>The distance-weighted consistency score ranks clubs on a single comparable scale, so practice goes where the spread actually costs strokes.</p>
       </div>
       <div class="card fx" style="--d:.2s">
-        <div class="v">&#8595;</div>
-        <h3>Rework and change requests</h3>
-        <p>Prototyping the interface in HTML before the build validated the experience with real users cheaply. Post-release change requests fell against projects built without that stage.</p>
+        <div class="v">0</div>
+        <h3>Credentials in the client</h3>
+        <p>The Cloudflare Worker keeps the Google Sheets key server-side. The published page is a static file with nothing to leak.</p>
       </div>
       <div class="card fx" style="--d:.3s">
-        <div class="v">7+</div>
-        <h3>Years in production</h3>
-        <p>PAR+ has been in continuous use since 2018, with enhancements delivered throughout. A solution that outlasts its builder is the goal; this one has.</p>
+        <div class="v">CSV</div>
+        <h3>An exit door</h3>
+        <p>Every filtered view exports to CSV, so a question the dashboard does not answer can still be answered somewhere else.</p>
       </div>
     </div>
   </div>
@@ -542,21 +532,21 @@ html:not(.motion) .cap.idle{display:none}
   <div class="cs-wrap">
     <h2 class="sec-h" data-split id="st-h">Stack breakdown.</h2>
     <div class="tech">
-      <div class="row fx"><div class="n">Power Apps (canvas)</div><div class="r">The interface: inspection forms, finding entry, corrective action tracking, photo capture.</div></div>
-      <div class="row fx"><div class="n">Dataverse</div><div class="r">The data layer: a relational schema modelling site, inspection, finding and corrective action.</div></div>
-      <div class="row fx"><div class="n">Power Automate</div><div class="r">Everything downstream: routing notifications, opening corrective action workflows, Teams Adaptive Cards.</div></div>
-      <div class="row fx"><div class="n">Power BI</div><div class="r">The reporting layer: contractor performance dashboards and oversight trends for Site Office leadership.</div></div>
-      <div class="row fx"><div class="n">SharePoint Online</div><div class="r">Document storage integration and supplemental list data.</div></div>
-      <div class="row fx"><div class="n">HTML &amp; CSS</div><div class="r">Pre-build prototyping: layout and field sequencing validated with end users before the app existed.</div></div>
+      <div class="row fx"><div class="n">React</div><div class="r">The application, built as a single self-contained page — no build step, no framework scaffolding to maintain.</div></div>
+      <div class="row fx"><div class="n">Recharts</div><div class="r">Dispersion, distance and trend charts, with club colour coding carried consistently across every view.</div></div>
+      <div class="row fx"><div class="n">Cloudflare Workers</div><div class="r">The API layer at api.trwells.com: proxies Google Sheets so the key stays server-side and responses stay fast.</div></div>
+      <div class="row fx"><div class="n">Google Sheets API</div><div class="r">The live data source. Editable by hand when a logged shot is wrong, which a database would make tedious.</div></div>
+      <div class="row fx"><div class="n">Python</div><div class="r">Collection and normalisation on a schedule, with retry and resume logic and structured logging.</div></div>
+      <div class="row fx"><div class="n">GitHub Pages</div><div class="r">Hosting for the dashboard and this site, deployed from the repo with no server to keep alive.</div></div>
     </div>
 
     <nav class="pag" aria-label="More work">
-      <a href="/#portfolio"><span class="d">&#8592; back to</span><span class="t">All five events</span></a>
-      <a class="next" href="/gspro-analytics.html"><span class="d">next event 05 &#8594;</span><span class="t">GSPro Shot Analytics</span></a>
+      <a href="/par.html"><span class="d">&#8592; previous event 01</span><span class="t">PAR+ inspection app</span></a>
+      <a class="next" href="/#portfolio"><span class="d">back to &#8594;</span><span class="t">All five events</span></a>
     </nav>
 
     <div class="cs-cta">
-      <h2 class="sec-h" data-split>Still running on paper?</h2>
+      <h2 class="sec-h" data-split>Got a messy source and a real question?</h2>
       <p class="cs-lede fx" style="--d:.2s">Open to Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
       <a class="c-mail fx" style="--d:.3s" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
       <p class="c-links fx" style="--d:.4s">

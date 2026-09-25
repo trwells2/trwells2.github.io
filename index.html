@@ -1,466 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tom Wells — Data &amp; Business Analyst, Power Platform Developer</title>
-  <meta name="description" content="Portfolio of Tom Wells — turning data into decisions and processes into products. Power BI, SQL, Power Apps, Power Automate." />
-  <meta name="theme-color" content="#0c0a09" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tom Wells — Data &amp; Business Analyst, Power Platform Developer</title>
+<meta name="description" content="Portfolio of Tom Wells — turning data into decisions and processes into products. Power BI, SQL, Power Apps, Power Automate.">
+<meta name="theme-color" content="#0B2231">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Tom Wells — Data &amp; Business Analyst" />
-  <meta property="og:description" content="Turning data into decisions and processes into products." />
-  <meta property="og:type" content="website" />
+<!-- Open Graph -->
+<meta property="og:title" content="Tom Wells — Data &amp; Business Analyst">
+<meta property="og:description" content="Turning data into decisions and processes into products.">
+<meta property="og:type" content="website">
 
-  <!-- Fonts: Fraunces (display serif) + Geist (grotesque) + Geist Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-  <link rel="stylesheet" href="assets/styles.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-width='1.9' stroke-linecap='round'%3E%3Cpath d='M21 2v10' stroke='%23E4EEF2'/%3E%3Cpath d='M21 12a9 9 0 0 1-9 9a7.5 7.5 0 0 1-7.5-7.5a6 6 0 0 1 6-6a4.5 4.5 0 0 1 4.5 4.5a3 3 0 0 1-3 3' stroke='%23FF4A3D'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/martian-mono.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion','pre');setTimeout(function(){d.classList.remove('pre')},4000)}})(document.documentElement)</script>
 </head>
 <body>
+<a class="skip" href="#portfolio">Skip to the work</a>
 
-  <!-- ============= GRAIN OVERLAY ============= -->
-  <div class="grain" aria-hidden="true"></div>
+<!-- ============= CHAMBER: live track field + lens marks ============= -->
+<canvas id="chamber" aria-hidden="true"></canvas>
+<div class="vig" aria-hidden="true"></div>
+<div class="fid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
-  <!-- ============= NAVIGATION ============= -->
-  <nav class="nav" id="nav">
-    <a href="#top" class="nav__logo">
-      <span class="nav__logo-mark">▰</span>
-      <span class="nav__logo-text">Tom Wells</span>
-    </a>
-    <ul class="nav__links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#portfolio">Work</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="#contact" class="nav__cta">
-      <span>Get in touch</span>
-      <span class="nav__cta-arrow">→</span>
-    </a>
-  </nav>
+<!-- ============= NAVIGATION ============= -->
+<header class="nav">
+  <a class="brand" href="#top" aria-label="Tom Wells, back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M21 2v10" stroke="#E4EEF2"/><path d="M21 12a9 9 0 0 1-9 9a7.5 7.5 0 0 1-7.5-7.5a6 6 0 0 1 6-6a4.5 4.5 0 0 1 4.5 4.5a3 3 0 0 1-3 3" stroke="#FF4A3D"/></svg>
+    <span>Tom Wells</span>
+  </a>
+  <div class="nav-r">
+    <ul><li><a href="#about">stack</a></li><li><a href="#portfolio">work</a></li><li><a href="#record">record</a></li><li><a href="#contact">contact</a></li></ul>
+    <span class="fc mono" aria-hidden="true">frame <b>0001</b></span>
+  </div>
+</header>
 
-  <!-- ============= HERO ============= -->
-  <header class="hero" id="top">
-    <div class="hero__meta">
-      <span class="hero__meta-item">Open to new opportunities</span>
-      <span class="hero__meta-dot"></span>
-      <span class="hero__meta-item">Chicago, IL</span>
+<main>
+<!-- ============= HERO ============= -->
+<section class="hero" id="top">
+  <div class="hero-in">
+    <h1 class="h-title" data-split><span class="w">Every system</span> <span class="w">leaves a track.</span></h1>
+    <p class="h-sub fx">I&#8217;m <strong>Tom Wells</strong>. I build the instruments that read them: Power Platform apps, automation and Power BI models, currently for the U.S. Department of Energy&#8217;s Fermilab Site Office.</p>
+  </div>
+  <div class="h-foot mono"><span><i class="live" aria-hidden="true"></i>open to new opportunities / Chicago, IL</span><span>scroll to advance the film</span></div>
+</section>
+
+<!-- ============= STACK: exploded view ============= -->
+<section class="stack" id="about" aria-labelledby="stack-h">
+  <div class="stack-stage">
+    <div class="stack-copy">
+      <h2 class="sec-h" id="stack-h" data-split>One architecture, five layers.</h2>
+      <p class="sec-p fx">Most of my work is the same five layers with a different problem on top. Interviews, process maps and requirements decide what goes in each one.</p>
+      <ol class="caps">
+        <li class="cap idle on"><span class="tag">exploded view</span><p>Five layers, drawn to one scale. Keep scrolling to pull them apart.</p></li>
+        <li class="cap"><span class="tag">layer 1 / sources</span><p>SQL Server, Oracle and SharePoint Online: the raw record, wherever it already lives. T-SQL and Postgres to get at it.</p></li>
+        <li class="cap"><span class="tag">layer 2 / model</span><p>One star schema over all of it, so a number means the same thing in every report. DAX and Power Query for reporting, Dataverse for apps.</p></li>
+        <li class="cap"><span class="tag">layer 3 / logic</span><p>Power Automate moves work between people: approvals, notifications, the handoffs nobody wants to chase.</p></li>
+        <li class="cap"><span class="tag">layer 4 / surface</span><p>Power Apps where the work actually happens, canvas and model-driven, wired into SharePoint. PAR+ moved federal safety inspections into an app.</p></li>
+        <li class="cap"><span class="tag">layer 5 / insight</span><p>Power BI and Tableau on top, reading the model instead of a pile of exports. Python when the question outgrows the dashboard.</p></li>
+      </ol>
     </div>
+    <svg class="stack-svg" id="stackSvg" viewBox="0 0 1000 1000" role="img" aria-label="Exploded diagram of five stacked layers: sources, model, logic, surface and insight."></svg>
+  </div>
+</section>
 
-    <h1 class="hero__title">
-      <span class="hero__line">Turning <em>data</em> into</span>
-      <span class="hero__line">decisions, and</span>
-      <span class="hero__line"><em>processes</em> into products.</span>
-    </h1>
-
-    <p class="hero__sub">
-      I'm a data &amp; business analyst building inside the Microsoft Power Platform. I help teams see their numbers clearly, automate the boring parts, and ship apps that people actually use.
-    </p>
-
-    <div class="hero__scroll">
-      <span class="hero__scroll-line"></span>
-      <span class="hero__scroll-text">Scroll to begin</span>
-    </div>
+<!-- ============= WORK: five events ============= -->
+<section class="events" id="portfolio" aria-labelledby="ev-h">
+  <header class="ev-head">
+    <h2 class="sec-h" id="ev-h" data-split>Five events.</h2>
+    <p class="sec-p fx">The projects, one frame at a time, the way the film was read: slowly, and with a red pencil for the parts that matter.</p>
   </header>
-
-  <!-- ============= STORY CHAPTER 1: THE PROBLEM ============= -->
-  <section class="chapter chapter--problem" data-chapter="01">
-    <div class="chapter__sticky">
-      <div class="chapter__num">Chapter 01</div>
-      <div class="chapter__content">
-        <h2 class="chapter__heading">
-          <span class="reveal-line"><span>Most teams are</span></span>
-          <span class="reveal-line"><span><em>drowning</em> in data</span></span>
-          <span class="reveal-line"><span>and starving for</span></span>
-          <span class="reveal-line"><span><em>answers.</em></span></span>
-        </h2>
-        <div class="chapter__stats">
-          <div class="stat" data-stat>
-            <div class="stat__num"><span data-count="73">0</span><span class="stat__suffix">%</span></div>
-            <div class="stat__label">of enterprise data goes unused</div>
+  <div class="fly">
+    <div class="fly-stage">
+      <div class="world" data-ok-overflow>
+        <article class="frame" data-href="/par.html">
+          <div class="fr-top"><span><b class="n">event 01</b> / 05</span><span>U.S. Department of Energy, Fermilab Site Office</span></div>
+          <div class="fr-body">
+            <div class="fr-text">
+              <h3>PAR+</h3>
+              <p class="fr-sum">A Power Apps canvas app for conducting and recording contractor safety inspections. The UI was prototyped in HTML and validated with end users before the build, which cut rework and post-release change requests.</p>
+              <p class="fr-metric"><b>282%</b><span>more oversight data captured, with manual record entry eliminated across the federal oversight organization.</span></p>
+              <p class="fr-stack">Power Apps / Dataverse / Power Automate</p>
+              <a class="fr-link" href="/par.html">Read the case study</a>
+            </div>
+            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
           </div>
-          <div class="stat" data-stat>
-            <div class="stat__num"><span data-count="40">0</span><span class="stat__suffix">%</span></div>
-            <div class="stat__label">of analyst time spent cleaning, not analyzing</div>
+        </article>
+        <article class="frame">
+          <div class="fr-top"><span><b class="n">event 02</b> / 05</span><span>U.S. Department of Energy, Fermilab Site Office</span></div>
+          <div class="fr-body">
+            <div class="fr-text">
+              <h3>Contractor Performance Dashboards</h3>
+              <p class="fr-sum">Star-schema models in Power BI that unify SQL Server, Oracle and SharePoint Online, giving Site Office leadership one view of contractor performance and oversight status in place of siloed manual reporting.</p>
+              <p class="fr-metric"><b>3 &#8594; 1</b><span>source systems resolved into one governed, query-optimized model.</span></p>
+              <p class="fr-stack">Power BI / DAX / SQL Server / Oracle / SharePoint Online</p>
+            </div>
+            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
           </div>
-          <div class="stat" data-stat>
-            <div class="stat__num"><span data-count="12">0</span><span class="stat__suffix">hrs</span></div>
-            <div class="stat__label">average weekly time on repeatable manual tasks</div>
+        </article>
+        <article class="frame">
+          <div class="fr-top"><span><b class="n">event 03</b> / 05</span><span>Federal oversight</span></div>
+          <div class="fr-body">
+            <div class="fr-text">
+              <h3>Contracting Officer Approvals</h3>
+              <p class="fr-sum">Multi-stage sequential approval flows for recurring contracting-officer workflows, with HTML-formatted Outlook notifications and Teams Adaptive Cards at every stage. Less manual routing, shorter response times.</p>
+              <p class="fr-quote">The decision happens where the request lands.</p>
+              <p class="fr-stack">Power Automate / Adaptive Cards / Teams / Outlook</p>
+            </div>
+            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
           </div>
-        </div>
+        </article>
+        <article class="frame">
+          <div class="fr-top"><span><b class="n">event 04</b> / 05</span><span>General Motors, North Central Region</span></div>
+          <div class="fr-body">
+            <div class="fr-text">
+              <h3>Sales &amp; Inventory BI</h3>
+              <p class="fr-sum">The Power BI and Tableau reporting layer for the region, giving field managers real-time sales and inventory visibility. I was the regional SME for Power BI, Tableau, SQL and Excel.</p>
+              <p class="fr-metric"><b>1,128</b><span>dealerships covered, supporting $50M in sales growth and a 6.1% year-over-year regional improvement.</span></p>
+              <p class="fr-stack">Power BI / Tableau / SQL / Excel</p>
+            </div>
+            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
+          </div>
+        </article>
+        <article class="frame" data-href="/gspro-analytics.html">
+          <div class="fr-top"><span><b class="n">event 05</b> / 05</span><span>Personal project, live now</span></div>
+          <div class="fr-body">
+            <div class="fr-text">
+              <h3>GSPro Shot Analytics</h3>
+              <p class="fr-sum">A full-stack React and Recharts app with club-segmented visualizations, a distance-weighted consistency metric and CSV export. A Cloudflare Worker proxies the Google Sheets API so credentials never reach the client.</p>
+              <p class="fr-stack">React / Recharts / Python / Cloudflare Workers</p>
+              <a class="fr-link" href="/gspro-analytics.html">Read the case study</a>
+              <a class="fr-link" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app</a>
+            </div>
+            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
+          </div>
+        </article>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ============= STORY CHAPTER 2: THE APPROACH ============= -->
-  <section class="chapter chapter--approach" data-chapter="02" id="about">
-    <div class="chapter__sticky">
-      <div class="chapter__num">Chapter 02 — About</div>
-      <div class="approach__grid">
-
-        <div class="approach__intro">
-          <h2 class="approach__heading">
-            I work the seam between <em>business</em> and <em>technology.</em>
-          </h2>
-          <p class="approach__lede">
-            Three disciplines, one job: make the org smarter, faster, and less reliant on tribal knowledge.
-          </p>
-        </div>
-
-        <article class="pillar" data-pillar="1">
-          <div class="pillar__top">
-            <span class="pillar__num">01</span>
-            <span class="pillar__tag">Data Analyst</span>
-          </div>
-          <h3 class="pillar__title">See the numbers clearly.</h3>
-          <p class="pillar__body">
-            SQL, DAX, and Power Query to turn raw transactional sprawl into decisions. I build dashboards that executives actually open on Monday mornings.
-          </p>
-          <ul class="pillar__skills">
-            <li>SQL (T-SQL, Postgres)</li>
-            <li>Power BI / DAX</li>
-            <li>Excel / Power Query</li>
-            <li>Python (pandas)</li>
-            <li>Statistical analysis</li>
-          </ul>
-        </article>
-
-        <article class="pillar" data-pillar="2">
-          <div class="pillar__top">
-            <span class="pillar__num">02</span>
-            <span class="pillar__tag">Business Analyst</span>
-          </div>
-          <h3 class="pillar__title">Translate between worlds.</h3>
-          <p class="pillar__body">
-            Stakeholder interviews, requirements documents, process maps. I'm the person who makes sure what gets built is what was actually needed.
-          </p>
-          <ul class="pillar__skills">
-            <li>Requirements gathering</li>
-            <li>Process mapping (BPMN)</li>
-            <li>User stories &amp; acceptance criteria</li>
-            <li>Agile / Scrum</li>
-            <li>Stakeholder management</li>
-          </ul>
-        </article>
-
-        <article class="pillar" data-pillar="3">
-          <div class="pillar__top">
-            <span class="pillar__num">03</span>
-            <span class="pillar__tag">Power Platform Dev</span>
-          </div>
-          <h3 class="pillar__title">Ship what you imagined.</h3>
-          <p class="pillar__body">
-            Canvas &amp; model-driven Power Apps, Power Automate flows, Dataverse modeling. I close the gap between &ldquo;wouldn't it be nice if&rdquo; and production.
-          </p>
-          <ul class="pillar__skills">
-            <li>Power Apps (Canvas + MDA)</li>
-            <li>Power Automate</li>
-            <li>Dataverse modeling</li>
-            <li>SharePoint integration</li>
-            <li>Power Fx</li>
-          </ul>
-        </article>
-
-      </div>
+<!-- ============= RECORD: career as one track ============= -->
+<section class="record" id="record" aria-labelledby="rec-h">
+  <div class="rec-stage">
+    <div class="rec-head">
+      <h2 class="sec-h" id="rec-h" data-split>Track record.</h2>
+      <p class="sec-p fx">Eighteen years, drawn as one particle track. Every change of role is a vertex: a new track leaves it, and what I learned keeps going.</p>
     </div>
-  </section>
+    <svg class="rec-svg" id="recSvg" role="img" aria-label="Career timeline: eBlaze Services 2008 to 2016, General Motors 2016 to 2018, RER Solutions at Fermilab 2018 to present, BS in Finance from Eastern Illinois University in 2009."></svg>
+  </div>
+</section>
 
-  <!-- ============= STORY CHAPTER 3: THE PROCESS (HORIZONTAL) ============= -->
-  <section class="chapter chapter--process" data-chapter="03">
-    <div class="process__intro">
-      <div class="chapter__num">Chapter 03 — How I work</div>
-      <h2 class="process__heading">
-        From <em>question</em> to <em>shipped.</em>
-      </h2>
-      <p class="process__lede">A repeatable five-step process that keeps stakeholders aligned and deliverables grounded.</p>
+<!-- ============= CONTACT ============= -->
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <svg class="c-spiral" viewBox="-500 -500 1000 1000" aria-hidden="true"><path pathLength="1" d=""/></svg>
+  <div class="c-in">
+    <h2 class="c-title" id="c-h" data-split><span class="w">Leave a</span> <span class="w">track.</span></h2>
+    <p class="c-sub fx">If you have a question hiding in your data, or a process begging to be automated, I want to hear it. Open to Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
+    <div class="c-actions fx">
+      <a class="c-mail" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
+      <p class="c-links"><a href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a><a href="/resume.pdf">Résumé (PDF)</a><a href="https://trwells.com/gspro" target="_blank" rel="noopener">GSPro app</a></p>
     </div>
+  </div>
+  <footer class="c-foot mono"><span>&#169; <span id="year">2026</span> Tom Wells, Chicago, IL</span><span>Tracks are a seeded simulation, not detector data.</span><a href="#top">Back to frame 0001</a></footer>
+</section>
+</main>
 
-    <div class="process__track-wrap">
-      <div class="process__track" id="processTrack">
+<script>
+(()=>{
+'use strict';
+const D=document.documentElement,motion=D.classList.contains('motion');
+const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
+const mul=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const clamp=(v,a=0,b=1)=>v<a?a:v>b?b:v;
+const f1=v=>v.toFixed(1);
+const E={lin:x=>x,out3:x=>1-Math.pow(1-x,3),in3:x=>x*x*x,io3:x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const FROST='#E4EEF2',RED='#FF4A3D';
 
-        <article class="step" data-step="1">
-          <div class="step__num">01</div>
-          <h3 class="step__title">Listen</h3>
-          <p class="step__body">
-            Workshops and interviews to map current state. What's the real question behind the question?
-          </p>
-          <div class="step__visual step__visual--listen">
-            <span></span><span></span><span></span><span></span>
-          </div>
-        </article>
+/* ---------- bubble chamber: seeded 3D track field, camera z follows scroll ---------- */
+function Chamber(cv){
+  const ctx=cv.getContext('2d'),r=mul(1978),EV=[],BM=[],ZMAX=46;
+  const st={camZ:0,cx:0,cy:0,tx:0,ty:0,dim:1,grow:1,mark:true};
+  let W=1,H=1,dpr=1,U=1,dirty=true;
+  const spiral=(x,y,a,q,R,dec,n,step)=>{const p=[x,y];for(let i=0;i<n;i++){a+=q*step/R;R*=dec;if(R<.012)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;p.push(x,y)}return p};
+  const add=(z,x,y,cnt,mk)=>{const e={z,x,y,mk,dx:0,dy:0,tr:[]},a=(r()-.5)*.35;e.tr.push({p:[x-3.6,y-Math.tan(a)*3.6,x,y],w:.9,beam:1,d:0});
+    for(let k=0;k<cnt;k++){const R=.09+Math.pow(r(),1.8)*1.5;e.tr.push({p:spiral(x,y,r()*6.2832,r()<.5?-1:1,R,.984+r()*.012,110+Math.floor(r()*300),.014),w:.5+r()*.8,d:.12+r()*.45,red:mk&&k===1})}
+    EV.push(e)};
+  add(1.8,.5,.05,5,true);
+  for(let i=0;i<54;i++)add(2.4+i*((ZMAX-2.4)/54)+r()*.5,(r()*2-1)*1.5,(r()*2-1)*.85,2+Math.floor(r()*4),false);
+  for(let i=0;i<46;i++){const z=.9+r()*ZMAX,y=(r()*2-1)*.95,c=(r()-.5)*.06,p=[];for(let x=-3.6;x<=3.61;x+=.12)p.push(x,y+c*x*x);BM.push({z,tr:{p,w:.55,beam:1,d:0}})}
+  function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=window.innerWidth;H=window.innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);U=Math.max(W,H)*.5;const pt=W<H;EV[0].dx=pt?-.2:0;EV[0].dy=pt?-.62:0;dirty=true}
+  function vis(z){const d=z-st.camZ;if(d<.28||d>13)return null;return {s:1/d,a:clamp((13-d)/6)*clamp((d-.28)/.55)*st.dim}}
+  function line(tr,s,a,col,frac,dx=0,dy=0){const p=tr.p,n=p.length>>1,m=Math.max(2,Math.round(n*frac)),ox=W*.5,oy=H*.5;
+    ctx.beginPath();for(let j=0;j<m;j++){const X=ox+(p[2*j]+dx-st.cx)*s*U,Y=oy+(p[2*j+1]+dy-st.cy)*s*U;j?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}
+    ctx.globalAlpha=a;ctx.strokeStyle=col;ctx.lineWidth=clamp(tr.w*s*1.15,.45,2.6);ctx.setLineDash(tr.beam?[]:[Math.max(.5,1.3*s),Math.max(1.4,2.8*s)]);ctx.stroke()}
+  function draw(){dirty=false;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.lineCap='round';ctx.lineJoin='round';
+    for(const b of BM){const v=vis(b.z);if(v)line(b.tr,v.s,v.a*.26,FROST,1)}
+    for(const e of EV){const v=vis(e.z);if(!v)continue;
+      for(const t of e.tr){const f=clamp(st.grow*1.8-t.d);if(f<=0)continue;line(t,v.s,v.a*(t.beam?.42:.8),t.red?RED:FROST,f,e.dx,e.dy)}
+      if(e.mk&&st.mark&&st.grow>.5){const k=clamp((st.grow-.5)/.4),X=W*.5+(e.x+e.dx-st.cx)*v.s*U,Y=H*.5+(e.y+e.dy-st.cy)*v.s*U,rr=.085*v.s*U;
+        ctx.setLineDash([]);ctx.globalAlpha=v.a*k;ctx.strokeStyle=RED;ctx.lineWidth=1.5;ctx.beginPath();
+        for(let j=0;j<=72;j++){const t=j/72*6.9*k,w=1+.07*Math.sin(t*3.3),px=X+Math.cos(t+.5)*rr*1.3*w,py=Y+Math.sin(t+.5)*rr*w;j?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke();
+        ctx.font='500 11px "Martian Mono", ui-monospace, monospace';ctx.fillStyle=RED;ctx.fillText('ev. 01',X+rr*1.35+6,Y-rr*.85)}}
+    ctx.globalAlpha=1}
+  function tick(){const dx=st.tx-st.cx,dy=st.ty-st.cy;if(Math.abs(dx)>1e-4||Math.abs(dy)>1e-4){st.cx+=dx*.07;st.cy+=dy*.07;dirty=true}if(dirty)draw()}
+  resize();
+  return {st,resize,draw,tick,touch:()=>{dirty=true},ZMAX};
+}
 
-        <article class="step" data-step="2">
-          <div class="step__num">02</div>
-          <h3 class="step__title">Frame</h3>
-          <p class="step__body">
-            Define success metrics, scope, and constraints. Document requirements so nothing gets &ldquo;reinterpreted&rdquo; later.
-          </p>
-          <div class="step__visual step__visual--frame">
-            <div></div><div></div><div></div>
-          </div>
-        </article>
+/* ---------- per-frame event glyphs ---------- */
+function glyphs(){$$('.fr-glyph').forEach((svg,i)=>{const r=mul(300+i*17);let o='';
+  const sp=(x,y,a,q,R,dec,n,step)=>{let d='M'+f1(x)+' '+f1(y);for(let k=0;k<n;k++){a+=q*step/R;R*=dec;if(R<1.5)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;d+='L'+f1(x)+' '+f1(y)}return d};
+  const vx=150+(r()-.5)*40,vy=150+(r()-.5)*40;
+  o+=`<path class="gb" d="M-10 ${f1(vy+(r()-.5)*30)} L${f1(vx)} ${f1(vy)}"/>`;
+  for(let k=0;k<5;k++)o+=`<path class="gt${k===1?' red':''}" d="${sp(vx,vy,r()*6.28,r()<.5?-1:1,18+Math.pow(r(),1.5)*90,.975+r()*.015,160+Math.floor(r()*160),2.2)}"/>`;
+  o+=`<circle class="gv" cx="${f1(vx)}" cy="${f1(vy)}" r="4"/>`;
+  [[18,18],[282,18],[18,282],[282,282]].forEach(([x,y])=>{o+=`<path class="gf" d="M${x-6} ${y}H${x+6}M${x} ${y-6}V${y+6}"/>`});
+  svg.innerHTML=o})}
 
-        <article class="step" data-step="3">
-          <div class="step__num">03</div>
-          <h3 class="step__title">Model</h3>
-          <p class="step__body">
-            Build the data model, transformations, and logic. Star schemas, clean DAX, normalized Dataverse tables.
-          </p>
-          <div class="step__visual step__visual--model">
-            <svg viewBox="0 0 200 120" preserveAspectRatio="none">
-              <circle cx="100" cy="60" r="14"></circle>
-              <circle cx="30" cy="30" r="10"></circle>
-              <circle cx="170" cy="30" r="10"></circle>
-              <circle cx="30" cy="90" r="10"></circle>
-              <circle cx="170" cy="90" r="10"></circle>
-              <line x1="100" y1="60" x2="30" y2="30"></line>
-              <line x1="100" y1="60" x2="170" y2="30"></line>
-              <line x1="100" y1="60" x2="30" y2="90"></line>
-              <line x1="100" y1="60" x2="170" y2="90"></line>
-            </svg>
-          </div>
-        </article>
+/* ---------- exploded stack (isometric projection) ---------- */
+function Stack(svg){
+  const L=[{n:'Sources',t:['SQL Server, Oracle,','SharePoint Online'],g:'db'},{n:'Model',t:['Star schema, DAX,','Dataverse'],g:'star'},{n:'Logic',t:['Power Automate,','Adaptive Cards'],g:'flow'},{n:'Surface',t:['Power Apps, canvas','and model-driven'],g:'app'},{n:'Insight',t:['Power BI, Tableau'],g:'bars'}];
+  function render(e,act,lab){
+    const ang=(45-9*e)*Math.PI/180,c=Math.cos(ang),s=Math.sin(ang),h=128,fz=.55,gap=14+104*e,cx=350,cy=560+2*gap;
+    const P=(x,y,z)=>[cx+(x*c-y*s)*h,cy+(x*s+y*c)*h*fz-z];
+    const pl=a=>a.map(p=>f1(p[0])+','+f1(p[1])).join(' ');
+    const seg=(a,b)=>'<path d="M'+f1(a[0])+' '+f1(a[1])+'L'+f1(b[0])+' '+f1(b[1])+'"/>';
+    const circ=(x0,y0,rr,z)=>{const a=[];for(let k=0;k<24;k++){const t=k/24*6.2832;a.push(P(x0+Math.cos(t)*rr,y0+Math.sin(t)*rr,z))}return a};
+    const sq=(x0,y0,d,z)=>[[-d,-d],[d,-d],[d,d],[-d,d]].map(q=>P(x0+q[0],y0+q[1],z));
+    let o='';const rc=[];
+    for(let i=0;i<5;i++){const z=(4-i)*gap,on=i===act?' on':'',cr=[P(-1,-1,z),P(1,-1,z),P(1,1,z),P(-1,1,z)];let g='';
+      o+='<g class="lay" data-i="'+i+'" tabindex="0" role="button" aria-label="Show the '+L[i].n+' layer"><polygon class="pl'+on+'" points="'+pl(cr)+'"/>';
+      const k=L[i].g;
+      if(k==='db')[[-.52,.1],[.05,-.42],[.45,.38]].forEach(q=>{const b=circ(q[0],q[1],.2,z),t=circ(q[0],q[1],.2,z+18);g+='<polygon points="'+pl(b)+'"/><polygon points="'+pl(t)+'"/>'});
+      if(k==='star'){g+='<polygon points="'+pl(sq(0,0,.16,z))+'"/>';[[.72,0],[-.72,0],[0,.72],[0,-.72]].forEach(q=>{g+=seg(P(q[0]*.24,q[1]*.24,z),P(q[0],q[1],z))+'<polygon points="'+pl(sq(q[0],q[1],.1,z))+'"/>'})}
+      if(k==='flow'){const nd=[[-.62,-.45],[0,0],[.62,.45]];g+='<polyline points="'+pl(nd.map(q=>P(q[0],q[1],z)))+'"/>';nd.forEach(q=>{g+='<polygon points="'+pl(sq(q[0],q[1],.1,z))+'"/>'})}
+      if(k==='app'){g+='<polygon points="'+pl([P(-.42,-.7,z),P(.42,-.7,z),P(.42,.7,z),P(-.42,.7,z)])+'"/>';[-.4,-.15,.1,.35].forEach(yy=>{g+=seg(P(-.28,yy,z),P(.28,yy,z))})}
+      if(k==='bars')[-.6,-.3,0,.3,.6].forEach((xx,j)=>{const hh=[34,58,44,78,62][j]*(.3+.7*e),a=P(xx,.1,z),b=P(xx,.1,z-hh);g+='<path class="bar" d="M'+f1(a[0])+' '+f1(a[1])+'L'+f1(b[0])+' '+f1(b[1])+'"/>'});
+      o+='<g class="gl'+on+'">'+g+'</g></g>';rc.push(cr[1]);
+    }
+    for(let i=0;i<5;i++){const p=rc[i],lx=690;
+      o+='<g class="lab'+(i===act?' on':'')+'" data-i="'+i+'" tabindex="0" role="button" aria-label="Show the '+L[i].n+' layer" opacity="'+lab.toFixed(3)+'"><rect x="'+f1(p[0])+'" y="'+f1(p[1]-30)+'" width="'+f1(1000-p[0])+'" height="62" fill="transparent" pointer-events="all"/><path d="M'+f1(p[0]+8)+' '+f1(p[1])+'H'+(lx-14)+'"/><circle cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="3.4"/><text class="ln" x="'+lx+'" y="'+f1(p[1]-9)+'">'+L[i].n+'</text>';
+      L[i].t.forEach((t,j)=>{o+='<text class="lt" x="'+lx+'" y="'+f1(p[1]+22+j*21)+'">'+t+'</text>'});o+='</g>'}
+    svg.innerHTML=o}
+  return {render};
+}
 
-        <article class="step" data-step="4">
-          <div class="step__num">04</div>
-          <h3 class="step__title">Build</h3>
-          <p class="step__body">
-            Power BI reports, Power Apps screens, Power Automate flows. Iterate with stakeholders weekly.
-          </p>
-          <div class="step__visual step__visual--build">
-            <div class="bar" style="--h: 40%"></div>
-            <div class="bar" style="--h: 70%"></div>
-            <div class="bar" style="--h: 55%"></div>
-            <div class="bar" style="--h: 90%"></div>
-            <div class="bar" style="--h: 65%"></div>
-          </div>
-        </article>
+/* ---------- career as one particle track ---------- */
+const STEPS=[['.axis,.tick,.yr','op',0,.06,.04],['.s1','dash',.06,.36],['.lb.l1','op',.1,.05],['.vx3','op',.105,.02],['.vx0','op',.115,.02],['.e1','dash',.12,.08],['.lb.l0','op',.14,.05],['.vx1','op',.42,.02],['.v1','dash',.42,.08],['.s2','dash',.43,.1],['.lb.l2','op',.45,.05],['.vx2','op',.53,.02],['.v2','dash',.53,.07,0,.02],['.s3','dash',.54,.32],['.lb.l3','op',.58,.05],['.vx4','op',.585,.02],['.head','op',.86,.04],['.lb.l4','op',.87,.05],['.fut','op',.9,.04]];
+function Record(svg){
+  let vert=null,items=[];
+  const U=t=>(t-2008)/18.71;
+  const bez=(a,c,b,t)=>{const m=1-t;return [m*m*a[0]+2*m*t*c[0]+t*t*b[0],m*m*a[1]+2*m*t*c[1]+t*t*b[1]]};
+  const wrap=(s,n)=>{const L=[];let cur='';s.split(' ').forEach(x=>{if(cur&&(cur+' '+x).length>n){L.push(cur);cur=x}else cur=(cur?cur+' ':'')+x});if(cur)L.push(cur);return L};
+  const P2=p=>f1(p[0])+' '+f1(p[1]);
+  function build(){
+    vert=svg.parentNode.clientWidth<700;svg.classList.toggle('vert',vert);
+    const VW=vert?700:1600,VH=vert?1520:760;svg.setAttribute('viewBox','0 0 '+VW+' '+VH);
+    const M=vert?(u,v)=>[250+v*.9,140+u*1200]:(u,v)=>[110+u*1340,380+v];
+    const uA=U(2016.95),uB=U(2018.87),uE=U(2009.37);
+    const A0=M(0,100),Ac=M(.24,122),A1=M(uA,30),Bc=M(.53,8),B1=M(uB,-28),Cc=M(.8,-58),C1=M(1,-70),F1=M(1.04,-78);
+    let o='';
+    o+=vert?'<path class="axis" d="M70 140V1340"/>':'<path class="axis" d="M110 690H1450"/>';
+    for(let y=2008;y<=2026;y++){const u=U(y),big=y%2===0;
+      if(vert){const yy=140+u*1200;o+='<path class="tick" d="M'+(70-(big?12:6))+' '+f1(yy)+'H70"/>';if(big)o+='<text class="yr" x="52" y="'+f1(yy+6)+'" text-anchor="end">'+y+'</text>'}
+      else{const xx=110+u*1340;o+='<path class="tick" d="M'+f1(xx)+' 690V'+(690+(big?12:6))+'"/>';if(big)o+='<text class="yr" x="'+f1(xx)+'" y="726" text-anchor="middle">'+y+'</text>'}}
+    const sp=(x,y,a,q,R,dec,n,step)=>{let d='M'+f1(x)+' '+f1(y);for(let i=0;i<n;i++){a+=q*step/R;R*=dec;if(R<2)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;d+='L'+f1(x)+' '+f1(y)}return d};
+    const E0=bez(A0,Ac,A1,uE/uA),m1=bez(A0,Ac,A1,.52),m3=bez(B1,Cc,C1,.3);
+    const down=vert?0:Math.PI/2,up=vert?Math.PI:-Math.PI/2;
+    o+='<path class="trk s1" pathLength="1" d="M'+P2(A0)+'Q'+P2(Ac)+' '+P2(A1)+'"/>';
+    o+='<path class="trk s2" pathLength="1" d="M'+P2(A1)+'Q'+P2(Bc)+' '+P2(B1)+'"/>';
+    o+='<path class="trk s3" pathLength="1" d="M'+P2(B1)+'Q'+P2(Cc)+' '+P2(C1)+'"/>';
+    o+='<path class="fut" d="M'+P2(C1)+'L'+P2(F1)+'"/>';
+    o+='<path class="sec e1" pathLength="1" d="'+sp(E0[0],E0[1],up+.5,1,62,.975,110,3)+'"/>';
+    o+='<path class="sec v1" pathLength="1" d="'+sp(A1[0],A1[1],down+.25,-1,80,.978,150,3)+'"/>';
+    o+='<path class="sec v2" pathLength="1" d="'+sp(B1[0],B1[1],down-.35,1,74,.976,140,3)+'"/>';
+    o+='<path class="sec v2" pathLength="1" d="'+sp(B1[0],B1[1],up+.9,-1,110,.985,80,3)+'"/>';
+    [E0,A1,B1,m1,m3].forEach((p,k)=>{o+='<circle class="vx vx'+k+'" cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="6"/>'});
+    o+='<g class="head"><circle cx="'+f1(C1[0])+'" cy="'+f1(C1[1])+'" r="8"/><circle class="pulse" cx="'+f1(C1[0])+'" cy="'+f1(C1[1])+'" r="8"/></g>';
+    const T=vert?17:34,Mn=vert?21:40,tH=vert?36:34,mH=vert?28:24;
+    const label=(cls,x,y,anchor,rows,lead)=>{let s='<g class="lb '+cls+'">',yy=y;
+      rows.forEach(rw=>{const isT=rw[0]==='t';wrap(rw[1],isT?T:Mn).forEach(line=>{s+='<text class="'+(isT?'lt':'lm')+'" x="'+f1(x)+'" y="'+f1(yy)+'"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+line+'</text>';yy+=isT?tH:mH});yy+=6});
+      if(lead)s+='<path class="ld" d="M'+f1(lead[0])+' '+f1(lead[1])+'L'+f1(lead[2])+' '+f1(lead[3])+'"/>';
+      return s+'</g>'};
+    if(!vert){
+      const t1=m1,tC=m3;
+      o+=label('l0',110,540,'',[['m','May 2009'],['m','BS in Finance,'],['m','Eastern Illinois University']],[E0[0],E0[1]+10,E0[0],522]);
+      o+=label('l1',t1[0],540,'',[['m','Jan 2008 – Dec 2016'],['t','Partner, Data Solutions & Business Development'],['m','eBlaze Services, Chicago']],[t1[0],t1[1]+12,t1[0],522]);
+      o+=label('l2',560,170,'',[['m','Dec 2016 – Nov 2018'],['t','Business & Data Analyst'],['m','General Motors, North Central Region']],[A1[0],262,A1[0],A1[1]-14]);
+      o+=label('l3',tC[0],540,'',[['m','Nov 2018 – present'],['t','Program Management Analyst'],['m','RER Solutions at Fermilab, for the DOE Fermilab Site Office']],[tC[0],tC[1]+12,tC[0],522]);
+      o+=label('l4',C1[0]+4,170,'end',[['m','now'],['t','Fabric and Purview'],['m','certifications in progress']],[C1[0],262,C1[0],C1[1]-16]);
+    }else{
+      o+=label('l1',380,190,'',[['m','Jan 2008 – Dec 2016'],['t','Partner, Data Solutions & Business Development'],['m','eBlaze Services, Chicago']]);
+      o+=label('l0',92,330,'',[['m','May 2009'],['m','BS in Finance,'],['m','Eastern Illinois'],['m','University']]);
+      o+=label('l2',380,700,'',[['m','Dec 2016 – Nov 2018'],['t','Business & Data Analyst'],['m','General Motors, North Central Region']]);
+      o+=label('l3',380,920,'',[['m','Nov 2018 – present'],['t','Program Management Analyst'],['m','RER Solutions at Fermilab, for the DOE Fermilab Site Office']]);
+      o+=label('l4',380,1250,'',[['m','now'],['t','Fabric and Purview'],['m','certifications in progress']]);
+    }
+    svg.innerHTML=o;
+    items=STEPS.map(s=>({els:[...svg.querySelectorAll(s[0])],k:s[1],t:s[2],d:s[3],sa:s[4]||0,se:s[5]||0}));
+  }
+  function apply(p){for(const it of items){const n=it.els.length;for(let i=0;i<n;i++){const off=it.sa?i*it.sa/Math.max(1,n-1):i*it.se,l=clamp((p-it.t-off)/it.d),el=it.els[i];if(it.k==='dash')el.style.strokeDashoffset=(1-l).toFixed(4);else el.style.opacity=l.toFixed(3)}}}
+  return {build,apply,isVert:()=>vert};
+}
 
-        <article class="step" data-step="5">
-          <div class="step__num">05</div>
-          <h3 class="step__title">Hand off</h3>
-          <p class="step__body">
-            Documentation, training, and a clean transition. Solutions that don't require me to keep them alive.
-          </p>
-          <div class="step__visual step__visual--handoff">
-            <span class="check">✓</span>
-          </div>
-        </article>
+function spiralPath(){const p=$('.c-spiral path');if(!p)return;let d='M460 -520L460 0';for(let t=0;t<=31.4;t+=.07){const rr=460*Math.exp(-.122*t);d+='L'+f1(Math.cos(t)*rr)+' '+f1(Math.sin(t)*rr)}p.setAttribute('d',d)}
 
-      </div>
-    </div>
-  </section>
+/* headings: wrap words and characters so each can expand in turn */
+function split(el){
+  const label=el.textContent.replace(/\s+/g,' ').trim();let i=0;
+  const walk=node=>{[...node.childNodes].forEach(n=>{
+    if(n.nodeType===3){const frag=document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(tok=>{if(!tok)return;if(/^\s+$/.test(tok)){frag.appendChild(document.createTextNode(' '));return}
+        const w=document.createElement('span');w.className='wd';
+        for(const c of tok){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.setProperty('--i',i++);w.appendChild(s)}
+        frag.appendChild(w)});
+      n.replaceWith(frag)}
+    else if(n.nodeType===1)walk(n)})};
+  walk(el);el.classList.add('split');el.setAttribute('aria-label',label);
+  [...el.children].forEach(c=>c.setAttribute('aria-hidden','true'));
+}
 
-  <!-- ============= STORY CHAPTER 4: PORTFOLIO ============= -->
-  <section class="chapter chapter--work" id="portfolio" data-chapter="04">
-    <div class="work__head">
-      <div class="chapter__num">Chapter 04 — Selected work</div>
-      <h2 class="work__heading">
-        Things I've <em>built</em>, <em>shipped</em>, and <em>handed off.</em>
-      </h2>
-    </div>
+/* ---------- boot ---------- */
+const ch=Chamber($('#chamber'));
+glyphs();
+const stack=Stack($('#stackSvg'));stack.render(1,-1,1);
+const rec=Record($('#recSvg'));rec.build();
+spiralPath();
+const yr=$('#year');if(yr)yr.textContent=String(new Date().getFullYear());
+let lastW=window.innerWidth;
 
-    <div class="work__grid">
+if(!motion){
+  ch.st.dim=.6;ch.st.mark=false;ch.draw();
+  window.addEventListener('resize',()=>{ch.resize();ch.draw();if(Math.abs(window.innerWidth-lastW)>40){lastW=window.innerWidth;rec.build()}});
+  return;
+}
 
-      <!-- PROJECT 1: PAR+ — hero card (full-width) -->
-      <a href="/par.html" class="project project--lg" data-project>
-        <div class="project__media">
-          <div class="project__viz project__viz--app">
-            <div class="app__topbar">
-              <span class="app__topbar-label">PAR+ · DOE Fermilab Site Office</span>
-              <span class="app__topbar-dot"></span>
-            </div>
-            <div class="app__form-row">
-              <div class="app__form-field app__form-field--wide">
-                <div class="app__form-label">Inspection Type</div>
-                <div class="app__form-value">Safety Walkthrough — Q3</div>
-              </div>
-              <div class="app__form-field">
-                <div class="app__form-label">Status</div>
-                <div class="app__form-value app__form-value--good">Complete</div>
-              </div>
-            </div>
-            <div class="app__form-row">
-              <div class="app__form-field app__form-field--wide">
-                <div class="app__form-label">Findings</div>
-                <div class="app__form-check"><span>✓</span> Corrective action logged</div>
-                <div class="app__form-check"><span>✓</span> Photo evidence attached</div>
-                <div class="app__form-check"><span>✓</span> Responsible party notified</div>
-              </div>
-            </div>
-            <div class="app__stat-row">
-              <div class="app__stat"><div class="app__stat-num">282<span>%</span></div><div class="app__stat-lbl">more oversight data captured</div></div>
-              <div class="app__stat"><div class="app__stat-num">0</div><div class="app__stat-lbl">paper forms remaining</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="project__meta">
-          <div class="project__tags">
-            <span>Power Apps</span><span>Dataverse</span><span>Power Automate</span><span>DOE</span>
-          </div>
-          <h3 class="project__title">PAR+ — Federal Safety Inspection App</h3>
-          <p class="project__desc">Built for the U.S. Department of Energy Fermilab Site Office. Designed and developed a Canvas Power App for conducting and recording contractor safety inspections — increasing captured oversight data by 282%. Prototyped UI layouts in HTML to validate with end users before building in Power Apps Studio, cutting rework and post-release change requests.</p>
-          <div class="project__cta">View case study <span>→</span></div>
-        </div>
-      </a>
+/* reveals */
+$$('[data-split]').forEach(split);
+const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}},{rootMargin:'0px 0px -12% 0px'});
+$$('[data-split],.fx').forEach(el=>{if(!el.closest('.hero'))io.observe(el)});
 
-      <!-- PROJECT 2: DOE Power BI Dashboards -->
-      <a href="#" class="project" data-project>
-        <div class="project__media">
-          <div class="project__viz project__viz--bi">
-            <div class="viz__header"><span></span><span></span><span></span></div>
-            <div class="viz__kpis">
-              <div class="viz__kpi"><div class="viz__kpi-num">100%</div><div class="viz__kpi-label">Oversight coverage</div></div>
-              <div class="viz__kpi"><div class="viz__kpi-num">3 src</div><div class="viz__kpi-label">SQL · Oracle · SPO</div></div>
-              <div class="viz__kpi"><div class="viz__kpi-num">★ DAX</div><div class="viz__kpi-label">Star schema model</div></div>
-            </div>
-            <div class="viz__chart">
-              <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-                <polyline points="0,70 40,60 80,65 110,40 150,45 180,28 220,32 260,14 300,18"></polyline>
-                <polyline class="dim" points="0,88 40,82 80,85 110,72 150,75 180,64 220,68 260,55 300,58"></polyline>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="project__meta">
-          <div class="project__tags"><span>Power BI</span><span>DAX</span><span>SQL Server</span><span>Oracle</span></div>
-          <h3 class="project__title">DOE Contractor Performance Dashboards</h3>
-          <p class="project__desc">Star-schema data models unifying SQL Server, Oracle, and SharePoint Online sources in Power BI. Gave Site Office leadership a single view of contractor performance and oversight status — replacing siloed manual reporting with governed, query-optimized datasets.</p>
-          <div class="project__cta">View case study <span>→</span></div>
-        </div>
-      </a>
+/* scroll engine: every scene reads a 0..1 progress, eased toward its target each frame */
+const R={hero:$('.hero'),stack:$('.stack'),events:$('.events'),fly:$('.fly'),rec:$('.record'),recSvg:$('#recSvg'),contact:$('.contact')};
+const heroIn=$('.hero-in'),hFoot=$('.h-foot'),spiral=$('.c-spiral path'),fc=$('.fc b'),caps=$$('.cap'),frames=$$('.frame'),side=[-1,1,-1,1,-1];
+const M={},T={},V={},P={},KEYS=['hero','stack','fly','rec','spiral','global','dim'];
+let DZ=900,CK=[],CT=1,recVert=rec.isVert(),lastA=-2;
 
-      <!-- PROJECT 3: Multi-stage Approval Automation -->
-      <a href="#" class="project" data-project>
-        <div class="project__media">
-          <div class="project__viz project__viz--flow">
-            <div class="flow__node flow__node--trigger">
-              <span class="flow__node-label">Trigger</span>
-            </div>
-            <div class="flow__line flow__line--animated"></div>
-            <div class="flow__node flow__node--mid">
-              <span class="flow__node-label">Approve</span>
-            </div>
-            <div class="flow__line flow__line--animated"></div>
-            <div class="flow__node flow__node--done">
-              <span class="flow__node-label">Complete</span>
-            </div>
-          </div>
-        </div>
-        <div class="project__meta">
-          <div class="project__tags"><span>Power Automate</span><span>Adaptive Cards</span><span>Teams</span><span>Outlook</span></div>
-          <h3 class="project__title">Contracting Officer Approval Automation</h3>
-          <p class="project__desc">Multi-stage sequential approval flows for recurring contracting-officer workflows. HTML-formatted Outlook notifications and Teams Adaptive Cards built into every stage — cutting manual routing effort and shortening response times across the federal oversight team.</p>
-          <div class="project__cta">View case study <span>→</span></div>
-        </div>
-      </a>
+function buildCam(){const n=frames.length;CK=[];let t=0,z=-1.3*DZ;const seg=(dur,z1,e)=>{CK.push({t0:t,t1:t+dur,z0:z,z1,e});t+=dur;z=z1};
+  seg(1,0,E.out3);for(let i=0;i<n;i++){seg(1.1,i*DZ+90,E.lin);if(i<n-1)seg(1,(i+1)*DZ,E.io3)}seg(.9,(n-1)*DZ+640,E.in3);CT=t}
+function camZ(p){const t=p*CT;for(const s of CK)if(t<=s.t1)return s.z0+(s.z1-s.z0)*s.e(clamp((t-s.t0)/(s.t1-s.t0)));return CK[CK.length-1].z1}
+function measure(){M.vh=window.innerHeight;M.vw=window.innerWidth;M.docH=D.scrollHeight;const y=window.scrollY;
+  for(const k in R){const r=R[k].getBoundingClientRect();M[k]={t:r.top+y,h:R[k].offsetHeight||r.height}}
+  DZ=Math.max(900,M.vw*.8);buildCam();recVert=rec.isVert()}
+function targets(y){
+  T.hero=clamp((y-M.hero.t)/M.hero.h);
+  T.stack=clamp((y-M.stack.t)/Math.max(1,M.stack.h-M.vh));
+  T.fly=clamp((y-M.fly.t)/Math.max(1,M.fly.h-M.vh));
+  T.rec=recVert?clamp((y+.72*M.vh-M.recSvg.t)/Math.max(1,M.recSvg.h)):clamp((y-M.rec.t)/Math.max(1,M.rec.h-M.vh));
+  T.spiral=clamp((y+M.vh-M.contact.t)/(.9*M.vh));
+  T.global=clamp(y/Math.max(1,M.docH-M.vh));
+  const c=y+M.vh/2;T.dim=c<M.stack.t?1:c<M.events.t?.42:c<M.rec.t?.5:c<M.contact.t?.38:.9;
+}
+let userAct=null,pickP=0;
+function renderStack(p,force){const e=E.io3(clamp((p-.03)/.27)),lab=clamp((e-.55)/.45);
+  if(userAct!==null&&Math.abs(p-pickP)>.012)userAct=null;
+  const a=userAct!==null?userAct:(p>=.34&&p<.95?Math.min(4,Math.floor((p-.34)/.12)):-1);
+  stack.render(e,a,lab);if(a!==lastA||force){lastA=a;caps.forEach((c,i)=>c.classList.toggle('on',i===a+1))}}
+function pickLayer(i){userAct=i;pickP=V.stack;lastA=-2;renderStack(V.stack,true)}
+function applyCam(z){const vw=M.vw/100;frames.forEach((f,i)=>{const rel=z-i*DZ,op=clamp((rel+2.4*DZ)/(1.1*DZ))*clamp(1-(rel-40)/190);
+  if(op<.004){if(f._v!==0){f.style.visibility='hidden';f._v=0}return}
+  let x,ry;if(rel<=0){const k=clamp(-rel/DZ,0,1.6);x=side[i]*14*vw*k;ry=side[i]*-9*k}else{const k=rel/600;x=-side[i]*26*vw*k;ry=side[i]*10*k}
+  f._v=1;f.style.visibility='visible';f.style.opacity=op.toFixed(3);f.style.transform='translate3d('+f1(x)+'px,0,'+f1(rel)+'px) rotateY('+ry.toFixed(2)+'deg)';f.style.pointerEvents=(op>.25&&rel<150)?'auto':'none'})}
+frames.forEach(f=>{const href=f.dataset.href;if(!href)return;
+  f.addEventListener('click',ev=>{if(ev.target.closest('a'))return;window.location.href=href})});
+function apply(force){
+  if(force||V.hero!==P.hero){heroIn.style.transform='translate3d(0,'+f1(-.14*M.vh*V.hero)+'px,0)';heroIn.style.opacity=(1-V.hero).toFixed(3);hFoot.style.opacity=clamp(1-V.hero/.3).toFixed(3)}
+  if(force||V.stack!==P.stack)renderStack(V.stack);
+  if(force||V.fly!==P.fly)applyCam(camZ(V.fly));
+  if(force||V.rec!==P.rec)rec.apply(V.rec);
+  if(force||V.spiral!==P.spiral)spiral.style.strokeDashoffset=(1-V.spiral).toFixed(4);
+  if(force||V.global!==P.global||V.dim!==P.dim){ch.st.camZ=V.global*(ch.ZMAX-3);ch.st.dim=V.dim;ch.touch();
+    const fr=String(1+Math.round(V.global*411)).padStart(4,'0');if(fc&&fc.textContent!==fr)fc.textContent=fr}
+  for(const k of KEYS)P[k]=V[k];
+}
+let last=performance.now(),lastY=NaN,force=true;
+function loop(now){
+  const dt=Math.min(.05,Math.max(.001,(now-last)/1000));last=now;
+  const y=window.scrollY;if(y!==lastY){lastY=y;targets(y)}
+  const k=1-Math.exp(-dt/.13),kd=1-Math.exp(-dt/.45);
+  for(const key of KEYS){const d=T[key]-V[key];if(d)V[key]=Math.abs(d)<1e-4?T[key]:V[key]+d*(key==='dim'?kd:k)}
+  apply(force);force=false;ch.tick();
+  requestAnimationFrame(loop);
+}
+function remeasure(){measure();lastY=NaN;force=true}
 
-      <!-- PROJECT 4: GM Dealership BI — wide card -->
-      <a href="#" class="project project--wide" data-project>
-        <div class="project__media">
-          <div class="project__viz project__viz--bi project__viz--gm">
-            <div class="viz__header"><span></span><span></span><span></span></div>
-            <div class="viz__kpis">
-              <div class="viz__kpi"><div class="viz__kpi-num">1,128</div><div class="viz__kpi-label">Dealerships</div></div>
-              <div class="viz__kpi"><div class="viz__kpi-num">$50M</div><div class="viz__kpi-label">Sales growth supported</div></div>
-              <div class="viz__kpi"><div class="viz__kpi-num">+6.1%</div><div class="viz__kpi-label">YoY regional growth</div></div>
-            </div>
-            <div class="viz__chart">
-              <svg viewBox="0 0 300 100" preserveAspectRatio="none">
-                <polyline points="0,88 25,80 50,83 75,68 100,72 125,55 150,58 175,44 200,48 225,30 250,34 275,20 300,22"></polyline>
-                <polyline class="dim" points="0,95 25,91 50,93 75,82 100,85 125,76 150,78 175,68 200,71 225,58 250,62 275,50 300,52"></polyline>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="project__meta">
-          <div class="project__tags"><span>Power BI</span><span>Tableau</span><span>SQL</span><span>Excel</span><span>General Motors</span></div>
-          <h3 class="project__title">GM North Central Region — Sales &amp; Inventory BI Layer</h3>
-          <p class="project__desc">Built and maintained the full Power BI and Tableau reporting layer for GM's North Central Region across 1,128 dealerships, giving field managers real-time sales and inventory visibility. Regional forecasting models surfaced performance gaps early enough for field teams to act — supporting $50M in sales growth and 6.1% YoY improvement. Served as regional SME for Power BI, Tableau, SQL, and Excel, training field teams and mentoring junior analysts across North America.</p>
-          <div class="project__cta">View case study <span>→</span></div>
-        </div>
-      </a>
+measure();targets(window.scrollY);for(const k of KEYS)V[k]=T[k];
+ch.st.grow=0;apply(true);requestAnimationFrame(loop);
 
-      <!-- PROJECT 5: GSPro Shot Analytics — live project with iframe preview -->
-      <a href="https://trwells.com/gspro" target="_blank" rel="noopener" class="project project--lg" data-project>
-        <div class="project__media project__media--iframe">
-          <iframe
-            class="project__iframe"
-            src="https://trwells.com/gspro"
-            title="GSPro Shot Analytics Dashboard — live preview"
-            loading="lazy"
-            scrolling="no"
-            tabindex="-1"
-            aria-hidden="true"
-          ></iframe>
-          <div class="project__iframe-overlay" aria-hidden="true">
-            <span class="project__iframe-label">Live preview · trwells.com/gspro</span>
-          </div>
-        </div>
-        <div class="project__meta">
-          <div class="project__tags">
-            <span>React</span><span>Recharts</span><span>Python</span><span>Cloudflare Workers</span><span>Google Sheets API</span>
-          </div>
-          <h3 class="project__title">GSPro Shot Analytics Dashboard
-            <span class="project__live-badge">Live ↗</span>
-          </h3>
-          <p class="project__desc">Full-stack golf shot analytics app built in React and Recharts — club-segmented visualizations, a custom distance-weighted consistency metric, a paginated shot feed, and CSV export. A Cloudflare Worker serves as a server-side API proxy so Google Sheets credentials never reach the client. Python pipelines collect and normalize data against third-party APIs on a schedule, with retry/resume logic and structured logging.</p>
-          <div class="project__cta">Visit trwells.com <span>→</span></div>
-        </div>
-      </a>
+/* page-load sequence: tracks grow in, then the headline widens */
+function intro(){if(D.classList.contains('ready'))return;D.classList.add('ready');D.classList.remove('pre');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{$('.h-title').classList.add('in');$('.h-sub').classList.add('in')}));
+  const g0=performance.now();(function g(now){const x=clamp((now-g0-150)/3200);ch.st.grow=E.out3(x);ch.touch();if(x<1)requestAnimationFrame(g)})(g0)}
+Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(r=>setTimeout(r,2500))]).then(()=>{remeasure();intro()});
 
-    </div>
-  </section>
-
-  <!-- ============= STORY CHAPTER 5: CONTACT / CTA ============= -->
-  <section class="chapter chapter--contact" id="contact" data-chapter="05">
-    <div class="contact__inner">
-      <div class="chapter__num">Chapter 05 — Let's talk</div>
-      <h2 class="contact__heading">
-        <span>If you have a</span>
-        <span><em>question</em> hiding</span>
-        <span>in your data, or a</span>
-        <span><em>process</em> begging</span>
-        <span>to be automated</span>
-        <span>— I want to hear it.</span>
-      </h2>
-
-      <div class="contact__actions">
-        <a class="contact__btn contact__btn--primary" href="mailto:trwells2@gmail.com">
-          <span>trwells2@gmail.com</span>
-          <span class="contact__btn-arrow">→</span>
-        </a>
-        <a class="contact__btn" href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">
-          <span>LinkedIn</span><span class="contact__btn-arrow">↗</span>
-        </a>
-        <a class="contact__btn" href="https://github.com/trwells2/" target="_blank" rel="noopener">
-          <span>GitHub</span><span class="contact__btn-arrow">↗</span>
-        </a>
-        <a class="contact__btn" href="/resume.pdf">
-          <span>Résumé (PDF)</span><span class="contact__btn-arrow">↓</span>
-        </a>
-      </div>
-
-      <div class="contact__sig">
-        <span class="contact__sig-line"></span>
-        <span>End of tour. Thanks for scrolling.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============= FOOTER ============= -->
-  <footer class="footer">
-    <div class="footer__col">
-      <div class="footer__brand">Tom Wells</div>
-      <div class="footer__tag">Data &amp; Business Analyst · Power Platform Developer</div>
-    </div>
-    <div class="footer__col footer__col--right">
-      <div class="footer__copy">© <span id="year">2026</span> Tom Wells. Built with care, hosted on GitHub Pages.</div>
-    </div>
-  </footer>
-
-  <script src="assets/script.js"></script>
+const stackSvg=$('#stackSvg');
+stackSvg.addEventListener('click',ev=>{const g=ev.target.closest('[data-i]');if(g)pickLayer(+g.dataset.i)});
+stackSvg.addEventListener('keydown',ev=>{if(ev.key!=='Enter'&&ev.key!==' ')return;const g=ev.target.closest('[data-i]');if(!g)return;ev.preventDefault();pickLayer(+g.dataset.i)});
+if(matchMedia('(pointer:fine)').matches)window.addEventListener('pointermove',e=>{ch.st.tx=(e.clientX/window.innerWidth-.5)*.1;ch.st.ty=(e.clientY/window.innerHeight-.5)*.07},{passive:true});
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{ch.resize();if(Math.abs(window.innerWidth-lastW)>40){lastW=window.innerWidth;rec.build()}remeasure()},120)});
+if('ResizeObserver' in window)new ResizeObserver(remeasure).observe($('main'));
+window.addEventListener('load',remeasure);
+})();
+</script>
 </body>
 </html>
