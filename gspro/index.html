@@ -1078,15 +1078,17 @@ function runApp() {
       for (const [club, pts] of Object.entries(byClub)) {
         const sorted = pts.slice().sort((a, b) => a.ts - b.ts);
         if (sorted.length < CONFIG.TREND_MIN_SHOTS) continue;
-        const points = sorted.map((pt, i) => {
+        // One point per practice day: the rolling average as of that day's last shot.
+        // Per-shot points bunch dozens of values minutes apart, which makes the curve loop.
+        const byDay = new Map();
+        sorted.forEach((pt, i) => {
           const windowStart = pt.ts - ROLL_SEC;
           let sum = 0, n = 0;
           for (let j = i; j >= 0 && sorted[j].ts >= windowStart; j--) { sum += sorted[j].val; n++; }
-          return { t: pt.ts, avg: Math.round(sum / n * 10) / 10, n, club };
+          byDay.set(new Date(pt.ts * 1000).toDateString(), { t: pt.ts, avg: Math.round(sum / n * 10) / 10, n, club });
         });
-        const days = new Set(points.map(p => Math.floor(p.t / 86400)));
-        if (days.size < CONFIG.TREND_MIN_BUCKETS) continue;
-        seriesByClub[club] = points;
+        if (byDay.size < CONFIG.TREND_MIN_BUCKETS) continue;
+        seriesByClub[club] = [...byDay.values()];
       }
       const present = BAG_ORDER.filter(c => seriesByClub[c]);
       return { seriesByClub, present, hasData: present.length > 0 };
@@ -1143,7 +1145,7 @@ function runApp() {
             formatter: (v, name, entry) => [`${fmt(v, 1)} ${meta.unit} (${entry.payload.n} shots in window)`, name]
           }),
           present.map(c => /*#__PURE__*/React.createElement(Line, {
-            key: c, name: c, data: seriesByClub[c], dataKey: "avg", type: "natural",
+            key: c, name: c, data: seriesByClub[c], dataKey: "avg", type: "monotoneX",
             stroke: colorFor(c), strokeWidth: 1.6, strokeOpacity: 0.9,
             dot: { r: 2.5, fill: colorFor(c), strokeWidth: 0 },
             activeDot: { r: 5, onClick: () => onClubClick && onClubClick(c), style: { cursor: "pointer" } },
