@@ -67,79 +67,112 @@
   </div>
 </section>
 
-<!-- ============= WORK: five events ============= -->
+<!-- ============= WORK: five events, as plates ============= -->
 <section class="events" id="portfolio" aria-labelledby="ev-h">
   <header class="ev-head">
     <h2 class="sec-h" id="ev-h" data-split>Five events.</h2>
     <p class="sec-p fx">The projects, one frame at a time, the way the film was read: slowly, and with a red pencil for the parts that matter.</p>
   </header>
-  <div class="fly">
-    <div class="fly-stage">
-      <div class="world" data-ok-overflow>
-        <article class="frame" data-href="/par.html">
-          <div class="fr-top"><span><b class="n">event 01</b> / 05</span><span>U.S. Department of Energy, Fermilab Site Office</span></div>
-          <div class="fr-body">
-            <div class="fr-text">
-              <h3>PAR+</h3>
-              <p class="fr-sum">A Power Apps canvas app for conducting and recording contractor safety inspections. The UI was prototyped in HTML and validated with end users before the build, which cut rework and post-release change requests.</p>
-              <p class="fr-metric"><b>282%</b><span>more oversight data captured, with manual record entry eliminated across the federal oversight organization.</span></p>
-              <p class="fr-stack">Power Apps / Dataverse / Power Automate</p>
-              <a class="fr-link" href="/par.html">Read the case study</a>
-            </div>
-            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
-          </div>
-        </article>
-        <article class="frame">
-          <div class="fr-top"><span><b class="n">event 02</b> / 05</span><span>U.S. Department of Energy, Fermilab Site Office</span></div>
-          <div class="fr-body">
-            <div class="fr-text">
-              <h3>Contractor Performance Dashboards</h3>
-              <p class="fr-sum">Star-schema models in Power BI that unify SQL Server, Oracle and SharePoint Online, giving Site Office leadership one view of contractor performance and oversight status in place of siloed manual reporting.</p>
-              <p class="fr-metric"><b>3 &#8594; 1</b><span>source systems resolved into one governed, query-optimized model.</span></p>
-              <p class="fr-stack">Power BI / DAX / SQL Server / Oracle / SharePoint Online</p>
-            </div>
-            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
-          </div>
-        </article>
-        <article class="frame">
-          <div class="fr-top"><span><b class="n">event 03</b> / 05</span><span>Federal oversight</span></div>
-          <div class="fr-body">
-            <div class="fr-text">
-              <h3>Contracting Officer Approvals</h3>
-              <p class="fr-sum">Multi-stage sequential approval flows for recurring contracting-officer workflows, with HTML-formatted Outlook notifications and Teams Adaptive Cards at every stage. Less manual routing, shorter response times.</p>
-              <p class="fr-quote">The decision happens where the request lands.</p>
-              <p class="fr-stack">Power Automate / Adaptive Cards / Teams / Outlook</p>
-            </div>
-            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
-          </div>
-        </article>
-        <article class="frame">
-          <div class="fr-top"><span><b class="n">event 04</b> / 05</span><span>General Motors, North Central Region</span></div>
-          <div class="fr-body">
-            <div class="fr-text">
-              <h3>Sales &amp; Inventory BI</h3>
-              <p class="fr-sum">The Power BI and Tableau reporting layer for the region, giving field managers real-time sales and inventory visibility. I was the regional SME for Power BI, Tableau, SQL and Excel.</p>
-              <p class="fr-metric"><b>1,128</b><span>dealerships covered, supporting $50M in sales growth and a 6.1% year-over-year regional improvement.</span></p>
-              <p class="fr-stack">Power BI / Tableau / SQL / Excel</p>
-            </div>
-            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
-          </div>
-        </article>
-        <article class="frame" data-href="/gspro-analytics.html">
-          <div class="fr-top"><span><b class="n">event 05</b> / 05</span><span>Personal project, live now</span></div>
-          <div class="fr-body">
-            <div class="fr-text">
-              <h3>GSPro Shot Analytics</h3>
-              <p class="fr-sum">A full-stack React and Recharts app with club-segmented visualizations, a distance-weighted consistency metric and CSV export. A Cloudflare Worker proxies the Google Sheets API so credentials never reach the client.</p>
-              <p class="fr-stack">React / Recharts / Python / Cloudflare Workers</p>
-              <a class="fr-link" href="/gspro-analytics.html">Read the case study</a>
-              <a class="fr-link" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app</a>
-            </div>
-            <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
-          </div>
-        </article>
+  <div class="plates fx">
+    <article class="plate open">
+      <div class="p-bg" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+      <button type="button" class="p-face" id="pl-01" aria-expanded="true" aria-controls="plb-01">
+        <span class="p-shut"><span class="mono red">01</span><span class="vt">PAR+</span></span>
+        <span class="p-head"><span class="mono"><b>event 01</b> / 05</span><span class="mono">U.S. Department of Energy, Fermilab Site Office</span></span>
+      </button>
+      <div class="p-body" id="plb-01" role="region" aria-labelledby="pl-01">
+        <div class="p-text">
+          <h3 class="p-title">PAR+</h3>
+          <p class="fr-sum">A Power Apps canvas app for conducting and recording contractor safety inspections. The UI was prototyped in HTML and validated with end users before the build, which cut rework and post-release change requests.</p>
+          <p class="fr-metric"><b>282%</b><span>more oversight data captured, with manual record entry eliminated across the federal oversight organization.</span></p>
+          <p class="fr-stack">Power Apps / Dataverse / Power Automate</p>
+          <p class="fr-links"><a class="fr-link" href="/par.html">Read the case study</a></p>
+        </div>
+        <div class="p-side">
+          <div class="p-glyph fid2" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+          <figure class="p-shot">
+            <div class="fid2"><img src="assets/img/par-home.webp" width="1200" height="541" loading="lazy" decoding="async" alt="PAR+ home screen showing entry, observation, open-item and high-risk totals above a list of recent walkthroughs"></div>
+            <figcaption class="mono">PAR+ home screen</figcaption>
+          </figure>
+        </div>
       </div>
-    </div>
+    </article>
+    <article class="plate">
+      <div class="p-bg" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+      <button type="button" class="p-face" id="pl-02" aria-expanded="false" aria-controls="plb-02">
+        <span class="p-shut"><span class="mono red">02</span><span class="vt">Contractor Performance Dashboards</span></span>
+        <span class="p-head"><span class="mono"><b>event 02</b> / 05</span><span class="mono">U.S. Department of Energy, Fermilab Site Office</span></span>
+      </button>
+      <div class="p-body" id="plb-02" role="region" aria-labelledby="pl-02">
+        <div class="p-text">
+          <h3 class="p-title">Contractor Performance Dashboards</h3>
+          <p class="fr-sum">Star-schema models in Power BI that unify SQL Server, Oracle and SharePoint Online, giving Site Office leadership one view of contractor performance and oversight status in place of siloed manual reporting.</p>
+          <p class="fr-metric"><b>3 &#8594; 1</b><span>source systems resolved into one governed, query-optimized model.</span></p>
+          <p class="fr-stack">Power BI / DAX / SQL Server / Oracle / SharePoint Online</p>
+        </div>
+        <div class="p-side">
+          <div class="p-glyph fid2" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+        </div>
+      </div>
+    </article>
+    <article class="plate">
+      <div class="p-bg" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+      <button type="button" class="p-face" id="pl-03" aria-expanded="false" aria-controls="plb-03">
+        <span class="p-shut"><span class="mono red">03</span><span class="vt">Contracting Officer Approvals</span></span>
+        <span class="p-head"><span class="mono"><b>event 03</b> / 05</span><span class="mono">Federal oversight</span></span>
+      </button>
+      <div class="p-body" id="plb-03" role="region" aria-labelledby="pl-03">
+        <div class="p-text">
+          <h3 class="p-title">Contracting Officer Approvals</h3>
+          <p class="fr-sum">Multi-stage sequential approval flows for recurring contracting-officer workflows, with HTML-formatted Outlook notifications and Teams Adaptive Cards at every stage. Less manual routing, shorter response times.</p>
+          <p class="fr-quote">The decision happens where the request lands.</p>
+          <p class="fr-stack">Power Automate / Adaptive Cards / Teams / Outlook</p>
+        </div>
+        <div class="p-side">
+          <div class="p-glyph fid2" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+        </div>
+      </div>
+    </article>
+    <article class="plate">
+      <div class="p-bg" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+      <button type="button" class="p-face" id="pl-04" aria-expanded="false" aria-controls="plb-04">
+        <span class="p-shut"><span class="mono red">04</span><span class="vt">Sales &amp; Inventory BI</span></span>
+        <span class="p-head"><span class="mono"><b>event 04</b> / 05</span><span class="mono">General Motors, North Central Region</span></span>
+      </button>
+      <div class="p-body" id="plb-04" role="region" aria-labelledby="pl-04">
+        <div class="p-text">
+          <h3 class="p-title">Sales &amp; Inventory BI</h3>
+          <p class="fr-sum">The Power BI and Tableau reporting layer for the region, giving field managers real-time sales and inventory visibility. I was the regional SME for Power BI, Tableau, SQL and Excel.</p>
+          <p class="fr-metric"><b>1,128</b><span>dealerships covered, supporting $50M in sales growth and a 6.1% year-over-year regional improvement.</span></p>
+          <p class="fr-stack">Power BI / Tableau / SQL / Excel</p>
+        </div>
+        <div class="p-side">
+          <div class="p-glyph fid2" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+        </div>
+      </div>
+    </article>
+    <article class="plate">
+      <div class="p-bg" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+      <button type="button" class="p-face" id="pl-05" aria-expanded="false" aria-controls="plb-05">
+        <span class="p-shut"><span class="mono red">05</span><span class="vt">GSPro Shot Analytics</span></span>
+        <span class="p-head"><span class="mono"><b>event 05</b> / 05</span><span class="mono">Personal project, live now</span></span>
+      </button>
+      <div class="p-body" id="plb-05" role="region" aria-labelledby="pl-05">
+        <div class="p-text">
+          <h3 class="p-title">GSPro Shot Analytics</h3>
+          <p class="fr-sum">A full-stack React and Recharts app with club-segmented visualizations, a distance-weighted consistency metric and CSV export. A Cloudflare Worker proxies the Google Sheets API so credentials never reach the client.</p>
+          <p class="fr-stack">React / Recharts / Python / Cloudflare Workers</p>
+          <p class="fr-links"><a class="fr-link" href="/gspro-analytics.html">Read the case study</a><a class="fr-link" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app</a></p>
+        </div>
+        <div class="p-side">
+          <div class="p-glyph fid2" aria-hidden="true"><svg class="fr-glyph" viewBox="0 0 300 300"></svg></div>
+          <figure class="p-shot">
+            <div class="fid2"><img src="assets/img/gspro-dispersion.webp" width="1200" height="576" loading="lazy" decoding="async" alt="GSPro Shot Analytics with club filters, carry and accuracy averages, and a scatter of 3,779 shots by offline distance"></div>
+            <figcaption class="mono">GSPro shot dispersion view</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
@@ -149,8 +182,10 @@
     <div class="rec-head">
       <h2 class="sec-h" id="rec-h" data-split>Track record.</h2>
       <p class="sec-p fx">Eighteen years, drawn as one particle track. Every change of role is a vertex: a new track leaves it, and what I learned keeps going.</p>
+      <p class="rec-hint mono fx"><i aria-hidden="true"></i>Select any point on the track for the details.</p>
     </div>
-    <svg class="rec-svg" id="recSvg" role="img" aria-label="Career timeline: eBlaze Services 2008 to 2016, General Motors 2016 to 2018, RER Solutions at Fermilab 2018 to present, BS in Finance from Eastern Illinois University in 2009."></svg>
+    <svg class="rec-svg" id="recSvg" role="group" aria-label="Career timeline: eBlaze Services 2008 to 2016, General Motors 2016 to 2018, RER Solutions at Fermilab 2018 to present, BS in Finance from Eastern Illinois University in 2009."></svg>
+    <div class="rec-card fid2" id="recCard" role="dialog" aria-modal="false" aria-labelledby="rcTitle" hidden></div>
   </div>
 </section>
 
@@ -212,14 +247,23 @@ function Chamber(cv){
 }
 
 /* ---------- per-frame event glyphs ---------- */
-function glyphs(){$$('.fr-glyph').forEach((svg,i)=>{const r=mul(300+i*17);let o='';
+function glyphs(){$$('.plate').forEach((pl,i)=>{const r=mul(300+i*17);let o='';
   const sp=(x,y,a,q,R,dec,n,step)=>{let d='M'+f1(x)+' '+f1(y);for(let k=0;k<n;k++){a+=q*step/R;R*=dec;if(R<1.5)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;d+='L'+f1(x)+' '+f1(y)}return d};
   const vx=150+(r()-.5)*40,vy=150+(r()-.5)*40;
   o+=`<path class="gb" d="M-10 ${f1(vy+(r()-.5)*30)} L${f1(vx)} ${f1(vy)}"/>`;
   for(let k=0;k<5;k++)o+=`<path class="gt${k===1?' red':''}" d="${sp(vx,vy,r()*6.28,r()<.5?-1:1,18+Math.pow(r(),1.5)*90,.975+r()*.015,160+Math.floor(r()*160),2.2)}"/>`;
   o+=`<circle class="gv" cx="${f1(vx)}" cy="${f1(vy)}" r="4"/>`;
   [[18,18],[282,18],[18,282],[282,282]].forEach(([x,y])=>{o+=`<path class="gf" d="M${x-6} ${y}H${x+6}M${x} ${y-6}V${y+6}"/>`});
-  svg.innerHTML=o})}
+  pl.querySelectorAll('.fr-glyph').forEach(svg=>{svg.innerHTML=o})})}
+
+/* ---------- work plates: one open at a time ---------- */
+function plates(){const wrap=$('.plates');if(!wrap)return;const ps=$$('.plate',wrap),hov=matchMedia('(hover:hover) and (pointer:fine) and (min-width:1024px)');let t;
+  const open=i=>{clearTimeout(t);ps.forEach((p,k)=>{const on=k===i;p.classList.toggle('open',on);$('.p-face',p).setAttribute('aria-expanded',on);$('.p-body',p).hidden=!on})};
+  wrap.classList.add('is-live');open(0);requestAnimationFrame(()=>requestAnimationFrame(()=>wrap.classList.add('settled')));
+  ps.forEach((p,i)=>{const f=$('.p-face',p);
+    f.addEventListener('click',()=>{open(i);const top=p.getBoundingClientRect().top;if(top<80)window.scrollBy(0,top-80)});
+    f.addEventListener('mouseenter',()=>{clearTimeout(t);if(hov.matches&&!p.classList.contains('open'))t=setTimeout(()=>open(i),160)});
+    f.addEventListener('mouseleave',()=>clearTimeout(t))})}
 
 /* ---------- exploded stack (isometric projection) ---------- */
 function Stack(svg){
@@ -250,7 +294,33 @@ function Stack(svg){
 }
 
 /* ---------- career as one particle track ---------- */
-const STEPS=[['.axis,.tick,.yr','op',0,.06,.04],['.s1','dash',.06,.36],['.lb.l1','op',.1,.05],['.vx3','op',.105,.02],['.vx0','op',.115,.02],['.e1','dash',.12,.08],['.lb.l0','op',.14,.05],['.vx1','op',.42,.02],['.v1','dash',.42,.08],['.s2','dash',.43,.1],['.lb.l2','op',.45,.05],['.vx2','op',.53,.02],['.v2','dash',.53,.07,0,.02],['.s3','dash',.54,.32],['.lb.l3','op',.58,.05],['.vx4','op',.585,.02],['.head','op',.86,.04],['.lb.l4','op',.87,.05],['.fut','op',.9,.04]];
+/* career details, one per point on the track, in track order */
+const RYRS=Math.floor((Date.now()-Date.UTC(2018,10,1))/31557600000);
+const RD=[
+  {k:'edu',aria:'Eastern Illinois University, BS in Finance, 2009',when:'May 2009',where:'Charleston, IL',title:'BS in Finance',org:'Eastern Illinois University, Lumpkin School of Business',
+    pts:['Finished the degree while already working at eBlaze Services, which I joined in January 2008.','The finance grounding under the pricing, margin and forecasting work that came next.']},
+  {k:'eblaze',aria:'eBlaze Services, 2008 to 2016',when:'Jan 2008 – Dec 2016',where:'Chicago, IL',title:'Partner, Data Solutions & Business Development',org:'eBlaze Services',
+    metric:['15%','year-over-year gross margin increase, after pricing and product analysis found the underperforming SKUs.'],
+    pts:['Co-owned a data solutions practice.','Designed and deployed a real-time pricing and forecasting database for procurement, with SQL and Python ETL pipelines that cut data latency 40%.','Built KPI, financial-ratio and sales dashboards, and automated the weekly and monthly reporting: 20+ hours of manual work gone each month.'],
+    stack:'SQL / Python / ETL pipelines / dashboards'},
+  {k:'gm',aria:'General Motors, 2016 to 2018',when:'Dec 2016 – Nov 2018',where:'Naperville, IL',title:'Business & Data Analyst',org:'General Motors, North Central Region',
+    metric:['$50M','in regional sales growth (6.1% year over year), supported by dashboards and forecasting models that surfaced gaps early enough to act on.'],
+    pts:['Built and maintained the Power BI and Tableau reporting layer for 1,128 dealerships, with real-time sales and inventory for field managers.','Regional SME for Power BI, Tableau, SQL, VBA and Excel: trained field teams and mentored junior analysts across North America.','Led the executive reviews that tied sales performance to regional planning.'],
+    stack:'Power BI / Tableau / SQL / VBA / Excel'},
+  {k:'rer',aria:'RER Solutions at the DOE Fermilab Site Office, 2018 to present',when:'Nov 2018 – present',where:'Warrenville, IL',title:'Program Management Analyst',org:'RER Solutions, for the U.S. Department of Energy Fermilab Site Office',
+    metric:[RYRS+'+ yrs','on a Department of Energy contract as its Power Platform developer and data architect.'],
+    pts:['End-to-end ownership: requirements straight from contracting officers, then the data model, the apps and flows, deployment and production support.','Star-schema models in Power BI over SQL Server, Oracle and SharePoint Online, replacing siloed manual reporting with governed datasets.','Data quality checks, documentation standards and knowledge-transfer material written to federal recordkeeping requirements.'],
+    stack:'Power Apps / Power Automate / Dataverse / Power BI / SharePoint Online'},
+  {k:'fnal',aria:'Selected work at the Fermilab Site Office',when:'2018 – present',where:'Fermilab Site Office',title:'Selected work',org:'Built for federal oversight staff and contracting officers',
+    metric:['282%','more oversight data captured by PAR+ than the manual inspection process it replaced.'],
+    pts:['PAR+: the Power Apps solution federal staff use to conduct and record contractor safety inspections, prototyped in HTML with end users before the build.','Contracting-officer approvals: multi-stage sequential flows with HTML Outlook notifications and Teams Adaptive Cards at every stage.','A tenant and environment migration of the whole Power Platform estate, with a backup runbook and solution inventory that kept the cutover auditable and reversible.'],
+    links:[['Read the PAR+ case study','/par.html']]},
+  {k:'now',aria:'Now: Fabric and Purview, open to new roles',when:'now',where:'Chicago, IL',title:'Fabric and Purview',org:'Microsoft learning paths, in progress',
+    pts:['Working through the Microsoft Fabric and Microsoft Purview learning paths.','Building on the side: GSPro Shot Analytics, a React app with a Cloudflare Worker keeping its credentials server-side.','Open to Power Platform development and solution architecture roles, especially in federal and government contracting.'],
+    links:[['Get in touch','#contact'],['Open the GSPro app','https://trwells.com/gspro',1]]}
+];
+const LBK={l0:'edu',l1:'eblaze',l2:'gm',l3:'rer',l4:'now'};
+const STEPS=[['.axis,.tick,.yr','op',0,.06,.04],['.s1','dash',.06,.36],['.lb.l1','op',.1,.05],['.vx3,.hit-vx3','op',.105,.02],['.vx0,.hit-vx0','op',.115,.02],['.e1','dash',.12,.08],['.lb.l0','op',.14,.05],['.vx1,.hit-vx1','op',.42,.02],['.v1','dash',.42,.08],['.s2','dash',.43,.1],['.lb.l2','op',.45,.05],['.vx2,.hit-vx2','op',.53,.02],['.v2','dash',.53,.07,0,.02],['.s3','dash',.54,.32],['.lb.l3','op',.58,.05],['.vx4,.hit-vx4','op',.585,.02],['.head,.hit-head','op',.86,.04],['.lb.l4','op',.87,.05],['.fut','op',.9,.04]];
 function Record(svg){
   let vert=null,items=[];
   const U=t=>(t-2008)/18.71;
@@ -282,7 +352,7 @@ function Record(svg){
     [E0,A1,B1,m1,m3].forEach((p,k)=>{o+='<circle class="vx vx'+k+'" cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="6"/>'});
     o+='<g class="head"><circle cx="'+f1(C1[0])+'" cy="'+f1(C1[1])+'" r="8"/><circle class="pulse" cx="'+f1(C1[0])+'" cy="'+f1(C1[1])+'" r="8"/></g>';
     const T=vert?17:34,Mn=vert?21:40,tH=vert?36:34,mH=vert?28:24;
-    const label=(cls,x,y,anchor,rows,lead)=>{let s='<g class="lb '+cls+'">',yy=y;
+    const label=(cls,x,y,anchor,rows,lead)=>{let s='<g class="lb '+cls+'" data-k="'+LBK[cls]+'">',yy=y;
       rows.forEach(rw=>{const isT=rw[0]==='t';wrap(rw[1],isT?T:Mn).forEach(line=>{s+='<text class="'+(isT?'lt':'lm')+'" x="'+f1(x)+'" y="'+f1(yy)+'"'+(anchor?' text-anchor="'+anchor+'"':'')+'>'+line+'</text>';yy+=isT?tH:mH});yy+=6});
       if(lead)s+='<path class="ld" d="M'+f1(lead[0])+' '+f1(lead[1])+'L'+f1(lead[2])+' '+f1(lead[3])+'"/>';
       return s+'</g>'};
@@ -300,11 +370,55 @@ function Record(svg){
       o+=label('l3',380,920,'',[['m','Nov 2018 – present'],['t','Program Management Analyst'],['m','RER Solutions at Fermilab, for the DOE Fermilab Site Office']]);
       o+=label('l4',380,1250,'',[['m','now'],['t','Fabric and Purview'],['m','certifications in progress']]);
     }
+    const hz=vert?44:28;
+    [[E0,'vx0'],[m1,'vx3'],[A1,'vx1'],[B1,'vx2'],[m3,'vx4'],[C1,'head']].forEach(([p,v],i)=>{const d=RD[i];
+      o+='<g class="hit hit-'+v+'" data-k="'+d.k+'" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="recCard" aria-label="'+d.aria+': show details"><circle class="hz" cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="'+hz+'"/><circle class="ring" cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="'+(v==='head'?17:14)+'"/></g>'});
     svg.innerHTML=o;
     items=STEPS.map(s=>({els:[...svg.querySelectorAll(s[0])],k:s[1],t:s[2],d:s[3],sa:s[4]||0,se:s[5]||0}));
+    svg.dispatchEvent(new Event('built'));
   }
-  function apply(p){for(const it of items){const n=it.els.length;for(let i=0;i<n;i++){const off=it.sa?i*it.sa/Math.max(1,n-1):i*it.se,l=clamp((p-it.t-off)/it.d),el=it.els[i];if(it.k==='dash')el.style.strokeDashoffset=(1-l).toFixed(4);else el.style.opacity=l.toFixed(3)}}}
+  function apply(p){for(const it of items){const n=it.els.length;for(let i=0;i<n;i++){const off=it.sa?i*it.sa/Math.max(1,n-1):i*it.se,l=clamp((p-it.t-off)/it.d),el=it.els[i];if(it.k==='dash')el.style.strokeDashoffset=(1-l).toFixed(4);else{el.style.opacity=l.toFixed(3);if(el.dataset.k)el.style.pointerEvents=l>.5?'':'none'}}}}
   return {build,apply,isVert:()=>vert};
+}
+
+/* ---------- record: a details card for each point on the track ---------- */
+function RecordCard(svg,card){
+  const stage=svg.parentNode;let cur=-1,from=null;
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const xIcon='<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>';
+  function fill(i){const d=RD[i],n=String(i+1).padStart(2,'0');
+    let o='<div class="rc-top"><span class="mono"><b>point '+n+'</b> / 0'+RD.length+'</span><button type="button" class="rc-x" data-a="x" aria-label="Close details">'+xIcon+'</button></div>';
+    o+='<p class="rc-when mono">'+esc(d.when)+' &middot; '+esc(d.where)+'</p><h3 class="rc-t" id="rcTitle" tabindex="-1">'+esc(d.title)+'</h3><p class="rc-org">'+esc(d.org)+'</p>';
+    if(d.metric)o+='<p class="rc-metric"><b>'+esc(d.metric[0])+'</b><span>'+esc(d.metric[1])+'</span></p>';
+    o+='<ul class="rc-pts">'+d.pts.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>';
+    if(d.stack)o+='<p class="rc-stack mono">'+esc(d.stack)+'</p>';
+    if(d.links)o+='<p class="rc-links">'+d.links.map(l=>'<a class="fr-link" href="'+l[1]+'"'+(l[2]?' target="_blank" rel="noopener"':'')+'>'+esc(l[0])+'</a>').join('')+'</p>';
+    o+='<div class="rc-nav"><button type="button" class="mono" data-a="-1"'+(i?'':' disabled')+'>&larr; earlier</button><button type="button" class="mono" data-a="1"'+(i<RD.length-1?'':' disabled')+'>later &rarr;</button></div>';
+    card.innerHTML=o}
+  const hit=i=>svg.querySelector('.hit[data-k="'+RD[i].k+'"]');
+  function place(){if(cur<0)return;const h=hit(cur);if(!h)return;
+    const s=stage.getBoundingClientRect(),r=h.querySelector('.ring').getBoundingClientRect(),cx=r.left+r.width/2-s.left,cy=r.top+r.height/2-s.top,sw=stage.clientWidth,pad=parseFloat(getComputedStyle(stage).paddingLeft)||20;
+    if(sw<640){card.style.width=(sw-2*pad)+'px';card.style.left=pad+'px';card.style.top=(cy+26)+'px';return}
+    const w=Math.min(420,sw-2*pad);card.style.width=w+'px';const ch=card.offsetHeight,sh=stage.clientHeight;
+    let x=cx+34;if(x+w>sw-pad)x=cx-34-w;card.style.left=Math.max(pad,x)+'px';
+    card.style.top=clamp(cy-ch*.4,84,Math.max(84,sh-ch-16))+'px'}
+  function open(i,focus){if(i<0||i>=RD.length)return;cur=i;fill(i);svg.classList.add('shown');
+    $$('[data-k]',svg).forEach(g=>{const on=g.dataset.k===RD[i].k;g.classList.toggle('on',on);if(g.classList.contains('hit'))g.setAttribute('aria-expanded',on)});
+    card.hidden=false;card.classList.remove('in');place();void card.offsetWidth;card.classList.add('in');
+    if(stage.clientWidth<640)card.scrollIntoView({block:'nearest',behavior:'smooth'});
+    if(focus)$('.rc-t',card).focus({preventScroll:true})}
+  function close(){if(cur<0)return;const back=card.contains(document.activeElement)?hit(cur):null;cur=-1;card.hidden=true;
+    $$('[data-k]',svg).forEach(g=>{g.classList.remove('on');if(g.classList.contains('hit'))g.setAttribute('aria-expanded','false')});if(back)back.focus()}
+  const idx=k=>RD.findIndex(d=>d.k===k);
+  svg.addEventListener('click',ev=>{const g=ev.target.closest('[data-k]');if(!g)return;const i=idx(g.dataset.k);i===cur?close():open(i,false)});
+  svg.addEventListener('keydown',ev=>{if(ev.key!=='Enter'&&ev.key!==' ')return;const g=ev.target.closest('.hit');if(!g)return;ev.preventDefault();open(idx(g.dataset.k),true)});
+  svg.addEventListener('focusin',ev=>{if(ev.target.closest('.hit'))svg.classList.add('shown')});
+  card.addEventListener('click',ev=>{const b=ev.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;if(a==='x')close();else open(cur+(+a),true)});
+  card.addEventListener('click',ev=>{if(ev.target.closest('a[href^="#"]'))close()});
+  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&cur>=0){ev.preventDefault();const k=cur;close();hit(k)&&hit(k).focus()}});
+  document.addEventListener('pointerdown',ev=>{if(cur>=0&&!card.contains(ev.target)&&!ev.target.closest('#recSvg [data-k]'))close()});
+  svg.addEventListener('built',()=>{if(cur<0)return;const i=cur;open(i,false)});
+  window.addEventListener('resize',place);
 }
 
 function spiralPath(){const p=$('.c-spiral path');if(!p)return;let d='M460 -520L460 0';for(let t=0;t<=31.4;t+=.07){const rr=460*Math.exp(-.122*t);d+='L'+f1(Math.cos(t)*rr)+' '+f1(Math.sin(t)*rr)}p.setAttribute('d',d)}
@@ -327,8 +441,9 @@ function split(el){
 /* ---------- boot ---------- */
 const ch=Chamber($('#chamber'));
 glyphs();
+plates();
 const stack=Stack($('#stackSvg'));stack.render(1,-1,1);
-const rec=Record($('#recSvg'));rec.build();
+const rec=Record($('#recSvg'));rec.build();RecordCard($('#recSvg'),$('#recCard'));
 spiralPath();
 const yr=$('#year');if(yr)yr.textContent=String(new Date().getFullYear());
 let lastW=window.innerWidth;
@@ -345,21 +460,17 @@ const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.
 $$('[data-split],.fx').forEach(el=>{if(!el.closest('.hero'))io.observe(el)});
 
 /* scroll engine: every scene reads a 0..1 progress, eased toward its target each frame */
-const R={hero:$('.hero'),stack:$('.stack'),events:$('.events'),fly:$('.fly'),rec:$('.record'),recSvg:$('#recSvg'),contact:$('.contact')};
-const heroIn=$('.hero-in'),hFoot=$('.h-foot'),spiral=$('.c-spiral path'),fc=$('.fc b'),caps=$$('.cap'),frames=$$('.frame'),side=[-1,1,-1,1,-1];
-const M={},T={},V={},P={},KEYS=['hero','stack','fly','rec','spiral','global','dim'];
-let DZ=900,CK=[],CT=1,recVert=rec.isVert(),lastA=-2;
+const R={hero:$('.hero'),stack:$('.stack'),events:$('.events'),rec:$('.record'),recSvg:$('#recSvg'),contact:$('.contact')};
+const heroIn=$('.hero-in'),hFoot=$('.h-foot'),spiral=$('.c-spiral path'),fc=$('.fc b'),caps=$$('.cap');
+const M={},T={},V={},P={},KEYS=['hero','stack','rec','spiral','global','dim'];
+let recVert=rec.isVert(),lastA=-2;
 
-function buildCam(){const n=frames.length;CK=[];let t=0,z=-1.3*DZ;const seg=(dur,z1,e)=>{CK.push({t0:t,t1:t+dur,z0:z,z1,e});t+=dur;z=z1};
-  seg(1,0,E.out3);for(let i=0;i<n;i++){seg(1.1,i*DZ+90,E.lin);if(i<n-1)seg(1,(i+1)*DZ,E.io3)}seg(.9,(n-1)*DZ+640,E.in3);CT=t}
-function camZ(p){const t=p*CT;for(const s of CK)if(t<=s.t1)return s.z0+(s.z1-s.z0)*s.e(clamp((t-s.t0)/(s.t1-s.t0)));return CK[CK.length-1].z1}
 function measure(){M.vh=window.innerHeight;M.vw=window.innerWidth;M.docH=D.scrollHeight;const y=window.scrollY;
   for(const k in R){const r=R[k].getBoundingClientRect();M[k]={t:r.top+y,h:R[k].offsetHeight||r.height}}
-  DZ=Math.max(900,M.vw*.8);buildCam();recVert=rec.isVert()}
+  recVert=rec.isVert()}
 function targets(y){
   T.hero=clamp((y-M.hero.t)/M.hero.h);
   T.stack=clamp((y-M.stack.t)/Math.max(1,M.stack.h-M.vh));
-  T.fly=clamp((y-M.fly.t)/Math.max(1,M.fly.h-M.vh));
   T.rec=recVert?clamp((y+.72*M.vh-M.recSvg.t)/Math.max(1,M.recSvg.h)):clamp((y-M.rec.t)/Math.max(1,M.rec.h-M.vh));
   T.spiral=clamp((y+M.vh-M.contact.t)/(.9*M.vh));
   T.global=clamp(y/Math.max(1,M.docH-M.vh));
@@ -371,16 +482,9 @@ function renderStack(p,force){const e=E.io3(clamp((p-.03)/.27)),lab=clamp((e-.55
   const a=userAct!==null?userAct:(p>=.34&&p<.95?Math.min(4,Math.floor((p-.34)/.12)):-1);
   stack.render(e,a,lab);if(a!==lastA||force){lastA=a;caps.forEach((c,i)=>c.classList.toggle('on',i===a+1))}}
 function pickLayer(i){userAct=i;pickP=V.stack;lastA=-2;renderStack(V.stack,true)}
-function applyCam(z){const vw=M.vw/100;frames.forEach((f,i)=>{const rel=z-i*DZ,op=clamp((rel+2.4*DZ)/(1.1*DZ))*clamp(1-(rel-40)/190);
-  if(op<.004){if(f._v!==0){f.style.visibility='hidden';f._v=0}return}
-  let x,ry;if(rel<=0){const k=clamp(-rel/DZ,0,1.6);x=side[i]*14*vw*k;ry=side[i]*-9*k}else{const k=rel/600;x=-side[i]*26*vw*k;ry=side[i]*10*k}
-  f._v=1;f.style.visibility='visible';f.style.opacity=op.toFixed(3);f.style.transform='translate3d('+f1(x)+'px,0,'+f1(rel)+'px) rotateY('+ry.toFixed(2)+'deg)';f.style.pointerEvents=(op>.25&&rel<150)?'auto':'none'})}
-frames.forEach(f=>{const href=f.dataset.href;if(!href)return;
-  f.addEventListener('click',ev=>{if(ev.target.closest('a'))return;window.location.href=href})});
 function apply(force){
   if(force||V.hero!==P.hero){heroIn.style.transform='translate3d(0,'+f1(-.14*M.vh*V.hero)+'px,0)';heroIn.style.opacity=(1-V.hero).toFixed(3);hFoot.style.opacity=clamp(1-V.hero/.3).toFixed(3)}
   if(force||V.stack!==P.stack)renderStack(V.stack);
-  if(force||V.fly!==P.fly)applyCam(camZ(V.fly));
   if(force||V.rec!==P.rec)rec.apply(V.rec);
   if(force||V.spiral!==P.spiral)spiral.style.strokeDashoffset=(1-V.spiral).toFixed(4);
   if(force||V.global!==P.global||V.dim!==P.dim){ch.st.camZ=V.global*(ch.ZMAX-3);ch.st.dim=V.dim;ch.touch();
