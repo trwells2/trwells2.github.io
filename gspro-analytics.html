@@ -5,729 +5,197 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GSPro Shot Analytics — Golf Simulator Dashboard · Tom Wells</title>
 <meta name="description" content="Case study: GSPro Shot Analytics, a React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live at trwells.com/gspro.">
-<meta name="theme-color" content="#0B2231">
+<meta name="theme-color" content="#000000">
 <meta property="og:title" content="GSPro Shot Analytics — Golf Simulator Dashboard">
 <meta property="og:description" content="Every shot leaves a track: a React dashboard over a Google Sheets pipeline, live at trwells.com/gspro.">
 <meta property="og:type" content="article">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-width='1.9' stroke-linecap='round'%3E%3Cpath d='M21 2v10' stroke='%23E4EEF2'/%3E%3Cpath d='M21 12a9 9 0 0 1-9 9a7.5 7.5 0 0 1-7.5-7.5a6 6 0 0 1 6-6a4.5 4.5 0 0 1 4.5 4.5a3 3 0 0 1-3 3' stroke='%23FF4A3D'/%3E%3C/svg%3E">
-<style>
-/* base system + case study layer, inlined so this page styles itself anywhere */
-/* =========================================================
-   trwells.com: "Track Record"
-   A bubble-chamber film: chamber navy, frost and a red pencil.
-   Type: Mona Sans (variable width) + Martian Mono, self-hosted
-   from assets/fonts/. Motion is CSS + vanilla JS inline in
-   index.html. No libraries, no build step.
-   ========================================================= */
-
-/* ------------ FONTS ------------ */
-@font-face{font-family:'Mona Sans';src:url(assets/fonts/mona-sans.woff2) format('woff2'),url(/assets/fonts/mona-sans.woff2) format('woff2');font-weight:200 900;font-stretch:75% 125%;font-style:normal;font-display:swap}
-@font-face{font-family:'Martian Mono';src:url(assets/fonts/martian-mono.woff2) format('woff2'),url(/assets/fonts/martian-mono.woff2) format('woff2');font-weight:100 800;font-stretch:75% 112.5%;font-style:normal;font-display:swap}
-
-/* ------------ TOKENS ------------ */
-:root{
-  --chamber:#0B2231;
-  --deep:#061722;
-  --frost:#E4EEF2;
-  --glass:#93B6C6;
-  --steel:#52707F;
-  --red:#FF4A3D;
-  --sans:'Mona Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
-  --mono:'Martian Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
-  --pad:clamp(20px,4.4vw,68px);
-  --ease:cubic-bezier(.16,1,.3,1);
-}
-
-/* ------------ RESET ------------ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;background:var(--chamber)}
-html,body{overflow-x:clip}
-body{font-family:var(--sans);font-size:17px;line-height:1.55;color:var(--frost);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-a{color:inherit}
-::selection{background:var(--red);color:#fff}
-:focus-visible{outline:2px solid var(--red);outline-offset:3px}
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-
-/* ------------ SHARED ------------ */
-.mono{font-family:var(--mono);font-size:12px;font-stretch:87.5%;letter-spacing:.01em;color:var(--glass)}
-.skip{position:absolute;left:12px;top:12px;z-index:99;background:var(--frost);color:var(--chamber);padding:8px 14px;transform:translateY(-180%);transition:transform .3s}
-.skip:focus{transform:none}
-.sec-h{--to:112.5%;font-weight:400;font-stretch:112.5%;font-size:clamp(38px,5vw,84px);line-height:1;letter-spacing:-.03em}
-.sec-p{--d:.25s;margin-top:20px;max-width:32em;color:var(--glass)}
-
-/* ------------ REVEALS (motion only) ------------
-   Headings expand from condensed to wide, one character at a time.
-   Body copy pulls into focus. Both are driven by an .in class. */
-.split .wd{display:inline-block;white-space:nowrap}
-.split .ch{display:inline-block}
-.motion .split .ch{opacity:0;font-stretch:75%;transition:font-stretch 1.4s var(--ease),opacity .9s ease;transition-delay:calc(var(--d,0s) + var(--i,0) * 24ms)}
-.motion .split.in .ch{opacity:1;font-stretch:var(--to,112.5%)}
-.motion .fx{opacity:0;filter:blur(8px);transform:translateY(14px);transition:opacity 1.1s ease,filter 1.2s ease,transform 1.3s var(--ease);transition-delay:var(--d,0s)}
-.motion .fx.in{opacity:1;filter:none;transform:none}
-.motion.pre .h-title,.motion.pre .h-sub,.motion.pre .h-foot{opacity:0}
-.motion .h-foot>span{opacity:0;transition:opacity 1.2s ease 1.35s}
-.motion.ready .h-foot>span{opacity:1}
-
-/* ------------ CHAMBER + LENS ------------ */
-#chamber{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
-.vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 95% at 50% 45%,rgba(6,23,34,0) 42%,rgba(3,13,20,.78) 100%)}
-.fid{position:fixed;inset:0;z-index:2;pointer-events:none}
-.fid i{position:absolute;width:15px;height:15px;opacity:.55}
-.fid i::before,.fid i::after{content:'';position:absolute;background:var(--glass)}
-.fid i::before{left:7px;top:0;width:1px;height:15px}
-.fid i::after{left:0;top:7px;width:15px;height:1px}
-.fid i:nth-child(1){left:calc(var(--pad) - 7px);top:84px}
-.fid i:nth-child(2){right:calc(var(--pad) - 7px);top:84px}
-.fid i:nth-child(3){left:calc(var(--pad) - 7px);bottom:64px}
-.fid i:nth-child(4){right:calc(var(--pad) - 7px);bottom:64px}
-main{position:relative;z-index:3}
-
-/* ------------ NAV ------------ */
-.nav{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px var(--pad);background:linear-gradient(rgba(6,23,34,.78),rgba(6,23,34,0))}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;font-stretch:112.5%;font-size:15px;letter-spacing:.01em}
-.brand svg{width:24px;height:24px;flex:none}
-.nav-r{display:flex;align-items:center;gap:30px}
-.nav ul{display:flex;gap:24px;list-style:none;font-family:var(--mono);font-size:12px;font-stretch:87.5%}
-.nav ul a{text-decoration:none;color:var(--glass);transition:color .3s}
-.nav ul a:hover,.nav ul a:focus-visible{color:var(--frost)}
-.fc b{color:var(--frost);font-weight:500;font-variant-numeric:tabular-nums}
-@media (max-width:760px){.nav li:not(:last-child){display:none}.fc{display:none}}
-
-/* ------------ HERO ------------ */
-.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:110px var(--pad) 100px}
-.hero-in{position:relative;max-width:1180px}
-.h-title{--to:125%;--d:.25s;font-weight:300;font-stretch:125%;font-size:clamp(44px,7vw,122px);line-height:.95;letter-spacing:-.035em}
-.h-title .w{display:block}
-.h-sub{--d:.9s;margin-top:clamp(24px,3vw,40px);max-width:34em;font-size:clamp(16px,1.25vw,19px);color:var(--glass)}
-.h-sub strong{color:var(--frost);font-weight:500}
-.h-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:26px;display:flex;justify-content:space-between;gap:20px}
-.live{display:inline-block;width:7px;height:7px;margin-right:10px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);vertical-align:1px;animation:blink 2.4s ease-in-out infinite}
-@keyframes blink{50%{opacity:.35}}
-@media (max-width:640px){.h-title{--to:100%;font-stretch:100%;font-size:11vw}.h-foot span:last-child{display:none}}
-
-/* ------------ STACK: EXPLODED VIEW ------------ */
-.stack{position:relative}
-.motion .stack{height:380vh}
-.stack-stage{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:center;gap:40px;padding:100px var(--pad) 60px}
-.motion .stack-stage{position:sticky;top:0;height:100svh}
-.stack-copy .sec-p{max-width:28em}
-.caps{list-style:none;position:relative;margin-top:36px}
-.motion .caps{min-height:8.5em}
-.cap{padding:14px 0 0;border-top:1px solid rgba(147,182,198,.2);margin-bottom:18px}
-.motion .cap{position:absolute;inset:0 0 auto 0;margin:0;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .7s var(--ease)}
-.motion .cap.on{opacity:1;transform:none}
-html:not(.motion) .cap.idle{display:none}
-.cap .tag{font-family:var(--mono);font-size:12px;font-stretch:87.5%;color:var(--red)}
-.cap p{margin-top:8px;font-size:clamp(16px,1.3vw,19px);max-width:27em}
-.stack-svg{display:block;width:100%;height:auto;max-height:88svh;aspect-ratio:1;overflow:visible}
-.stack-svg .pl{fill:rgba(147,182,198,.06);stroke:rgba(228,238,242,.5);stroke-width:1.2}
-.stack-svg .pl.on{fill:rgba(255,74,61,.1);stroke:var(--red)}
-.stack-svg .lay,.stack-svg .lab{cursor:pointer}
-.stack-svg .lay:hover .pl{stroke:#FF7B70;fill:rgba(255,123,112,.09)}
-.stack-svg .lab:hover .ln{fill:#FF7B70}
-.stack-svg .lay:focus,.stack-svg .lab:focus{outline:none}
-.stack-svg .lay:focus-visible .pl{stroke:var(--red);stroke-width:2}
-.stack-svg .lab:focus-visible .ln{fill:var(--red)}
-.motion .frame[data-href]{cursor:pointer}
-.stack-svg .gl *{fill:none;stroke:rgba(228,238,242,.6);stroke-width:1.2}
-.stack-svg .gl.on *{stroke:#FF7B70}
-.stack-svg .gl .bar{stroke-width:9;stroke:rgba(228,238,242,.45)}
-.stack-svg .gl.on .bar{stroke:var(--red)}
-.stack-svg .lab path{fill:none;stroke:rgba(147,182,198,.45);stroke-width:1}
-.stack-svg .lab circle{fill:var(--frost)}
-.stack-svg .lab.on path{stroke:var(--red)}
-.stack-svg .lab.on circle{fill:var(--red)}
-.stack-svg .ln{font:500 28px var(--sans);font-stretch:112%;fill:var(--frost)}
-.stack-svg .lab.on .ln{fill:var(--red)}
-.stack-svg .lt{font:400 16px var(--mono);font-stretch:87.5%;fill:var(--glass)}
-@media (max-width:900px){
-  .stack-stage{grid-template-columns:minmax(0,1fr);align-content:start;gap:4px;padding-top:84px}
-  .stack .sec-h{font-size:clamp(32px,8.6vw,48px)}
-  .stack .sec-p{font-size:15px;margin-top:12px}
-  .caps{margin-top:16px}
-  .motion .caps{min-height:7.6em}
-  .cap p{font-size:15px}
-  .stack-svg{max-height:46svh;margin:0 auto}
-}
-
-/* ------------ WORK: Z-AXIS FLYTHROUGH ------------ */
-.events{position:relative;padding-top:16vh}
-.ev-head{width:min(1180px,calc(100vw - 2*var(--pad)));margin:0 auto 7vh}
-.fly{position:relative;padding:0 var(--pad) 8vh}
-.motion .fly{height:640vh;padding:0}
-.motion .fly-stage{position:sticky;top:0;height:100svh;overflow:clip;perspective:1200px}
-.motion .world{position:absolute;inset:0;transform-style:preserve-3d}
-.frame{position:relative;width:min(1000px,100%);margin:0 auto 5vh;padding:clamp(20px,2.6vw,38px);background:#06151F;border:1px solid rgba(147,182,198,.24);box-shadow:0 40px 90px -30px rgba(0,0,0,.65)}
-.motion .frame{position:absolute;left:50%;top:50%;width:min(1000px,88vw);margin:0;translate:-50% -50%;visibility:hidden;will-change:transform,opacity}
-.frame::before,.frame::after{content:'';position:absolute;width:13px;height:13px;background:linear-gradient(var(--glass),var(--glass)) 6px 0/1px 13px no-repeat,linear-gradient(var(--glass),var(--glass)) 0 6px/13px 1px no-repeat;opacity:.75}
-.frame::before{left:-7px;top:-7px}
-.frame::after{right:-7px;bottom:-7px}
-.fr-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 24px;font-family:var(--mono);font-size:12px;font-stretch:87.5%;color:var(--glass)}
-.fr-top .n{color:var(--red);font-weight:500}
-.fr-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,260px);gap:clamp(20px,3vw,44px);align-items:center;margin-top:clamp(16px,2vw,26px)}
-.fr-body h3{font-weight:500;font-stretch:115%;font-size:clamp(30px,3.6vw,58px);line-height:1;letter-spacing:-.03em}
-.fr-sum{margin-top:14px;color:var(--glass);max-width:36em}
-.fr-metric{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin-top:22px}
-.fr-metric b{font-weight:300;font-stretch:125%;font-size:clamp(44px,5.2vw,88px);line-height:.9;letter-spacing:-.045em;color:var(--red)}
-.fr-metric span{flex:1 1 15em;font-size:15px;line-height:1.45}
-.fr-quote{margin-top:22px;font-weight:300;font-stretch:125%;font-size:clamp(24px,2.4vw,38px);line-height:1.1;letter-spacing:-.02em}
-.fr-stack{margin-top:18px;font-family:var(--mono);font-size:12px;font-stretch:87.5%;color:var(--glass)}
-.fr-link{display:inline-block;margin-top:20px;font-weight:400;font-stretch:112.5%;font-size:clamp(19px,1.7vw,26px);color:var(--frost);text-decoration:none;border-bottom:2px solid var(--red);padding-bottom:3px;transition:color .3s}
-.fr-link:hover{color:var(--red)}
-.fr-link + .fr-link{margin-left:26px}
-.fr-glyph{display:block;width:100%;height:auto;aspect-ratio:1;border:1px solid rgba(147,182,198,.2);background:rgba(3,13,20,.55)}
-.fr-glyph .gt{fill:none;stroke:rgba(228,238,242,.78);stroke-width:1.4;stroke-dasharray:1.2 2.8;stroke-linecap:round}
-.fr-glyph .gt.red{stroke:var(--red)}
-.fr-glyph .gb{stroke:rgba(228,238,242,.4);stroke-width:1.2}
-.fr-glyph .gv{fill:var(--frost)}
-.fr-glyph .gf{stroke:rgba(147,182,198,.6);stroke-width:1}
-@media (max-width:760px){
-  .fr-body{grid-template-columns:minmax(0,1fr)}
-  .fr-glyph{display:none}
-  .fr-sum{font-size:14.5px;line-height:1.5}
-  .fr-top{flex-direction:column}
-}
-
-/* ------------ RECORD: CAREER AS ONE TRACK ------------ */
-.record{position:relative;padding:12vh 0 8vh}
-.rec-stage{position:relative;padding:0 var(--pad);display:flex;flex-direction:column}
-.rec-svg{display:block;width:100%;height:auto;margin-top:5vh}
-@media (min-width:761px){
-  .motion .record{height:300vh;padding:0}
-  .motion .rec-stage{position:sticky;top:0;height:100svh;padding:96px var(--pad) 26px}
-  .motion .rec-svg{flex:1;min-height:0;height:100%;margin-top:2vh}
-}
-.rec-svg .axis,.rec-svg .tick{stroke:rgba(147,182,198,.45);stroke-width:1.2;fill:none}
-.rec-svg .yr{font:400 16px var(--mono);fill:var(--glass)}
-.rec-svg .trk{fill:none;stroke:var(--frost);stroke-width:2.6;stroke-linecap:round}
-.rec-svg .sec{fill:none;stroke:rgba(228,238,242,.68);stroke-width:1.5;stroke-linecap:round}
-.rec-svg .fut{fill:none;stroke:rgba(228,238,242,.55);stroke-width:2.2;stroke-dasharray:2 9;stroke-linecap:round}
-.rec-svg .vx{fill:var(--chamber);stroke:var(--frost);stroke-width:2}
-.rec-svg .head circle{fill:var(--red)}
-.rec-svg .head .pulse{fill:none;stroke:var(--red);stroke-width:2;transform-box:fill-box;transform-origin:center;animation:pulse 2.2s ease-out infinite}
-@keyframes pulse{from{transform:scale(1);opacity:.85}to{transform:scale(3.4);opacity:0}}
-.rec-svg .lt{font:500 28px var(--sans);font-stretch:112%;fill:var(--frost)}
-.rec-svg .lm{font:400 16px var(--mono);font-stretch:87.5%;fill:var(--glass)}
-.rec-svg .ld{stroke:rgba(147,182,198,.4);stroke-width:1;stroke-dasharray:3 5;fill:none}
-.rec-svg.vert .lm{font-size:21px}
-.rec-svg.vert .yr{font-size:19px}
-.rec-svg.vert .lt{font-size:30px}
-.motion .rec-svg .trk,.motion .rec-svg .sec{stroke-dasharray:1 2;stroke-dashoffset:1}
-.motion .rec-svg .axis,.motion .rec-svg .tick,.motion .rec-svg .yr,.motion .rec-svg .lb,.motion .rec-svg .vx,.motion .rec-svg .head,.motion .rec-svg .fut{opacity:0}
-
-/* ------------ CONTACT ------------ */
-.contact{position:relative;min-height:100svh;padding:26vh var(--pad) 150px;overflow:clip}
-.c-spiral{position:absolute;right:-12vw;top:50%;width:min(96vh,980px);height:min(96vh,980px);margin-top:calc(min(96vh,980px)/-2);pointer-events:none;overflow:visible}
-.c-spiral path{fill:none;stroke:var(--red);stroke-width:1.5;vector-effect:non-scaling-stroke;opacity:.85}
-.motion .c-spiral path{stroke-dasharray:1 2;stroke-dashoffset:1}
-.c-in{position:relative;max-width:1100px}
-.c-title{--to:125%;font-weight:300;font-stretch:125%;font-size:clamp(52px,9vw,160px);line-height:.9;letter-spacing:-.045em}
-.c-sub{--d:.2s;margin-top:30px;max-width:31em;color:var(--glass)}
-.c-actions{--d:.35s;margin-top:34px}
-.c-mail{display:inline-block;font-weight:400;font-size:clamp(28px,4.4vw,72px);letter-spacing:-.02em;line-height:1.1;color:var(--frost);text-decoration:none;background:linear-gradient(var(--red),var(--red)) 0 100%/100% 2px no-repeat;padding-bottom:6px;transition:background-size .6s var(--ease)}
-.c-mail:hover{background-size:0 2px;background-position:100% 100%}
-.c-links{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:26px;font-family:var(--mono);font-size:13px;font-stretch:87.5%}
-.c-links a{color:var(--frost);text-underline-offset:5px}
-.c-links a:hover{color:var(--red)}
-.c-foot{position:absolute;left:var(--pad);right:var(--pad);bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px}
-.c-foot a{color:inherit}
-@media (max-width:640px){
-  .c-title{--to:100%;font-stretch:100%;font-size:17vw}
-  .c-title .w{display:block}
-  .c-spiral{right:-45vw;opacity:.75}
-  .c-mail{font-size:clamp(24px,7.6vw,34px)}
-}
-
-/* ------------ ACCESSIBILITY ------------ */
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-
-
-/* =========================================================
-   trwells.com — case study pages ("Track Record" system)
-   Loads on top of /assets/styles.css, which supplies the
-   tokens, fonts, nav, chamber canvas and reveal classes.
-   ========================================================= */
-
-/* ------------ BREADCRUMB ------------ */
-.crumb{position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:10px;padding:104px var(--pad) 0;font-family:var(--mono);font-size:12px;font-stretch:87.5%;color:var(--glass)}
-.crumb a{color:var(--glass);text-decoration:none;transition:color .3s}
-.crumb a:hover,.crumb a:focus-visible{color:var(--frost)}
-.crumb b{color:var(--frost);font-weight:500}
-
-/* ------------ HERO ------------ */
-.cs-hero{position:relative;padding:36px var(--pad) clamp(60px,10vh,120px)}
-.cs-in{width:min(1240px,100%);margin:0 auto}
-.cs-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,260px);gap:clamp(24px,4vw,56px);align-items:center}
-.cs-title{--to:125%;font-weight:300;font-stretch:125%;font-size:clamp(46px,7.6vw,122px);line-height:.92;letter-spacing:-.04em}
-.cs-sub{margin-top:clamp(18px,2vw,28px);font-weight:300;font-stretch:112.5%;font-size:clamp(21px,2.5vw,38px);line-height:1.12;letter-spacing:-.025em;color:var(--frost);max-width:19em}
-.cs-lede{margin-top:clamp(20px,2vw,28px);max-width:34em;color:var(--glass);font-size:clamp(16px,1.2vw,18.5px)}
-.cs-kpis{display:flex;flex-wrap:wrap;gap:clamp(28px,4.6vw,72px);margin-top:clamp(36px,5vw,64px);padding-top:clamp(22px,3vw,34px);border-top:1px solid rgba(147,182,198,.22)}
-.cs-kpi{position:relative}
-.cs-kpi .v{font-weight:300;font-stretch:125%;font-size:clamp(42px,5.2vw,82px);line-height:.9;letter-spacing:-.045em;color:var(--frost)}
-.cs-kpi.mark .v{color:var(--red)}
-.cs-kpi .k{margin-top:13px;max-width:17em;font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;line-height:1.5;color:var(--glass)}
-.cs-kpi .mv{position:relative;display:inline-block}
-.cs-kpi .ann{position:absolute;left:-18px;top:-13px;width:calc(100% + 36px);height:calc(100% + 24px);overflow:visible;pointer-events:none}
-.cs-kpi .ann path{fill:none;stroke:var(--red);stroke-width:1.5;stroke-linecap:round}
-.motion .cs-kpi .ann path{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset 1.4s ease .25s}
-.motion .cs-kpi.in .ann path{stroke-dashoffset:0}
-@media (max-width:900px){.cs-head{grid-template-columns:minmax(0,1fr)}.cs-kpi .v{font-size:clamp(38px,11vw,54px)}}
-
-.motion.pre .cs-title,.motion.pre .cs-sub,.motion.pre .cs-lede,.motion.pre .crumb{opacity:0}
-
-/* ------------ SECTIONS ------------ */
-.cs-sec{position:relative;padding:clamp(50px,8vh,104px) var(--pad)}
-.cs-wrap{width:min(1240px,100%);margin:0 auto}
-.cs-split{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,4vw,64px);align-items:start}
-.cs-body p{max-width:34em;color:var(--glass);font-size:clamp(16px,1.15vw,18px)}
-.cs-body p + p{margin-top:18px}
-.cs-body strong{color:var(--frost);font-weight:500}
-@media (max-width:900px){.cs-split{grid-template-columns:minmax(0,1fr);gap:28px}}
-
-/* plate = a film frame used for cards, galleries and callouts */
-.plate{position:relative;background:#06151F;border:1px solid rgba(147,182,198,.24);box-shadow:0 34px 70px -40px rgba(0,0,0,.7)}
-.plate::before,.plate::after{content:'';position:absolute;width:13px;height:13px;opacity:.75;background:linear-gradient(var(--glass),var(--glass)) 6px 0/1px 13px no-repeat,linear-gradient(var(--glass),var(--glass)) 0 6px/13px 1px no-repeat}
-.plate::before{left:-7px;top:-7px}
-.plate::after{right:-7px;bottom:-7px}
-.rec-card{padding:clamp(18px,2vw,28px)}
-.rec-card .hd{font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:var(--red);padding-bottom:12px;border-bottom:1px solid rgba(147,182,198,.2)}
-.rec-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;padding:13px 0;border-bottom:1px solid rgba(147,182,198,.14);font-size:15.5px;line-height:1.45}
-.rec-row:last-child{border-bottom:0;padding-bottom:0}
-.rec-row .k{font-family:var(--mono);font-size:11px;font-stretch:87.5%;color:var(--glass);padding-top:4px}
-
-/* ------------ PROCESS TRACK ------------ */
-.track{position:relative;margin-top:clamp(34px,5vw,56px);padding-left:clamp(50px,5vw,72px)}
-.rail{position:absolute;left:clamp(12px,1.2vw,17px);top:10px;bottom:10px;width:2px;background:rgba(147,182,198,.2);overflow:hidden}
-.rail i{position:absolute;inset:0;background:linear-gradient(var(--frost),var(--red));transform:scaleY(var(--p,1));transform-origin:top}
-.motion .rail i{transform:scaleY(var(--p,0))}
-.step{position:relative;padding-bottom:clamp(30px,4vw,48px)}
-.step:last-child{padding-bottom:0}
-.step .dot{position:absolute;left:calc(clamp(50px,5vw,72px) * -1 + clamp(12px,1.2vw,17px) - 12px);top:2px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(147,182,198,.4);background:var(--chamber);display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--glass);transition:border-color .4s ease,color .4s ease}
-.step.on .dot{border-color:var(--red);color:var(--red)}
-.step h3{font-weight:500;font-stretch:112.5%;font-size:clamp(21px,2.1vw,30px);letter-spacing:-.022em;line-height:1.1}
-.step p{margin-top:11px;max-width:42em;color:var(--glass);font-size:clamp(15px,1.1vw,17px)}
-
-/* ------------ SCREEN GALLERY ------------ */
-.gal{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(14px,1.6vw,22px);margin-top:clamp(30px,4vw,48px)}
-.shot{grid-column:span 2;display:block;width:100%;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;background:#06151F;border:1px solid rgba(147,182,198,.24);transition:border-color .3s ease,transform .5s var(--ease,cubic-bezier(.2,.7,.1,1))}
-.shot.lg{grid-column:span 3}
-.shot:hover{border-color:var(--red)}
-.shot .fig{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;background:rgba(3,13,20,.7)}
-.shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center}
-.shot .ph{position:absolute;inset:0;display:none;place-content:center;justify-items:center;gap:8px;padding:18px;text-align:center;font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:rgba(147,182,198,.8);background:repeating-linear-gradient(45deg,rgba(147,182,198,.05) 0 10px,transparent 10px 20px)}
-.shot .ph b{display:block;margin-bottom:6px;color:var(--frost);font-weight:500}
-.shot.missing img{display:none}
-.shot.missing .ph{display:grid}
-.shot .cap{display:flex;width:100%;box-sizing:border-box;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 14px;border-top:1px solid rgba(147,182,198,.16);font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:var(--glass)}
-.shot .cap b{color:var(--red);font-weight:500}
-@media (max-width:900px){.gal{grid-template-columns:repeat(2,minmax(0,1fr))}.shot,.shot.lg{grid-column:span 1}}
-@media (max-width:620px){.gal{grid-template-columns:minmax(0,1fr)}}
-
-/* ------------ RESULT CARDS ------------ */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:clamp(16px,2vw,26px);margin-top:clamp(30px,4vw,48px)}
-.card{border:1px solid rgba(147,182,198,.22);background:rgba(6,21,31,.55);padding:clamp(20px,2.2vw,30px)}
-.card .v{font-weight:300;font-stretch:125%;font-size:clamp(38px,4.2vw,66px);line-height:.9;letter-spacing:-.045em;color:var(--red)}
-.card h3{margin-top:16px;font-weight:500;font-size:18.5px;letter-spacing:-.012em;line-height:1.25}
-.card p{margin-top:10px;font-size:15px;line-height:1.5;color:var(--glass)}
-
-/* ------------ TECH ROWS ------------ */
-.tech{margin-top:clamp(30px,4vw,48px);border-top:1px solid rgba(147,182,198,.22)}
-.tech .row{display:grid;grid-template-columns:minmax(0,290px) minmax(0,1fr);gap:clamp(12px,2vw,40px);padding:clamp(14px,1.6vw,20px) 0;border-bottom:1px solid rgba(147,182,198,.14)}
-.tech .n{font-weight:500;font-size:18px;letter-spacing:-.012em}
-.tech .r{color:var(--glass);font-size:15.5px;line-height:1.5}
-@media (max-width:700px){.tech .row{grid-template-columns:minmax(0,1fr);gap:6px}}
-
-/* ------------ PAGINATION + CTA ------------ */
-.pag{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,24px);margin-top:clamp(40px,6vw,76px)}
-.pag a{display:block;padding:clamp(20px,2.4vw,32px);border:1px solid rgba(147,182,198,.22);text-decoration:none;transition:border-color .3s ease,background .3s ease}
-.pag a:hover{border-color:var(--red);background:rgba(255,74,61,.05)}
-.pag .d{font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:var(--glass)}
-.pag .t{margin-top:10px;font-weight:500;font-stretch:112.5%;font-size:clamp(19px,2.1vw,29px);letter-spacing:-.022em;line-height:1.1}
-.pag a.next{text-align:right}
-@media (max-width:700px){.pag{grid-template-columns:minmax(0,1fr)}.pag a.next{text-align:left}}
-.cs-cta{margin-top:clamp(46px,7vw,92px);padding-top:clamp(28px,3.4vw,44px);border-top:1px solid rgba(147,182,198,.22)}
-.cs-cta h2{max-width:14em}
-.cs-cta .c-mail{margin-top:26px}
-.cs-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 26px;margin-top:clamp(40px,6vw,72px);padding:20px 0 clamp(30px,5vh,56px);border-top:1px solid rgba(147,182,198,.18);font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:var(--glass)}
-.cs-foot a{color:inherit}
-
-/* ------------ LIGHTBOX ------------ */
-.lb{position:fixed;inset:0;z-index:60;display:none;background:rgba(4,13,20,.95)}
-.lb.on{display:grid;place-items:center;padding:clamp(20px,6vh,70px) clamp(20px,8vw,110px)}
-.lb figure{margin:0;display:grid;justify-items:center}
-.lb img{max-width:min(1400px,88vw);max-height:74vh;border:1px solid rgba(147,182,198,.3)}
-.lb figcaption{margin-top:16px;font-family:var(--mono);font-size:12px;font-stretch:87.5%;color:var(--glass);text-align:center}
-.lb button{position:absolute;display:grid;place-items:center;width:46px;height:46px;background:transparent;border:1px solid rgba(147,182,198,.3);color:var(--frost);font:400 20px/1 var(--sans);cursor:pointer;transition:border-color .3s ease,color .3s ease}
-.lb button:hover{border-color:var(--red);color:var(--red)}
-.lb .x{top:clamp(16px,3vh,30px);right:clamp(16px,3vw,30px)}
-.lb .p{left:clamp(10px,2vw,26px);top:50%;transform:translateY(-50%)}
-.lb .n{right:clamp(10px,2vw,26px);top:50%;transform:translateY(-50%)}
-.lb .count{position:absolute;left:50%;bottom:clamp(16px,3vh,30px);transform:translateX(-50%);font-family:var(--mono);font-size:11.5px;font-stretch:87.5%;color:var(--glass)}
-
-</style>
-<script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion','pre');setTimeout(function(){d.classList.remove('pre')},4000)}})(document.documentElement)</script>
+<link rel="icon" href="assets/logo/mark-vertex.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/martian-mono.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css?v=2026-10-01">
+<script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion');setTimeout(function(){d.classList.add('ready')},3500)}})(document.documentElement)</script>
 </head>
 <body>
 <a class="skip" href="#screens">Skip to the screens</a>
 
-<canvas id="chamber" aria-hidden="true" data-mark="ev. 05"></canvas>
-<div class="vig" aria-hidden="true"></div>
-<div class="fid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-
 <header class="nav">
-  <a class="brand" href="/" aria-label="Tom Wells, home">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M21 2v10" stroke="#E4EEF2"/><path d="M21 12a9 9 0 0 1-9 9a7.5 7.5 0 0 1-7.5-7.5a6 6 0 0 1 6-6a4.5 4.5 0 0 1 4.5 4.5a3 3 0 0 1-3 3" stroke="#FF4A3D"/></svg>
+  <a class="brand" href="index.html" aria-label="Tom Wells, home">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 3.4V7" stroke="currentColor"/><circle cx="17.7" cy="10.4" r="1.75" fill="#FF4A3D" stroke="none"/><path d="M17.7 14a6.4 6.4 0 0 1-6.4 6.4a4.6 4.6 0 0 1-4.6-4.6a3.3 3.3 0 0 1 3.3-3.3a2.4 2.4 0 0 1 2.4 2.4" stroke="#FF4A3D"/></svg>
     <span>Tom Wells</span>
   </a>
-  <div class="nav-r">
-    <ul><li><a href="/#about">stack</a></li><li><a href="/#portfolio">work</a></li><li><a href="/#record">record</a></li><li><a href="/#contact">contact</a></li></ul>
-    <span class="fc mono" aria-hidden="true">frame <b>0001</b></span>
-  </div>
+  <nav class="links" aria-label="Sections"><i class="ind" aria-hidden="true"></i><a href="index.html#about">Stack</a><a class="on" href="index.html#portfolio">Work</a><a href="index.html#record">Record</a></nav>
+  <a class="btn btn-w btn-sm" href="index.html#contact">Get in touch</a>
 </header>
 
 <main>
-<nav class="crumb" aria-label="Breadcrumb">
-  <a href="/#portfolio">&#8592; selected work</a><span>/</span><b>event 05 — GSPro Shot Analytics</b>
-</nav>
-
-<!-- ================= HERO ================= -->
-<section class="cs-hero">
-  <div class="cs-in">
-    <div class="cs-head">
-      <div>
-        <p class="mono fx">event 05 / 05 &nbsp;·&nbsp; personal project, live now</p>
-        <h1 class="cs-title" data-split>GSPro Shot Analytics</h1>
-        <p class="cs-sub fx" style="--d:.15s">Every swing leaves a track. This reads them.</p>
-        <p class="cs-lede fx" style="--d:.3s">A full-stack React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live data comes from Google Sheets through a Cloudflare Worker, so the API key never reaches the browser.</p>
-      </div>
-      <svg class="fr-glyph" viewBox="0 0 300 300" aria-hidden="true"></svg>
+<!-- ============= HERO ============= -->
+<section class="hero cs-hero" id="top">
+  <div class="sky" aria-hidden="true"></div>
+  <svg class="tracks" viewBox="0 0 1440 1100" preserveAspectRatio="xMidYMid slice" data-seed="505" aria-hidden="true"></svg>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wrap cs-in">
+    <nav class="crumb" aria-label="Breadcrumb"><a class="pill" href="index.html#portfolio">&#8592; Selected work</a><span class="mono">05 / 05 &#183; Personal project, live now</span></nav>
+    <h1 class="h1" data-words>GSPro Shot Analytics</h1>
+    <p class="cs-sub">Every swing leaves a track. This reads them.</p>
+    <p class="cs-lede">A full-stack React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live data comes from Google Sheets through a Cloudflare Worker, so the API key never reaches the browser.</p>
+    <div class="ctas"><a class="btn btn-w" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn-g" href="#screens">See the screens</a></div>
+    <div class="kpis"><div class="kpi"><b>1</b><span>custom metric: distance-weighted consistency, per club</span></div><div class="kpi"><b>0</b><span>credentials exposed to the client</span></div><div class="kpi mark"><b>live</b><span>in production at trwells.com/gspro</span></div></div>
+  </div>
+  <div class="stage">
+    <div class="device">
+      <div class="dev-bar" aria-hidden="true"><i></i><i></i><i></i><span>GSPro Shot Analytics &#183; trwells.com/gspro</span></div>
+      <div class="screen"><img src="assets/img/gspro-dispersion.webp" width="1200" height="576" decoding="async" fetchpriority="high" alt="GSPro Shot Analytics with club filters, carry and accuracy averages, and a scatter of 3,779 shots by offline distance"></div>
     </div>
-    <div class="cs-kpis">
-      <div class="cs-kpi"><div class="v">1</div><div class="k">custom metric: distance-weighted consistency, per club</div></div>
-      <div class="cs-kpi"><div class="v">0</div><div class="k">credentials exposed to the client</div></div>
-      <div class="cs-kpi mark"><span class="mv"><div class="v">live</div><svg class="ann" viewBox="0 0 320 170" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M300 84C300 118 233 146 160 146C87 146 20 118 20 84C20 50 87 22 160 22C233 22 300 50 300 84C300 92 292 100 276 108"/></svg></span><div class="k">in production at trwells.com/gspro</div></div>
-    </div>
-    <p class="fx" style="--d:.45s;margin-top:34px"><a class="fr-link" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app</a></p>
   </div>
 </section>
 
-<!-- ================= OVERVIEW ================= -->
-<section class="cs-sec" aria-labelledby="ov-h">
-  <div class="cs-wrap cs-split">
+<!-- ============= OVERVIEW ============= -->
+<section class="sec" aria-labelledby="ov-h">
+  <div class="wrap cs-split">
     <div class="cs-body">
-      <h2 class="sec-h" id="ov-h" data-split>A simulator makes data. Spreadsheets don&#8217;t make sense of it.</h2>
-      <p class="fx" style="--d:.2s;margin-top:24px">A golf simulator records every shot: club, carry, total, offline, ball speed. After a few sessions that is thousands of rows in a sheet, and a sheet can tell you your average 7-iron. It cannot tell you which club you can actually trust on a given shot.</p>
-      <p class="fx" style="--d:.3s">GSPro Shot Analytics answers that question. Shots are colour-coded by club and plotted as dispersion, so the shape of a miss is visible rather than averaged away. A <strong>distance-weighted consistency metric</strong> ranks clubs by how tightly they group relative to how far they carry, which is the comparison a raw standard deviation gets wrong.</p>
-      <p class="fx" style="--d:.4s">It is the same pattern as the federal work, at hobby scale: a messy source, one model over it, and a surface that answers a question. That is why it is on this site.</p>
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Overview</p>
+      <h2 class="h2 rv" id="ov-h">A simulator makes data. Spreadsheets don&#8217;t make sense of it.</h2>
+      <p class="rv">A golf simulator records every shot: club, carry, total, offline, ball speed. After a few sessions that is thousands of rows in a sheet, and a sheet can tell you your average 7-iron. It cannot tell you which club you can actually trust on a given shot.</p>
+      <p class="rv">GSPro Shot Analytics answers that question. Shots are colour-coded by club and plotted as dispersion, so the shape of a miss is visible rather than averaged away. A <strong>distance-weighted consistency metric</strong> ranks clubs by how tightly they group relative to how far they carry, which is the comparison a raw standard deviation gets wrong.</p>
+      <p class="rv">It is the same pattern as the federal work, at hobby scale: a messy source, one model over it, and a surface that answers a question. That is why it is on this site.</p>
     </div>
-    <div class="plate rec-card fx" style="--d:.25s">
-      <div class="hd">RECORD</div>
-      <div class="rec-row"><span class="k">ROLE</span><span>Sole builder — pipeline, API layer, front end, deployment</span></div>
-      <div class="rec-row"><span class="k">TYPE</span><span>Personal project, in active use</span></div>
-      <div class="rec-row"><span class="k">LIVE AT</span><span><a href="https://trwells.com/gspro" target="_blank" rel="noopener">trwells.com/gspro</a></span></div>
-      <div class="rec-row"><span class="k">SOURCE</span><span>Google Sheets, read through a Cloudflare Worker at api.trwells.com</span></div>
-      <div class="rec-row"><span class="k">STACK</span><span>React, Recharts, Cloudflare Workers, Google Sheets API, Python, GitHub Pages</span></div>
-    </div>
+    <aside class="facts rv" aria-label="Project record"><span class="mono">Record</span><dl><div><dt>Role</dt><dd>Sole builder — pipeline, API layer, front end, deployment</dd></div><div><dt>Type</dt><dd>Personal project, in active use</dd></div><div><dt>Live at</dt><dd><a href="https://trwells.com/gspro" target="_blank" rel="noopener">trwells.com/gspro</a></dd></div><div><dt>Source</dt><dd>Google Sheets, read through a Cloudflare Worker at api.trwells.com</dd></div><div><dt>Stack</dt><dd><ul class="tags"><li>React</li><li>Recharts</li><li>Cloudflare Workers</li><li>Google Sheets API</li><li>Python</li><li>GitHub Pages</li></ul></dd></div></dl></aside>
   </div>
 </section>
 
-<!-- ================= PROCESS ================= -->
-<section class="cs-sec" aria-labelledby="pr-h">
-  <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="pr-h">How it was built.</h2>
-    <p class="cs-lede fx" style="--d:.2s">Six stages, from a session log to a dashboard that loads in a browser tab.</p>
-    <div class="track">
+<!-- ============= PROCESS ============= -->
+<section class="sec" aria-labelledby="pr-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Process</p>
+      <h2 class="h2 rv" id="pr-h">How it was built.</h2>
+      <p class="sub rv">Six stages, from a session log to a dashboard that loads in a browser tab.</p>
+    </div>
+    <div class="steps">
       <div class="rail" aria-hidden="true"><i></i></div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">01</span>
-        <h3>Get the shots out of the simulator</h3>
-        <p>Session data lands in Google Sheets, which is the right store for this: free, editable by hand when a shot needs correcting, and already synced. Python collects and normalises the rows on a schedule, with retry and resume logic so an interrupted run does not duplicate or lose a session.</p>
-      </div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">02</span>
-        <h3>Normalise the record</h3>
-        <p>Club names, units and outliers are reconciled into one consistent shape before anything reads them, so a 7-iron logged three different ways is still one club. Structured logging makes a bad session traceable rather than mysterious.</p>
-      </div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">03</span>
-        <h3>Put a Worker in front of the key</h3>
-        <p>A Cloudflare Worker at api.trwells.com proxies the Google Sheets API. The browser talks to the Worker; the Worker holds the credential. Nothing sensitive ships to the client, and the front end stays a static file on GitHub Pages.</p>
-      </div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">04</span>
-        <h3>Build the dashboard</h3>
-        <p>React and Recharts in a single self-contained page: club-colour-coded dispersion and distance views, a paginated shot feed for reading individual swings, and CSV export for anything the dashboard does not answer.</p>
-      </div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">05</span>
-        <h3>Define the consistency metric</h3>
-        <p>Grouping tightness means little without distance: a wedge and a driver cannot be compared on spread alone. The distance-weighted consistency score normalises for carry, so clubs can be ranked against each other and tracked over time.</p>
-      </div>
-      <div class="step">
-        <span class="dot" aria-hidden="true">06</span>
-        <h3>Ship it and keep using it</h3>
-        <p>Deployed on GitHub Pages at trwells.com/gspro and refined against real sessions since. Every change has to survive the only user who matters: the one standing on the mat wondering which club to hit.</p>
-      </div>
+      <ol>
+        <li class="step"><span class="n" aria-hidden="true">01</span><h3>Get the shots out of the simulator</h3><p>Session data lands in Google Sheets, which is the right store for this: free, editable by hand when a shot needs correcting, and already synced. Python collects and normalises the rows on a schedule, with retry and resume logic so an interrupted run does not duplicate or lose a session.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">02</span><h3>Normalise the record</h3><p>Club names, units and outliers are reconciled into one consistent shape before anything reads them, so a 7-iron logged three different ways is still one club. Structured logging makes a bad session traceable rather than mysterious.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">03</span><h3>Put a Worker in front of the key</h3><p>A Cloudflare Worker at api.trwells.com proxies the Google Sheets API. The browser talks to the Worker; the Worker holds the credential. Nothing sensitive ships to the client, and the front end stays a static file on GitHub Pages.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">04</span><h3>Build the dashboard</h3><p>React and Recharts in a single self-contained page: club-colour-coded dispersion and distance views, a paginated shot feed for reading individual swings, and CSV export for anything the dashboard does not answer.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">05</span><h3>Define the consistency metric</h3><p>Grouping tightness means little without distance: a wedge and a driver cannot be compared on spread alone. The distance-weighted consistency score normalises for carry, so clubs can be ranked against each other and tracked over time.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">06</span><h3>Ship it and keep using it</h3><p>Deployed on GitHub Pages at trwells.com/gspro and refined against real sessions since. Every change has to survive the only user who matters: the one standing on the mat wondering which club to hit.</p></li>
+      </ol>
     </div>
   </div>
 </section>
 
-<!-- ================= SCREENS ================= -->
-<section class="cs-sec" id="screens" aria-labelledby="sc-h">
-  <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="sc-h">Inside the dashboard.</h2>
-    <p class="cs-lede fx" style="--d:.2s">Four frames from the live app. Select any frame to enlarge, or open the real thing.</p>
-    <div class="gal">
+<!-- ============= SCREENS ============= -->
+<section class="sec" id="screens" aria-labelledby="sc-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Screens</p>
+      <h2 class="h2 rv" id="sc-h">Inside the dashboard.</h2>
+      <p class="sub rv">Four frames from the live app. Select any frame to enlarge, or open the real thing.</p>
+    </div>
+    <div class="gal rv">
       <button class="shot lg" type="button" data-src="assets/gspro-01.png" data-caption="Dispersion view — every shot, colour-coded by club">
-        <span class="fig" data-ok-missing><img src="assets/gspro-01.png" alt="Dispersion chart with shots colour-coded by club" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-01.png</span></span>
+        <span class="fig"><img src="assets/gspro-01.png" alt="Dispersion chart with shots colour-coded by club" loading="lazy"><span class="ph"><b>Image not loaded</b>gspro-01.png</span></span>
         <span class="cap"><span>Dispersion — colour-coded by club</span><b>01</b></span>
       </button>
       <button class="shot lg" type="button" data-src="assets/gspro-02.png" data-caption="Club summary — carry, total and the consistency score">
-        <span class="fig" data-ok-missing><img src="assets/gspro-02.png" alt="Club summary table with carry, total and consistency" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-02.png</span></span>
+        <span class="fig"><img src="assets/gspro-02.png" alt="Club summary table with carry, total and consistency" loading="lazy"><span class="ph"><b>Image not loaded</b>gspro-02.png</span></span>
         <span class="cap"><span>Club summary &amp; consistency</span><b>02</b></span>
       </button>
       <button class="shot lg" type="button" data-src="assets/gspro-03.png" data-caption="Shot feed — paginated, one swing per row">
-        <span class="fig" data-ok-missing><img src="assets/gspro-03.png" alt="Paginated shot feed listing individual swings" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-03.png</span></span>
+        <span class="fig"><img src="assets/gspro-03.png" alt="Paginated shot feed listing individual swings" loading="lazy"><span class="ph"><b>Image not loaded</b>gspro-03.png</span></span>
         <span class="cap"><span>Paginated shot feed</span><b>03</b></span>
       </button>
       <button class="shot lg" type="button" data-src="assets/gspro-04.png" data-caption="Distance trend — carry by club across sessions">
-        <span class="fig" data-ok-missing><img src="assets/gspro-04.png" alt="Distance trend chart across sessions" loading="lazy"><span class="ph"><b>PLATE NOT LOADED</b>gspro-04.png</span></span>
+        <span class="fig"><img src="assets/gspro-04.png" alt="Distance trend chart across sessions" loading="lazy"><span class="ph"><b>Image not loaded</b>gspro-04.png</span></span>
         <span class="cap"><span>Distance trend by session</span><b>04</b></span>
       </button>
     </div>
   </div>
 </section>
 
-<!-- ================= RESULTS ================= -->
-<section class="cs-sec" aria-labelledby="rs-h">
-  <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="rs-h">What it does.</h2>
-    <div class="cards">
-      <div class="card fx">
-        <div class="v">&#9679;</div>
-        <h3>Shows the shape of a miss</h3>
-        <p>Club-coloured dispersion makes a two-way miss look different from a consistent fade. An average hides that; a scatter does not.</p>
-      </div>
-      <div class="card fx" style="--d:.1s">
-        <div class="v">1</div>
-        <h3>One number per club</h3>
-        <p>The distance-weighted consistency score ranks clubs on a single comparable scale, so practice goes where the spread actually costs strokes.</p>
-      </div>
-      <div class="card fx" style="--d:.2s">
-        <div class="v">0</div>
-        <h3>Credentials in the client</h3>
-        <p>The Cloudflare Worker keeps the Google Sheets key server-side. The published page is a static file with nothing to leak.</p>
-      </div>
-      <div class="card fx" style="--d:.3s">
-        <div class="v">CSV</div>
-        <h3>An exit door</h3>
-        <p>Every filtered view exports to CSV, so a question the dashboard does not answer can still be answered somewhere else.</p>
-      </div>
+<!-- ============= RESULTS ============= -->
+<section class="sec" aria-labelledby="rs-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Results</p>
+      <h2 class="h2 rv" id="rs-h">What it does.</h2>
+    </div>
+    <div class="res rv">
+      <article class="res-c spot"><b>&#9679;</b><h3>Shows the shape of a miss</h3><p>Club-coloured dispersion makes a two-way miss look different from a consistent fade. An average hides that; a scatter does not.</p></article>
+      <article class="res-c spot"><b>1</b><h3>One number per club</h3><p>The distance-weighted consistency score ranks clubs on a single comparable scale, so practice goes where the spread actually costs strokes.</p></article>
+      <article class="res-c spot"><b>0</b><h3>Credentials in the client</h3><p>The Cloudflare Worker keeps the Google Sheets key server-side. The published page is a static file with nothing to leak.</p></article>
+      <article class="res-c spot"><b>CSV</b><h3>An exit door</h3><p>Every filtered view exports to CSV, so a question the dashboard does not answer can still be answered somewhere else.</p></article>
     </div>
   </div>
 </section>
 
-<!-- ================= STACK ================= -->
-<section class="cs-sec" aria-labelledby="st-h">
-  <div class="cs-wrap">
-    <h2 class="sec-h" data-split id="st-h">Stack breakdown.</h2>
-    <div class="tech">
-      <div class="row fx"><div class="n">React</div><div class="r">The application, built as a single self-contained page — no build step, no framework scaffolding to maintain.</div></div>
-      <div class="row fx"><div class="n">Recharts</div><div class="r">Dispersion, distance and trend charts, with club colour coding carried consistently across every view.</div></div>
-      <div class="row fx"><div class="n">Cloudflare Workers</div><div class="r">The API layer at api.trwells.com: proxies Google Sheets so the key stays server-side and responses stay fast.</div></div>
-      <div class="row fx"><div class="n">Google Sheets API</div><div class="r">The live data source. Editable by hand when a logged shot is wrong, which a database would make tedious.</div></div>
-      <div class="row fx"><div class="n">Python</div><div class="r">Collection and normalisation on a schedule, with retry and resume logic and structured logging.</div></div>
-      <div class="row fx"><div class="n">GitHub Pages</div><div class="r">Hosting for the dashboard and this site, deployed from the repo with no server to keep alive.</div></div>
+<!-- ============= STACK ============= -->
+<section class="sec" aria-labelledby="st-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Stack</p>
+      <h2 class="h2 rv" id="st-h">Stack breakdown.</h2>
     </div>
-
-    <nav class="pag" aria-label="More work">
-      <a href="/par.html"><span class="d">&#8592; previous event 01</span><span class="t">PAR+ inspection app</span></a>
-      <a class="next" href="/#portfolio"><span class="d">back to &#8594;</span><span class="t">All five events</span></a>
+    <ul class="tech rv">
+      <li><b>React</b><span>The application, built as a single self-contained page — no build step, no framework scaffolding to maintain.</span></li>
+      <li><b>Recharts</b><span>Dispersion, distance and trend charts, with club colour coding carried consistently across every view.</span></li>
+      <li><b>Cloudflare Workers</b><span>The API layer at api.trwells.com: proxies Google Sheets so the key stays server-side and responses stay fast.</span></li>
+      <li><b>Google Sheets API</b><span>The live data source. Editable by hand when a logged shot is wrong, which a database would make tedious.</span></li>
+      <li><b>Python</b><span>Collection and normalisation on a schedule, with retry and resume logic and structured logging.</span></li>
+      <li><b>GitHub Pages</b><span>Hosting for the dashboard and this site, deployed from the repo with no server to keep alive.</span></li>
+    </ul>
+    <nav class="pag rv" aria-label="More work">
+      <a href="par.html"><span class="d">&#8592; Previous, event 01</span><span class="t">PAR+ inspection app</span></a>
+      <a class="nx" href="index.html#portfolio"><span class="d">Back to &#8594;</span><span class="t">All five events</span></a>
     </nav>
+  </div>
+</section>
 
-    <div class="cs-cta">
-      <h2 class="sec-h" data-split>Got a messy source and a real question?</h2>
-      <p class="cs-lede fx" style="--d:.2s">Open to Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
-      <a class="c-mail fx" style="--d:.3s" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
-      <p class="c-links fx" style="--d:.4s">
-        <a href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a>
-        <a href="/resume.pdf">Résumé (PDF)</a>
-      </p>
+<!-- ============= CONTACT ============= -->
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <div class="sky" aria-hidden="true"></div>
+  <svg class="spiral" viewBox="-500 -500 1000 1000" aria-hidden="true"><path pathLength="1" d=""/></svg>
+  <div class="wrap">
+    <p class="pill rv"><i class="dot pulse" aria-hidden="true"></i>Contact</p>
+    <h2 class="c-h sm rv" id="c-h">Got a messy source and a real question?</h2>
+    <p class="sub rv">Open to Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
+    <div class="mailbox rv">
+      <a class="mail" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
+      <button type="button" class="copy" data-copy="trwells2@gmail.com"><svg class="cp" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy email</span></button>
     </div>
-
-    <footer class="cs-foot">
-      <span>&#169; <span id="year">2026</span> Tom Wells, Chicago, IL</span>
-      <span>Tracks are a seeded simulation, not detector data.</span>
-      <a href="/">Back to frame 0001</a>
-    </footer>
+    <p class="c-ls rv"><a class="btn btn-g btn-sm" href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a><a class="btn btn-g btn-sm" href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a><a class="btn btn-g btn-sm" href="resume.pdf">R&#233;sum&#233; (PDF)</a><a class="btn btn-g btn-sm" href="https://trwells.com/gspro" target="_blank" rel="noopener">GSPro app</a></p>
+    <p class="sr" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
   </div>
 </section>
 </main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 3.4V7" stroke="currentColor"/><circle cx="17.7" cy="10.4" r="1.75" fill="#FF4A3D" stroke="none"/><path d="M17.7 14a6.4 6.4 0 0 1-6.4 6.4a4.6 4.6 0 0 1-4.6-4.6a3.3 3.3 0 0 1 3.3-3.3a2.4 2.4 0 0 1 2.4 2.4" stroke="#FF4A3D"/></svg><span>Tom Wells</span></a>
+        <p>Data and business analyst and Power Platform developer, turning data into decisions and processes into products.</p>
+      </div>
+      <div><h4>Sitemap</h4><ul><li><a href="index.html#about">Stack</a></li><li><a href="index.html#portfolio">Work</a></li><li><a href="index.html#record">Record</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
+      <div><h4>Case studies</h4><ul><li><a href="par.html">PAR+</a></li><li><a href="gspro-analytics.html">GSPro Shot Analytics</a></li><li><a href="resume.pdf">R&#233;sum&#233; (PDF)</a></li></ul></div>
+      <div><h4>Elsewhere</h4><ul><li><a href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a></li><li><a href="mailto:trwells2@gmail.com">Email</a></li></ul></div>
+    </div>
+    <div class="f-bot"><span>&#169; <span class="year">2026</span> Tom Wells, Chicago, IL</span><a href="#top">Back to top &#8593;</a></div>
+  </div>
+  <p class="f-wm" aria-hidden="true">Tom Wells</p>
+</footer>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screen viewer" hidden>
   <button class="x" type="button" aria-label="Close">&#10005;</button>
   <button class="p" type="button" aria-label="Previous">&#8249;</button>
   <button class="n" type="button" aria-label="Next">&#8250;</button>
-  <figure data-ok-missing><img src="" alt=""><figcaption></figcaption></figure>
+  <figure><img src="" alt=""><figcaption></figcaption></figure>
   <div class="count" aria-hidden="true"></div>
 </div>
 
-<script>
-/* =========================================================
-   trwells.com — case study behaviour ("Track Record" system)
-   Chamber canvas, character reveals, scroll-driven process
-   rail, gallery lightbox. Vanilla JS, no dependencies.
-   ========================================================= */
-(()=>{
-'use strict';
-const D=document.documentElement,motion=D.classList.contains('motion');
-const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)];
-const mul=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
-const clamp=(v,a=0,b=1)=>v<a?a:v>b?b:v;
-const f1=v=>v.toFixed(1);
-const FROST='#E4EEF2',RED='#FF4A3D';
-
-/* ---------- bubble chamber: seeded 3D track field ---------- */
-function Chamber(cv){
-  const ctx=cv.getContext('2d'),r=mul(1978),EV=[],BM=[],ZMAX=46;
-  const st={camZ:0,cx:0,cy:0,tx:0,ty:0,dim:1,grow:1,mark:true};
-  let W=1,H=1,dpr=1,U=1,dirty=true;
-  const spiral=(x,y,a,q,R,dec,n,step)=>{const p=[x,y];for(let i=0;i<n;i++){a+=q*step/R;R*=dec;if(R<.012)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;p.push(x,y)}return p};
-  const add=(z,x,y,cnt,mk)=>{const e={z,x,y,mk,dx:0,dy:0,tr:[]},a=(r()-.5)*.35;e.tr.push({p:[x-3.6,y-Math.tan(a)*3.6,x,y],w:.9,beam:1,d:0});
-    for(let k=0;k<cnt;k++){const R=.09+Math.pow(r(),1.8)*1.5;e.tr.push({p:spiral(x,y,r()*6.2832,r()<.5?-1:1,R,.984+r()*.012,110+Math.floor(r()*300),.014),w:.5+r()*.8,d:.12+r()*.45,red:mk&&k===1})}
-    EV.push(e)};
-  add(1.8,.5,.05,5,true);
-  for(let i=0;i<54;i++)add(2.4+i*((ZMAX-2.4)/54)+r()*.5,(r()*2-1)*1.5,(r()*2-1)*.85,2+Math.floor(r()*4),false);
-  for(let i=0;i<46;i++){const z=.9+r()*ZMAX,y=(r()*2-1)*.95,c=(r()-.5)*.06,p=[];for(let x=-3.6;x<=3.61;x+=.12)p.push(x,y+c*x*x);BM.push({z,tr:{p,w:.55,beam:1,d:0}})}
-  function resize(){dpr=Math.min(2,window.devicePixelRatio||1);W=window.innerWidth;H=window.innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);U=Math.max(W,H)*.5;const pt=W<H;EV[0].dx=pt?-.2:0;EV[0].dy=pt?-.62:0;st.mark=!pt;dirty=true}
-  function vis(z){const d=z-st.camZ;if(d<.28||d>13)return null;return {s:1/d,a:clamp((13-d)/6)*clamp((d-.28)/.55)*st.dim}}
-  function line(tr,s,a,col,frac,dx=0,dy=0){const p=tr.p,n=p.length>>1,m=Math.max(2,Math.round(n*frac)),ox=W*.5,oy=H*.5;
-    ctx.beginPath();for(let j=0;j<m;j++){const X=ox+(p[2*j]+dx-st.cx)*s*U,Y=oy+(p[2*j+1]+dy-st.cy)*s*U;j?ctx.lineTo(X,Y):ctx.moveTo(X,Y)}
-    ctx.globalAlpha=a;ctx.strokeStyle=col;ctx.lineWidth=clamp(tr.w*s*1.15,.45,2.6);ctx.setLineDash(tr.beam?[]:[Math.max(.5,1.3*s),Math.max(1.4,2.8*s)]);ctx.stroke()}
-  function draw(){dirty=false;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.lineCap='round';ctx.lineJoin='round';
-    for(const b of BM){const v=vis(b.z);if(v)line(b.tr,v.s,v.a*.26,FROST,1)}
-    for(const e of EV){const v=vis(e.z);if(!v)continue;
-      for(const t of e.tr){const f=clamp(st.grow*1.8-t.d);if(f<=0)continue;line(t,v.s,v.a*(t.beam?.42:.8),t.red?RED:FROST,f,e.dx,e.dy)}
-      if(e.mk&&st.mark&&st.grow>.5){const k=clamp((st.grow-.5)/.4),X=W*.5+(e.x+e.dx-st.cx)*v.s*U,Y=H*.5+(e.y+e.dy-st.cy)*v.s*U,rr=.085*v.s*U;
-        ctx.setLineDash([]);ctx.globalAlpha=v.a*k;ctx.strokeStyle=RED;ctx.lineWidth=1.5;ctx.beginPath();
-        for(let j=0;j<=72;j++){const t=j/72*6.9*k,w=1+.07*Math.sin(t*3.3),px=X+Math.cos(t+.5)*rr*1.3*w,py=Y+Math.sin(t+.5)*rr*w;j?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke();
-        ctx.font='500 11px "Martian Mono", ui-monospace, monospace';ctx.fillStyle=RED;ctx.fillText(cv.dataset.mark||'ev. 01',X+rr*1.35+6,Y-rr*.85)}}
-    ctx.globalAlpha=1}
-  function tick(){const dx=st.tx-st.cx,dy=st.ty-st.cy;if(Math.abs(dx)>1e-4||Math.abs(dy)>1e-4){st.cx+=dx*.07;st.cy+=dy*.07;dirty=true}if(dirty)draw()}
-  resize();
-  return {st,resize,draw,tick,touch:()=>{dirty=true},ZMAX};
-}
-
-/* ---------- headings: split into words and characters ---------- */
-function split(el){
-  const label=el.textContent.replace(/\s+/g,' ').trim();let i=0;
-  const walk=node=>{[...node.childNodes].forEach(n=>{
-    if(n.nodeType===3){const frag=document.createDocumentFragment();
-      n.textContent.split(/(\s+)/).forEach(tok=>{if(!tok)return;if(/^\s+$/.test(tok)){frag.appendChild(document.createTextNode(' '));return}
-        const w=document.createElement('span');w.className='wd';
-        for(const c of tok){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.setProperty('--i',i++);w.appendChild(s)}
-        frag.appendChild(w)});
-      n.replaceWith(frag)}
-    else if(n.nodeType===1)walk(n)})};
-  walk(el);el.classList.add('split');el.setAttribute('aria-label',label);
-  [...el.children].forEach(c=>c.setAttribute('aria-hidden','true'));
-}
-
-/* ---------- event glyph: a seeded track diagram ---------- */
-function glyphs(){$$('.fr-glyph').forEach(svg=>{const r=mul(+(svg.dataset.seed||317));let o='';
-  const sp=(x,y,a,q,R,dec,n,step)=>{let d='M'+f1(x)+' '+f1(y);for(let k=0;k<n;k++){a+=q*step/R;R*=dec;if(R<1.5)break;x+=Math.cos(a)*step;y+=Math.sin(a)*step;d+='L'+f1(x)+' '+f1(y)}return d};
-  const vx=150+(r()-.5)*40,vy=150+(r()-.5)*40;
-  o+=`<path class="gb" d="M-10 ${f1(vy+(r()-.5)*30)} L${f1(vx)} ${f1(vy)}"/>`;
-  for(let k=0;k<5;k++)o+=`<path class="gt${k===1?' red':''}" d="${sp(vx,vy,r()*6.28,r()<.5?-1:1,18+Math.pow(r(),1.5)*90,.975+r()*.015,160+Math.floor(r()*160),2.2)}"/>`;
-  o+=`<circle class="gv" cx="${f1(vx)}" cy="${f1(vy)}" r="4"/>`;
-  [[18,18],[282,18],[18,282],[282,282]].forEach(([x,y])=>{o+=`<path class="gf" d="M${x-6} ${y}H${x+6}M${x} ${y-6}V${y+6}"/>`});
-  svg.innerHTML=o})}
-
-/* ---------- gallery lightbox ---------- */
-function lightbox(){
-  const box=$('#lb');if(!box)return;
-  const img=$('img',box),cap=$('figcaption',box),count=$('.count',box);
-  const shots=$$('.shot');let idx=0,open=false;
-  const avail=()=>shots.filter(s=>!s.classList.contains('missing'));
-  function show(i){
-    const list=avail();if(!list.length)return;
-    idx=(i+list.length)%list.length;
-    const s=list[idx];
-    img.src=s.dataset.src;img.alt=s.dataset.caption||'';
-    cap.textContent=s.dataset.caption||'';
-    count.textContent=String(idx+1).padStart(2,'0')+' / '+String(list.length).padStart(2,'0');
-  }
-  function openAt(s){
-    if(s.classList.contains('missing'))return;
-    const list=avail();show(list.indexOf(s));box.classList.add('on');box.removeAttribute('hidden');open=true;document.body.style.overflow='hidden';$('.x',box).focus();
-  }
-  function close(){box.classList.remove('on');box.setAttribute('hidden','');open=false;document.body.style.overflow=''}
-  shots.forEach(s=>s.addEventListener('click',()=>openAt(s)));
-  $('.x',box).addEventListener('click',close);
-  $('.p',box).addEventListener('click',()=>show(idx-1));
-  $('.n',box).addEventListener('click',()=>show(idx+1));
-  box.addEventListener('click',e=>{if(e.target===box)close()});
-  window.addEventListener('keydown',e=>{if(!open)return;
-    if(e.key==='Escape')close();else if(e.key==='ArrowLeft')show(idx-1);else if(e.key==='ArrowRight')show(idx+1)});
-}
-
-/* ---------- boot ---------- */
-const cv=$('#chamber');
-const ch=cv?Chamber(cv):null;
-$$('.shot img').forEach(im=>{
-  const mark=()=>im.closest('.shot').classList.add('missing');
-  im.addEventListener('error',mark);
-  if(im.complete&&im.naturalWidth===0)mark();
-});
-glyphs();lightbox();
-const yr=$('#year');if(yr)yr.textContent=String(new Date().getFullYear());
-
-if(!motion){if(ch){ch.st.dim=.55;ch.st.mark=false;ch.draw();window.addEventListener('resize',()=>{ch.resize();ch.draw()})}return}
-
-$$('[data-split]').forEach(split);
-const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}},{rootMargin:'0px 0px -12% 0px'});
-$$('[data-split],.fx,.cs-kpi.mark').forEach(el=>io.observe(el));
-
-const fc=$('.fc b'),rail=$('.rail i'),track=$('.track'),steps=$$('.step');
-let last=performance.now(),lastY=NaN,dimV=1,camV=0,onStep=-1;
-function frame(now){
-  const dt=Math.min(.05,Math.max(.001,(now-last)/1000));last=now;
-  const y=window.scrollY,vh=window.innerHeight,docH=D.scrollHeight;
-  if(y!==lastY){
-    lastY=y;
-    const p=clamp(y/Math.max(1,docH-vh));
-    if(fc){const s=String(1+Math.round(p*411)).padStart(4,'0');if(fc.textContent!==s)fc.textContent=s}
-    camV=p;
-    if(track&&rail){
-      const r=track.getBoundingClientRect();
-      rail.style.setProperty('--p',clamp((vh*.74-r.top)/Math.max(1,r.height)).toFixed(3));
-    }
-    let act=-1;
-    steps.forEach((s,i)=>{if(s.getBoundingClientRect().top<vh*.62)act=i});
-    if(act!==onStep){onStep=act;steps.forEach((s,i)=>s.classList.toggle('on',i<=act))}
-  }
-  if(ch){
-    const p=camV,target=p<.1?1-.5*(p/.1):(p>.86?.5+.35*((p-.86)/.14):.5);
-    dimV+=(target-dimV)*(1-Math.exp(-dt/.45));
-    ch.st.camZ=p*(ch.ZMAX-3);ch.st.dim=dimV;ch.touch();ch.tick();
-  }
-  requestAnimationFrame(frame);
-}
-if(ch){ch.st.grow=0;
-  const g0=performance.now();
-  (function grow(now){const x=clamp((now-g0-120)/2600);ch.st.grow=1-Math.pow(1-x,3);ch.touch();if(x<1)requestAnimationFrame(grow)})(g0);
-}
-requestAnimationFrame(frame);
-D.classList.remove('pre');
-requestAnimationFrame(()=>requestAnimationFrame(()=>{$$('.cs-hero [data-split],.cs-hero .fx').forEach(el=>el.classList.add('in'))}));
-
-if(matchMedia('(pointer:fine)').matches&&ch)window.addEventListener('pointermove',e=>{
-  ch.st.tx=(e.clientX/window.innerWidth-.5)*.1;ch.st.ty=(e.clientY/window.innerHeight-.5)*.07;
-},{passive:true});
-window.addEventListener('resize',()=>{if(ch){ch.resize();ch.draw()}lastY=NaN});
-})();
-
-</script>
+<script src="assets/case-study.js?v=2026-10-01"></script>
 </body>
 </html>
