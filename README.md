@@ -15,6 +15,7 @@ Portfolio site for Tom Wells: data and business analyst, Power Platform develope
 ├── assets/
 │   ├── styles.css         # The only stylesheet, shared by all three pages
 │   ├── case-study.js      # Behavior for the two case-study pages
+│   ├── dashboard.js       # The Business Overview report in work row 02 (Power BI rebuild, sample data)
 │   ├── fonts/             # Mona Sans + Martian Mono, self-hosted
 │   ├── img/               # Optimized screenshots used on the home page
 │   ├── logo/              # The Vertex mark (favicon) and the other mark studies
@@ -31,7 +32,7 @@ Portfolio site for Tom Wells: data and business analyst, Power Platform develope
 
 ## Caching
 
-GitHub Pages caches CSS and JS for longer than HTML. Whenever `assets/styles.css` or `assets/case-study.js` changes, bump the `?v=` date on every `<link>` / `<script>` that loads it (index.html, par.html, gspro-analytics.html).
+GitHub Pages caches CSS and JS for longer than HTML. Whenever `assets/styles.css`, `assets/case-study.js` or `assets/dashboard.js` changes, bump the `?v=` date on every `<link>` / `<script>` that loads it (index.html, par.html, gspro-analytics.html).
 
 ---
 

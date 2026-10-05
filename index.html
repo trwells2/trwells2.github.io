@@ -15,7 +15,7 @@
 <link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/martian-mono.woff2" as="font" type="font/woff2" crossorigin>
 <script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion');setTimeout(function(){d.classList.add('ready')},3500)}})(document.documentElement)</script>
-<link rel="stylesheet" href="assets/styles.css?v=2026-10-01">
+<link rel="stylesheet" href="assets/styles.css?v=2026-10-05">
 </head>
 <body>
 <a class="skip" href="#portfolio">Skip to the work</a>
@@ -195,7 +195,16 @@
             <text x="522" y="306">one view</text>
           </svg>
           </div><figcaption>Three sources, one model, one view</figcaption></figure>
-        </div></div></div>
+        </div>
+        <div class="bd" id="bd">
+          <div class="bd-top g12"><div class="bd-lede">
+            <p class="mono">Interactive rebuild &middot; sample data</p>
+            <h3 class="bd-h">Business Overview</h3>
+            <p>One of these reports, rebuilt for the web. It tracks how quickly contractor actions are received, reviewed and closed: subcontract consents, procurements, technology-transfer agreements and wage determinations. The two pages, measures and filters follow the Power BI original. Every number is generated sample data.</p>
+          </div></div>
+          <div class="bd-app"><p class="bd-nojs">This report is interactive and needs JavaScript.</p></div>
+        </div>
+        </div></div>
       </li>
       <li class="row">
         <button type="button" class="row-h g12" id="wh-3" aria-expanded="false" aria-controls="wb-3">
@@ -661,5 +670,6 @@ Promise.race([document.fonts?document.fonts.ready:Promise.resolve(),new Promise(
 addEventListener('load',refresh);
 })();
 </script>
+<script src="assets/dashboard.js?v=2026-10-05" defer></script>
 </body>
 </html>
