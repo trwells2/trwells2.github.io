@@ -48,7 +48,7 @@ $$('.shot img').forEach(im=>{const miss=()=>im.closest('.shot').classList.add('m
   const avail=()=>shots.filter(s=>!s.classList.contains('missing'));
   function show(i){const list=avail();if(!list.length)return;idx=(i+list.length)%list.length;const s=list[idx];
     img.src=s.dataset.src;img.alt=s.dataset.caption||'';cap.textContent=s.dataset.caption||'';
-    count.textContent=String(idx+1).padStart(2,'0')+' / '+String(list.length).padStart(2,'0')}
+    count.textContent=String(idx+1).padStart(2,'0')+' of '+String(list.length).padStart(2,'0')}
   function openAt(s){if(s.classList.contains('missing'))return;back=s;show(avail().indexOf(s));box.hidden=false;box.classList.add('on');open=true;document.body.style.overflow='hidden';$('.x',box).focus()}
   function close(){box.classList.remove('on');box.hidden=true;open=false;document.body.style.overflow='';if(back)back.focus()}
   shots.forEach(s=>s.addEventListener('click',()=>openAt(s)));

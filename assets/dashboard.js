@@ -1,5 +1,5 @@
 /* =========================================================
-   trwells.com: the Business Overview report (index.html, work 02)
+   trwells.com: the Business Overview report (contractor-dashboards.html)
    A native rebuild of a Power BI report: its two pages, measures
    and filters, drawn as SVG over sample data generated here from
    a fixed seed. Nothing comes from the original data model.
@@ -375,11 +375,10 @@ body.addEventListener('mouseout',e=>{const b=e.target.closest('.bd-i');if(b&&cur
 body.addEventListener('focusin',e=>{if(e.target.classList.contains('bd-i'))showInfo(e.target)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&cur&&cur.k==='info')hide()});
 
-/* ---------- build when the row first opens; redraw on resize ---------- */
+/* ---------- build as the report scrolls into view; redraw on resize ---------- */
 function build(){if(built)return;built=true;render(true)}
-const rowEl=root.closest('.row');
-if(!rowEl||rowEl.classList.contains('open'))build();
-else new MutationObserver((_,mo)=>{if(rowEl.classList.contains('open')){mo.disconnect();build()}}).observe(rowEl,{attributes:true,attributeFilter:['class']});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();build()}},{rootMargin:'0px 0px -12% 0px'});io.observe(root)}
+else build();
 let rt;addEventListener('resize',()=>{if(!built)return;clearTimeout(rt);rt=setTimeout(()=>{if(body.clientWidth&&body.clientWidth!==lastW)render(false)},150)});
 sync();
 })();

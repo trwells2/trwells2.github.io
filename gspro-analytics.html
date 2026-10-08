@@ -7,14 +7,14 @@
 <meta name="description" content="Case study: GSPro Shot Analytics, a React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live at trwells.com/gspro.">
 <meta name="theme-color" content="#000000">
 <meta property="og:title" content="GSPro Shot Analytics — Golf Simulator Dashboard">
-<meta property="og:description" content="Every shot leaves a track: a React dashboard over a Google Sheets pipeline, live at trwells.com/gspro.">
+<meta property="og:description" content="A React dashboard over a Google Sheets pipeline, live at trwells.com/gspro.">
 <meta property="og:type" content="article">
 <link rel="icon" href="assets/logo/mark-vertex.svg" type="image/svg+xml">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/martian-mono.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/styles.css?v=2026-10-05">
+<link rel="stylesheet" href="assets/styles.css?v=2026-10-07">
 <script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion');setTimeout(function(){d.classList.add('ready')},3500)}})(document.documentElement)</script>
 </head>
 <body>
@@ -36,10 +36,10 @@
   <svg class="tracks" viewBox="0 0 1440 1100" preserveAspectRatio="xMidYMid slice" data-seed="505" aria-hidden="true"></svg>
   <div class="grain" aria-hidden="true"></div>
   <div class="wrap cs-in">
-    <nav class="crumb" aria-label="Breadcrumb"><a class="pill" href="index.html#portfolio">&#8592; Selected work</a><span class="mono">05 / 05 &#183; Personal project, live now</span></nav>
+    <nav class="crumb" aria-label="Breadcrumb"><a class="pill" href="index.html#portfolio">&#8592; Selected work</a><span class="mono">05 of 05 &#183; Personal project, live now</span></nav>
     <h1 class="h1" data-words>GSPro Shot Analytics</h1>
-    <p class="cs-sub">Every swing leaves a track. This reads them.</p>
-    <p class="cs-lede">A full-stack React and Recharts dashboard that turns golf-simulator sessions into club-by-club dispersion, distance and consistency analysis. Live data comes from Google Sheets through a Cloudflare Worker, so the API key never reaches the browser.</p>
+    <p class="cs-sub">3,779 shots, read club by club.</p>
+    <p class="cs-lede">Sole builder, pipeline to deployment, of a React and Recharts dashboard for golf-simulator sessions: club-by-club dispersion, distance and consistency. Live data comes from Google Sheets through a Cloudflare Worker, so the API key never reaches the browser.</p>
     <div class="ctas"><a class="btn btn-w" href="https://trwells.com/gspro" target="_blank" rel="noopener">Open the live app<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a><a class="btn btn-g" href="#screens">See the screens</a></div>
     <div class="kpis"><div class="kpi"><b>1</b><span>custom metric: distance-weighted consistency, per club</span></div><div class="kpi"><b>0</b><span>credentials exposed to the client</span></div><div class="kpi mark"><b>live</b><span>in production at trwells.com/gspro</span></div></div>
   </div>
@@ -56,7 +56,7 @@
   <div class="wrap cs-split">
     <div class="cs-body">
       <p class="pill rv"><i class="dot" aria-hidden="true"></i>Overview</p>
-      <h2 class="h2 rv" id="ov-h">A simulator makes data. Spreadsheets don&#8217;t make sense of it.</h2>
+      <h2 class="h2 rv" id="ov-h">Scope, source and role.</h2>
       <p class="rv">A golf simulator records every shot: club, carry, total, offline, ball speed. After a few sessions that is thousands of rows in a sheet, and a sheet can tell you your average 7-iron. It cannot tell you which club you can actually trust on a given shot.</p>
       <p class="rv">GSPro Shot Analytics answers that question. Shots are colour-coded by club and plotted as dispersion, so the shape of a miss is visible rather than averaged away. A <strong>distance-weighted consistency metric</strong> ranks clubs by how tightly they group relative to how far they carry, which is the comparison a raw standard deviation gets wrong.</p>
       <p class="rv">It is the same pattern as the federal work, at hobby scale: a messy source, one model over it, and a surface that answers a question. That is why it is on this site.</p>
@@ -70,8 +70,8 @@
   <div class="wrap">
     <div class="head">
       <p class="pill rv"><i class="dot" aria-hidden="true"></i>Process</p>
-      <h2 class="h2 rv" id="pr-h">How it was built.</h2>
-      <p class="sub rv">Six stages, from a session log to a dashboard that loads in a browser tab.</p>
+      <h2 class="h2 rv" id="pr-h">Six stages, source to browser.</h2>
+      <p class="sub rv">In order, from a session log to a page that loads in a browser tab.</p>
     </div>
     <div class="steps">
       <div class="rail" aria-hidden="true"><i></i></div>
@@ -92,8 +92,8 @@
   <div class="wrap">
     <div class="head">
       <p class="pill rv"><i class="dot" aria-hidden="true"></i>Screens</p>
-      <h2 class="h2 rv" id="sc-h">Inside the dashboard.</h2>
-      <p class="sub rv">Four frames from the live app. Select any frame to enlarge, or open the real thing.</p>
+      <h2 class="h2 rv" id="sc-h">Four screens from the live app.</h2>
+      <p class="sub rv">Select any frame to enlarge, or open the real thing.</p>
     </div>
     <div class="gal rv">
       <button class="shot lg" type="button" data-src="assets/gspro-01.png" data-caption="Dispersion view — every shot, colour-coded by club">
@@ -121,7 +121,7 @@
   <div class="wrap">
     <div class="head">
       <p class="pill rv"><i class="dot" aria-hidden="true"></i>Results</p>
-      <h2 class="h2 rv" id="rs-h">What it does.</h2>
+      <h2 class="h2 rv" id="rs-h">Results, with numbers.</h2>
     </div>
     <div class="res rv">
       <article class="res-c spot"><b>&#9679;</b><h3>Shows the shape of a miss</h3><p>Club-coloured dispersion makes a two-way miss look different from a consistent fade. An average hides that; a scatter does not.</p></article>
@@ -137,7 +137,7 @@
   <div class="wrap">
     <div class="head">
       <p class="pill rv"><i class="dot" aria-hidden="true"></i>Stack</p>
-      <h2 class="h2 rv" id="st-h">Stack breakdown.</h2>
+      <h2 class="h2 rv" id="st-h">What it runs on.</h2>
     </div>
     <ul class="tech rv">
       <li><b>React</b><span>The application, built as a single self-contained page — no build step, no framework scaffolding to maintain.</span></li>
@@ -148,8 +148,8 @@
       <li><b>GitHub Pages</b><span>Hosting for the dashboard and this site, deployed from the repo with no server to keep alive.</span></li>
     </ul>
     <nav class="pag rv" aria-label="More work">
-      <a href="par.html"><span class="d">&#8592; Previous, event 01</span><span class="t">PAR+ inspection app</span></a>
-      <a class="nx" href="index.html#portfolio"><span class="d">Back to &#8594;</span><span class="t">All five events</span></a>
+      <a href="contractor-dashboards.html"><span class="d">&#8592; Previous, 02 of 05</span><span class="t">Contractor Performance Dashboards</span></a>
+      <a class="nx" href="index.html#portfolio"><span class="d">Back to &#8594;</span><span class="t">All selected work</span></a>
     </nav>
   </div>
 </section>
@@ -160,8 +160,8 @@
   <svg class="spiral" viewBox="-500 -500 1000 1000" aria-hidden="true"><path pathLength="1" d=""/></svg>
   <div class="wrap">
     <p class="pill rv"><i class="dot pulse" aria-hidden="true"></i>Contact</p>
-    <h2 class="c-h sm rv" id="c-h">Got a messy source and a real question?</h2>
-    <p class="sub rv">Open to Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
+    <h2 class="c-h sm rv" id="c-h">Open to new work.</h2>
+    <p class="sub rv">Seeking Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
     <div class="mailbox rv">
       <a class="mail" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
       <button type="button" class="copy" data-copy="trwells2@gmail.com"><svg class="cp" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy email</span></button>
@@ -177,10 +177,10 @@
     <div class="f-grid">
       <div>
         <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 3.4V7" stroke="currentColor"/><circle cx="17.7" cy="10.4" r="1.75" fill="#FF4A3D" stroke="none"/><path d="M17.7 14a6.4 6.4 0 0 1-6.4 6.4a4.6 4.6 0 0 1-4.6-4.6a3.3 3.3 0 0 1 3.3-3.3a2.4 2.4 0 0 1 2.4 2.4" stroke="#FF4A3D"/></svg><span>Tom Wells</span></a>
-        <p>Data and business analyst and Power Platform developer, turning data into decisions and processes into products.</p>
+        <p>Power Platform developer and solution architect. R&#233;sum&#233; and references on request.</p>
       </div>
       <div><h4>Sitemap</h4><ul><li><a href="index.html#about">Stack</a></li><li><a href="index.html#portfolio">Work</a></li><li><a href="index.html#record">Record</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
-      <div><h4>Case studies</h4><ul><li><a href="par.html">PAR+</a></li><li><a href="gspro-analytics.html">GSPro Shot Analytics</a></li><li><a href="resume.pdf">R&#233;sum&#233; (PDF)</a></li></ul></div>
+      <div><h4>Case studies</h4><ul><li><a href="par.html">PAR+</a></li><li><a href="contractor-dashboards.html">Contractor Performance Dashboards</a></li><li><a href="gspro-analytics.html">GSPro Shot Analytics</a></li><li><a href="resume.pdf">R&#233;sum&#233; (PDF)</a></li></ul></div>
       <div><h4>Elsewhere</h4><ul><li><a href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a></li><li><a href="mailto:trwells2@gmail.com">Email</a></li></ul></div>
     </div>
     <div class="f-bot"><span>&#169; <span class="year">2026</span> Tom Wells, Chicago, IL</span><a href="#top">Back to top &#8593;</a></div>
@@ -196,6 +196,6 @@
   <div class="count" aria-hidden="true"></div>
 </div>
 
-<script src="assets/case-study.js?v=2026-10-01"></script>
+<script src="assets/case-study.js?v=2026-10-07"></script>
 </body>
 </html>

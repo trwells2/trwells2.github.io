@@ -9,7 +9,7 @@ Portfolio site. Pure HTML/CSS/vanilla JS. No build step, no dependencies. Hosted
 - Never delete or edit the `CNAME` file.
 - `transform: scale()` doesn't change layout. Scaled iframes need an oversize width/height, `transform-origin: top left`, and a negative margin.
 - Don't embed Power Apps. They show a sign-in wall to the public.
-- Browsers cache `assets/styles.css` for 4 hours but the HTML for only 10 minutes. `styles.css` is shared by index.html, par.html and gspro-analytics.html, so whenever it changes, bump the `?v=` date on its `<link>` in all three, or visitors get the new HTML with the old CSS. The same goes for `assets/case-study.js` and its `<script>` in the two case-study pages, and for `assets/dashboard.js` and its `<script>` in index.html.
+- Browsers cache `assets/styles.css` for 4 hours but the HTML for only 10 minutes. `styles.css` is shared by index.html, par.html, contractor-dashboards.html and gspro-analytics.html, so whenever it changes, bump the `?v=` date on its `<link>` in all four, or visitors get the new HTML with the old CSS. The same goes for `assets/case-study.js` and its `<script>` in the three case-study pages, and for `assets/dashboard.js` and its `<script>` in contractor-dashboards.html.
 - The logo is the Vertex mark: `assets/logo/mark-vertex.svg` (favicon), with `favicon.ico` and `apple-touch-icon.png` as raster fallbacks. The nav and footer inline the same SVG.
 
 ## Preview

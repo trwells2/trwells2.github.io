@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contractor Performance Dashboards — Power BI for DOE Oversight · Tom Wells</title>
+<meta name="description" content="Case study: star-schema Power BI models and dashboards for the U.S. Department of Energy Fermilab Site Office, unifying SQL Server, Oracle and SharePoint Online into one governed model. Includes a working rebuild of one report, with sample data.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="Contractor Performance Dashboards — Power BI for DOE Oversight">
+<meta property="og:description" content="Three source systems, one governed model, one view of contractor performance for the DOE Fermilab Site Office.">
+<meta property="og:type" content="article">
+<link rel="icon" href="assets/logo/mark-vertex.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/mona-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/martian-mono.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css?v=2026-10-07">
+<script>(function(d){d.classList.add('js');if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('motion');setTimeout(function(){d.classList.add('ready')},3500)}})(document.documentElement)</script>
+</head>
+<body>
+<a class="skip" href="#report">Skip to the live report</a>
+
+<header class="nav">
+  <a class="brand" href="index.html" aria-label="Tom Wells, home">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 3.4V7" stroke="currentColor"/><circle cx="17.7" cy="10.4" r="1.75" fill="#FF4A3D" stroke="none"/><path d="M17.7 14a6.4 6.4 0 0 1-6.4 6.4a4.6 4.6 0 0 1-4.6-4.6a3.3 3.3 0 0 1 3.3-3.3a2.4 2.4 0 0 1 2.4 2.4" stroke="#FF4A3D"/></svg>
+    <span>Tom Wells</span>
+  </a>
+  <nav class="links" aria-label="Sections"><i class="ind" aria-hidden="true"></i><a href="index.html#about">Stack</a><a class="on" href="index.html#portfolio">Work</a><a href="index.html#record">Record</a></nav>
+  <a class="btn btn-w btn-sm" href="index.html#contact">Get in touch</a>
+</header>
+
+<main>
+<!-- ============= HERO ============= -->
+<section class="hero cs-hero" id="top">
+  <div class="sky" aria-hidden="true"></div>
+  <svg class="tracks" viewBox="0 0 1440 1100" preserveAspectRatio="xMidYMid slice" data-seed="202" aria-hidden="true"></svg>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wrap cs-in">
+    <nav class="crumb" aria-label="Breadcrumb"><a class="pill" href="index.html#portfolio">&#8592; Selected work</a><span class="mono">02 of 05 &#183; U.S. Department of Energy, Fermilab Site Office</span></nav>
+    <h1 class="h1" data-words>Contractor Performance Dashboards</h1>
+    <p class="cs-sub">Power BI for the U.S. Department of Energy: three source systems, one model, one view.</p>
+    <p class="cs-lede">End-to-end owner, requirements through production support, for the Fermilab Site Office through RER Solutions. Star-schema models unify SQL Server, Oracle and SharePoint Online, replacing siloed manual reporting with governed datasets and giving Site Office leadership a single view of contractor performance and oversight status.</p>
+    <div class="ctas"><a class="btn btn-w" href="#report">Try the live report<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a></div>
+    <div class="kpis"><div class="kpi mark"><b>3&#8202;<em>&#8594;</em>&#8202;1</b><span>source systems resolved into one governed, query-optimized model</span></div><div class="kpi"><b>1</b><span>view of contractor performance and oversight status for leadership</span></div><div class="kpi"><b>live</b><span>working rebuild of one report below, with generated sample data</span></div></div>
+  </div>
+  <div class="stage">
+    <div class="device">
+      <div class="dev-bar" aria-hidden="true"><i></i><i></i><i></i><span>Contractor performance &#183; data model</span></div>
+      <div class="screen dk">
+<svg class="il" viewBox="0 70 640 260" role="img" aria-label="Diagram: SQL Server, Oracle and SharePoint flow into one star-schema model, which feeds one dashboard.">
+<rect class="sp" x="56" y="98" width="150" height="38" rx="19"/><text x="131" y="121">SQL Server</text>
+<rect class="sp" x="56" y="181" width="150" height="38" rx="19"/><text x="131" y="204">Oracle</text>
+<rect class="sp" x="56" y="264" width="150" height="38" rx="19"/><text x="131" y="287">SharePoint Online</text>
+<path class="s flow" d="M206 117C262 117 262 200 300 200"/><path class="s flow" d="M206 200H300"/><path class="s flow" d="M206 283C262 283 262 200 300 200"/>
+<path class="s" d="M318 182L292 156M362 182L388 156M362 218L388 244M318 218L292 244"/>
+<rect class="sp" x="280" y="144" width="16" height="16"/><rect class="sp" x="384" y="144" width="16" height="16"/><rect class="sp" x="384" y="240" width="16" height="16"/><rect class="sp" x="280" y="240" width="16" height="16"/>
+<rect class="sp r" x="318" y="182" width="44" height="36"/>
+<text x="340" y="292">one model</text>
+<path class="s flow" d="M400 200H452"/>
+<rect class="sp" x="452" y="118" width="140" height="164" rx="6"/>
+<path class="s" d="M466 140H520M466 152H500"/>
+<rect class="so" x="468" y="228" width="14" height="38"/><rect class="so" x="490" y="210" width="14" height="56"/><rect class="so" x="512" y="218" width="14" height="48"/><rect class="so" x="534" y="196" width="14" height="70"/><rect class="so" x="556" y="184" width="14" height="82"/>
+<path class="r" d="M468 202L497 190L519 194L541 172L572 160"/>
+<text x="522" y="306">one view</text>
+</svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= OVERVIEW ============= -->
+<section class="sec" aria-labelledby="ov-h">
+  <div class="wrap cs-split">
+    <div class="cs-body">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Overview</p>
+      <h2 class="h2 rv" id="ov-h">Scope, client and role.</h2>
+      <p class="rv">The Fermilab Site Office is responsible for federal oversight of the contractor at the Fermi National Accelerator Laboratory. The records that oversight runs on live in three places, SQL Server, Oracle and SharePoint Online, and reporting across them was siloed and manual.</p>
+      <p class="rv">I architected star-schema models in Power BI that unify all three, so <strong>a number means the same thing in every report</strong>, and built the dashboards on top with advanced DAX. Requirements come straight from the contracting officers who read them.</p>
+      <p class="rv">The production reports run on federal data and stay inside the agency. The Business Overview report below is a rebuild of one of them: the same two pages, measures and filters, over generated sample data.</p>
+    </div>
+    <aside class="facts rv" aria-label="Project record"><span class="mono">Record</span><dl><div><dt>Role</dt><dd>End-to-end owner &#8212; requirements, data model, dashboards, deployment</dd></div><div><dt>Client</dt><dd>U.S. Department of Energy, Fermilab Site Office</dd></div><div><dt>Employer</dt><dd>RER Solutions, Inc.</dd></div><div><dt>Sources</dt><dd>SQL Server, Oracle, SharePoint Online</dd></div><div><dt>Stack</dt><dd><ul class="tags"><li>Power BI</li><li>DAX</li><li>Power Query</li><li>SQL Server</li><li>Oracle</li><li>SharePoint Online</li></ul></dd></div></dl></aside>
+  </div>
+</section>
+
+<!-- ============= PROCESS ============= -->
+<section class="sec" aria-labelledby="pr-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Process</p>
+      <h2 class="h2 rv" id="pr-h">Six stages, question to dataset.</h2>
+      <p class="sub rv">In order, from a contracting officer&#8217;s question to a governed dataset leadership can trust.</p>
+    </div>
+    <div class="steps">
+      <div class="rail" aria-hidden="true"><i></i></div>
+      <ol>
+        <li class="step"><span class="n" aria-hidden="true">01</span><h3>Requirements from contracting officers</h3><p>Requirements come directly from the contracting officers and leadership who use the reports: the questions they ask, the measures that answer them, and the system each source record lives in.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">02</span><h3>Connect the three sources</h3><p>SQL Server, Oracle and SharePoint Online are read where they already live. Power Query shapes them into consistent types and keys before anything is modeled, so a record means the same thing whichever system it came from.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">03</span><h3>Model one star schema</h3><p>Fact tables for the records, shared dimensions such as date, category and status. Every page filters the same way, and every report reads the same model instead of its own export.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">04</span><h3>Write the measures in DAX</h3><p>Received, completed, net flow, approval time and aging are defined once as DAX measures on the model, not as calculations inside a visual, so the overview and the workload pages always agree.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">05</span><h3>Design for a quick read</h3><p>Headline tiles first, trends second, detail tables last, with one filter row that scopes everything on the page. Leadership gets the answer at a glance and the detail when they need it.</p></li>
+        <li class="step"><span class="n" aria-hidden="true">06</span><h3>Govern, document, hand over</h3><p>Governed datasets tuned for query performance and scale, data quality checks, and documentation and knowledge-transfer material that meet federal recordkeeping and compliance requirements.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============= LIVE REPORT ============= -->
+<section class="sec" id="report" aria-labelledby="lr-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot pulse" aria-hidden="true"></i>Live report</p>
+      <h2 class="h2 rv" id="lr-h">One report, rebuilt to try.</h2>
+      <p class="sub rv">The Business Overview report: the same two pages, measures and filters as the Power BI original, drawn natively for the web. Every number is generated sample data. Filter it, hover any chart, or switch a chart to its table.</p>
+    </div>
+    <div class="bd" id="bd" aria-label="Business Overview report, rebuilt with sample data">
+      <div class="bd-app"><p class="bd-nojs">This report is interactive and needs JavaScript.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= RESULTS ============= -->
+<section class="sec" aria-labelledby="rs-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Results</p>
+      <h2 class="h2 rv" id="rs-h">Results, with numbers.</h2>
+    </div>
+    <div class="res rv">
+      <article class="res-c spot"><b>3&#8202;&#8594;&#8202;1</b><h3>Source systems, one model</h3><p>SQL Server, Oracle and SharePoint Online resolved into one governed model, tuned for query performance and scale.</p></article>
+      <article class="res-c spot"><b>1</b><h3>View for leadership</h3><p>Site Office leadership reads contractor performance and oversight status in one place, in place of siloed manual reporting.</p></article>
+      <article class="res-c spot"><b>DAX</b><h3>Measures defined once</h3><p>Every measure lives on the model, so the same number means the same thing on every page and in every report.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============= STACK ============= -->
+<section class="sec" aria-labelledby="st-h" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <p class="pill rv"><i class="dot" aria-hidden="true"></i>Stack</p>
+      <h2 class="h2 rv" id="st-h">What it runs on.</h2>
+    </div>
+    <ul class="tech rv">
+      <li><b>Power BI</b><span>Desktop and Service: the interactive dashboards Site Office leadership reads, published from one shared model.</span></li>
+      <li><b>DAX</b><span>The measures: received, completed, net flow, approval time and aging, defined once on the model.</span></li>
+      <li><b>Power Query</b><span>Shaping the three sources into consistent types and keys before they are modeled.</span></li>
+      <li><b>SQL Server</b><span>Source system, read in place.</span></li>
+      <li><b>Oracle</b><span>Source system, read in place.</span></li>
+      <li><b>SharePoint Online</b><span>Source lists and supplemental data.</span></li>
+      <li><b>SVG &amp; JavaScript</b><span>The rebuild on this page: drawn natively with no Power BI embed, so it loads anywhere with no sign-in.</span></li>
+    </ul>
+    <nav class="pag rv" aria-label="More work">
+      <a href="par.html"><span class="d">&#8592; Previous, 01 of 05</span><span class="t">PAR+ inspection app</span></a>
+      <a class="nx" href="gspro-analytics.html"><span class="d">Next, 05 of 05 &#8594;</span><span class="t">GSPro Shot Analytics</span></a>
+    </nav>
+  </div>
+</section>
+
+<!-- ============= CONTACT ============= -->
+<section class="contact" id="contact" aria-labelledby="c-h">
+  <div class="sky" aria-hidden="true"></div>
+  <svg class="spiral" viewBox="-500 -500 1000 1000" aria-hidden="true"><path pathLength="1" d=""/></svg>
+  <div class="wrap">
+    <p class="pill rv"><i class="dot pulse" aria-hidden="true"></i>Contact</p>
+    <h2 class="c-h sm rv" id="c-h">Open to new work.</h2>
+    <p class="sub rv">Seeking Power Platform development and solution architecture roles, especially in federal and government contracting.</p>
+    <div class="mailbox rv">
+      <a class="mail" href="mailto:trwells2@gmail.com">trwells2@gmail.com</a>
+      <button type="button" class="copy" data-copy="trwells2@gmail.com"><svg class="cp" viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg><svg class="ok" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg><span>Copy email</span></button>
+    </div>
+    <p class="c-ls rv"><a class="btn btn-g btn-sm" href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a><a class="btn btn-g btn-sm" href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a><a class="btn btn-g btn-sm" href="resume.pdf">R&#233;sum&#233; (PDF)</a><a class="btn btn-g btn-sm" href="https://trwells.com/gspro" target="_blank" rel="noopener">GSPro app</a></p>
+    <p class="sr" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a class="brand" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 3.4V7" stroke="currentColor"/><circle cx="17.7" cy="10.4" r="1.75" fill="#FF4A3D" stroke="none"/><path d="M17.7 14a6.4 6.4 0 0 1-6.4 6.4a4.6 4.6 0 0 1-4.6-4.6a3.3 3.3 0 0 1 3.3-3.3a2.4 2.4 0 0 1 2.4 2.4" stroke="#FF4A3D"/></svg><span>Tom Wells</span></a>
+        <p>Power Platform developer and solution architect. R&#233;sum&#233; and references on request.</p>
+      </div>
+      <div><h4>Sitemap</h4><ul><li><a href="index.html#about">Stack</a></li><li><a href="index.html#portfolio">Work</a></li><li><a href="index.html#record">Record</a></li><li><a href="index.html#contact">Contact</a></li></ul></div>
+      <div><h4>Case studies</h4><ul><li><a href="par.html">PAR+</a></li><li><a href="contractor-dashboards.html">Contractor Performance Dashboards</a></li><li><a href="gspro-analytics.html">GSPro Shot Analytics</a></li><li><a href="resume.pdf">R&#233;sum&#233; (PDF)</a></li></ul></div>
+      <div><h4>Elsewhere</h4><ul><li><a href="https://linkedin.com/in/thomas-r-wells" target="_blank" rel="noopener">LinkedIn</a></li><li><a href="https://github.com/trwells2/" target="_blank" rel="noopener">GitHub</a></li><li><a href="mailto:trwells2@gmail.com">Email</a></li></ul></div>
+    </div>
+    <div class="f-bot"><span>&#169; <span class="year">2026</span> Tom Wells, Chicago, IL</span><a href="#top">Back to top &#8593;</a></div>
+  </div>
+  <p class="f-wm" aria-hidden="true">Tom Wells</p>
+</footer>
+
+<script src="assets/case-study.js?v=2026-10-07"></script>
+<script src="assets/dashboard.js?v=2026-10-07" defer></script>
+</body>
+</html>
